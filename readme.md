@@ -33,3 +33,8 @@ That said, some lightweight additions to consider:
 - Clients can annotate
 - Clients can add comments
 
+## Dependencies
+(Other than the boilerplate)
+- [react-pdf](https://www.npmjs.com/package/react-pdf)
+- [socket.io](https://socket.io/)
+
