@@ -23,7 +23,10 @@ Server sends to everyone else:
 - Internal presentations contain confidential information, so PDFs should be treated with caution
     - PDFs should temporarily be hosted on S3
     - S3 object read access is only granted to `porter` url and room id (so even other teams can't randomly snoop around)
+    - S3 object should be deleted when room is empty (ie. meeting is done)
     - `porter` will need authentication (can use Google OAuth & screen for `@raai.com` addresses)
+- Room IDs are only stored in memory and deleted when everyone leaves
+    - Also if using free heroku, memory is wiped when instance goes to sleep
 - Always use HTTPs
 
 ## Additional Functionalities
