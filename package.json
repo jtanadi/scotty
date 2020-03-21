@@ -1,0 +1,36 @@
+{
+  "name": "porter",
+  "version": "0.1.0",
+  "description": "WebSocket-enabled PDF Viewer",
+  "main": "backend/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raa-tools/porter.git"
+  },
+  "keywords": [
+    "WebSocket",
+    "PDF"
+  ],
+  "author": "JT",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/raa-tools/porter/issues"
+  },
+  "homepage": "https://github.com/raa-tools/porter#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
