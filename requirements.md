@@ -20,9 +20,10 @@ Server sends to everyone else:
 - Current page number
 
 ### Important Considerations
-- Because internal presentaitons contain confidential information, PDF data should never be saved by the server
-    - More P2P than server-client
-    - On connection, host client streams data to server, which redirects directly to newly-connected client
+- Internal presentations contain confidential information, so PDFs should be treated with caution
+    - PDFs should temporarily be hosted on S3
+    - S3 object read access is only granted to `porter` url and room id (so even other teams can't randomly snoop around)
+    - `porter` will need authentication (can use Google OAuth & screen for `@raai.com` addresses)
 - Always use HTTPs
 
 ## Additional Functionalities
