@@ -4,8 +4,8 @@ module.exports = (req, res, next) => {
 
   if (req.hostname === "localhost" || isSecure) {
     next()
+  } else {
+    const httpsUrl = `https://${req.get("host")}${req.originalUrl}`
+    res.redirect(301, httpsUrl)
   }
-
-  const httpsUrl = `https://${req.get("host")}${req.originalUrl}`
-  res.redirect(301, httpsUrl)
 }

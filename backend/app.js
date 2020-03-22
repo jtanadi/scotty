@@ -2,18 +2,16 @@ const bodyParser = require("body-parser")
 const express = require("express")
 const path = require("path")
 
+const useHttps = require("./middlewares/useHttps")
+
 const app = express()
 
 app.use(bodyParser.json())
+app.use(useHttps)
 app.use("/static", express.static(path.join(__dirname, "../frontend/static")))
 app.use("/", express.static(path.join(__dirname, "../frontend/static")))
 
 app.get("/", (req, res) => {
-  if (req.hostname !== "localhost" && req.protocol === "http") {
-    const httpsUrl = `https://${req.get("host")}${req.url}`
-    return res.redirect(301, httpsUrl)
-  }
-
   res.sendFile(path.join(__dirname, "../frontend/index.html"))
 })
 
