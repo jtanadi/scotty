@@ -1,7 +1,7 @@
 const express = require("express")
 const { v4 } = require("uuid")
 
-const s3 = require("../s3")
+const s3 = require("../utils/s3")
 
 const router = express.Router()
 

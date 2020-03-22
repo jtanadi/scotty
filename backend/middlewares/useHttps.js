@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
-  const forwardedProto = req.headers["x-forwarded-proto"] || ""
-  const isSecure = req.secure || forwardedProto === "https"
+  const forwardedProtocol = req.headers["x-forwarded-proto"] || ""
+  const isSecure = req.secure || forwardedProtocol === "https"
 
   if (req.hostname === "localhost" || isSecure) {
     next()
