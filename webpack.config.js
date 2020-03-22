@@ -1,5 +1,7 @@
-const webpack = require("webpack")
+const TerserPlugin = require("terser-webpack-plugin")
 const path = require("path")
+
+console.log("NODE_ENV:", process.env.NODE_ENV)
 
 module.exports = {
   entry: "./frontend/src/index.tsx",
@@ -7,7 +9,7 @@ module.exports = {
     filename: "index.js",
     path: path.join(__dirname, "/frontend/static"),
   },
-  mode: process.env.MODE || "development",
+  mode: process.env.NODE_ENV || "development",
   module: {
     rules: [
       {
@@ -25,11 +27,8 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify("production"),
-      },
-    }),
-  ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
 }
