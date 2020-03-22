@@ -3,9 +3,11 @@
     <h1>🛸️ scotty 🛸️</h1>
 </div>
 
-`scotty` is a WebSocket-enabled PDF viewer, allowing multiple clients to look at and browse through a document together in real time. The name is derived from ["Beam me up, Scotty!"](https://en.wikipedia.org/wiki/Beam_me_up,_Scotty).
+`scotty` is a WebSocket-enabled PDF viewer, allowing multiple clients to look at and browse through a document together in real time.
 
 [The app is available here.](https://raa-scotty.herokuapp.com/)
+
+[*Who's Scotty?*](https://en.wikipedia.org/wiki/Beam_me_up,_Scotty).
 
 ## Basic Functionality
 `scotty` is designed to be a lightweight app and isn't comparable to a product like Google Slides. The app's main purpose is to allow multiple people to have the same view of the same document in real time, as if they're in the same room together.
@@ -25,9 +27,10 @@ Some additional functionality that will be added as the project matures:
 - Allow clients to add annotations and comments
 
 ## Technical Information
-Because internal documents contain confidential information, they are treated with caution. That said, there is still room for improvement, such as adding authentication.
+Because internal documents contain confidential information, they are treated with caution. That said, there is still room for improvement, such as adding authentication, making S3 permissions more restrictive, etc.
 
-### Technical Features
+### Technical/Security Features
+- Use HTTPS by default (through Heroku)
 - PDFs are hosted on Amazon's S3 only for the duration of a session.
     - Once all clients leave the room associated with a PDF, the file object is deleted from S3.
     - Future: Objects in S3 bucket are only accessible via deployed URL (ie. no public access).
