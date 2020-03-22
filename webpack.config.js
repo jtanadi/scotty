@@ -1,7 +1,15 @@
-const TerserPlugin = require("terser-webpack-plugin")
 const path = require("path")
+const TerserPlugin = require("terser-webpack-plugin")
 
 console.log("NODE_ENV:", process.env.NODE_ENV)
+
+let optimization = {}
+if (process.env.NODE_ENV === "production") {
+  optimization = {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  }
+}
 
 module.exports = {
   entry: "./frontend/src/index.tsx",
@@ -27,8 +35,5 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
   },
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
-  },
+  optimization,
 }
