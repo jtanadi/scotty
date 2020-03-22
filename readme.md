@@ -25,7 +25,7 @@ Some additional functionality that will be added as the project matures:
 - Allow clients to add annotations and comments
 
 ## Technical Information
-Because internal documents contain confidential information, they are treated with caution. That said, there is still room for improvement, including authentication and end-to-end encryption.
+Because internal documents contain confidential information, they are treated with caution. That said, there is still room for improvement, such as adding authentication.
 
 ### Technical Features
 - PDFs are hosted on Amazon's S3 only for the duration of a session.
@@ -33,3 +33,4 @@ Because internal documents contain confidential information, they are treated wi
     - Future: Objects in S3 bucket are only accessible via deployed URL (ie. no public access).
 - `room` IDs, `user` IDs, and temporary file names are all stored in memory.
     - Future: each room will have a `TTL` that starts from creation.
+
