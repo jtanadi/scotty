@@ -10,7 +10,8 @@ app.use("/", express.static(path.join(__dirname, "../frontend/static")))
 
 app.get("/", (req, res) => {
   if (req.hostname !== "localhost" && req.protocol === "http") {
-    res.redirect(`https://${req.get("host")}${req.url}`)
+    const httpsUrl = `https://${req.get("host")}${req.url}`
+    return res.redirect(301, httpsUrl)
   }
 
   res.sendFile(path.join(__dirname, "../frontend/index.html"))
