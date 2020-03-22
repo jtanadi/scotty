@@ -6,8 +6,10 @@ const useHttps = require("./middlewares/useHttps")
 
 const app = express()
 
-app.use(bodyParser.json())
 app.use(useHttps)
+
+app.use(bodyParser.json())
+
 app.use("/static", express.static(path.join(__dirname, "../frontend/static")))
 app.use("/", express.static(path.join(__dirname, "../frontend/static")))
 
