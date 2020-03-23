@@ -31,6 +31,9 @@ const Input = styled.input`
   &:focus + label {
     outline: 1px dotted black;
     outline: -webkit-focus-ring-color auto 5px;
+  }
+
+  &:active + label {
     background-color: #7cb8c2;
   }
 `
@@ -63,7 +66,7 @@ const UploadButton = styled.button`
     background-color: #67c974;
   }
 
-  &:focus {
+  &:active {
     background-color: #4cba5b;
   }
 
