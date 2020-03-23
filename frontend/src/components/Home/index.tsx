@@ -5,14 +5,18 @@ import { v4 } from "uuid"
 
 import socket from "../../socket"
 
-const Host: React.FC<{}> = (): ReactElement => {
+import { Background, Form, Label, Input, UploadButton } from "./styles"
+
+const Home: React.FC<{}> = (): ReactElement => {
   const [pdfFile, setPdfFile] = useState(null)
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     setPdfFile(e.target.files[0])
   }
 
   const [roomID, setRoomID] = useState("")
-  const handleUpload = async (): Promise<void> => {
+  const handleUpload = async (e: Event): Promise<void> => {
+    e.preventDefault()
+
     if (!pdfFile) {
       return
     }
@@ -32,14 +36,30 @@ const Host: React.FC<{}> = (): ReactElement => {
     setRoomID(uuidv4)
   }
 
+  const renderInput = (): ReactElement => {
+    return (
+      <Form>
+        <Input
+          type="file"
+          id="file-input"
+          accept="application/pdf"
+          onChange={handleFile}
+        />
+        <Label htmlFor="file-input">
+          {pdfFile ? pdfFile.name : "Select PDF to upload"}
+        </Label>
+        <UploadButton disabled={!pdfFile} onClick={handleUpload}>
+          🖖️ Beam me up, Scotty! 🖖
+        </UploadButton>
+      </Form>
+    )
+  }
+
   return (
-    <div>
-      <h4>Upload PDF</h4>
-      <input type="file" accept="application/pdf" onChange={handleFile} />
-      <button onClick={handleUpload}>Upload</button>
-      {roomID ? <Redirect to={`/room=${roomID}`} /> : null}
-    </div>
+    <Background>
+      {roomID ? <Redirect to={`/room=${roomID}`} /> : renderInput()}
+    </Background>
   )
 }
 
-export default Host
+export default Home
