@@ -1,21 +1,16 @@
 import React, { useState, useEffect, ReactElement } from "react"
 
+import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
 import socket from "../../socket"
 
-import {
-  ButtonsContainer,
-  NavBar,
-  NavButton,
-  PageInfo,
-  RoomContainer,
-} from "./styles"
+import { RoomContainer } from "./styles"
 
-type PropType = {
+type PropTypes = {
   id: string
 }
 
-const Room: React.FC<PropType> = ({ id }): ReactElement => {
+const Room: React.FC<PropTypes> = ({ id }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
   const [error, setError] = useState("")
 
@@ -24,10 +19,6 @@ const Room: React.FC<PropType> = ({ id }): ReactElement => {
     setMaxPage(numPages)
   }
 
-  type PageOption = {
-    offset?: number
-    goto?: number
-  }
   const [pageNum, setPageNum] = useState(1)
   const handleChangePage = (option: PageOption): void => {
     const { offset, goto } = option
@@ -64,30 +55,14 @@ const Room: React.FC<PropType> = ({ id }): ReactElement => {
     })
   }, [])
 
-  const renderElmts = (): ReactElement => {
+  const renderRoom = (): ReactElement => {
     return (
       <RoomContainer>
-        <NavBar>
-          <ButtonsContainer>
-            <NavButton onClick={(): void => handleChangePage({ goto: 1 })}>
-              {`<<`}
-            </NavButton>
-            <NavButton onClick={(): void => handleChangePage({ offset: -1 })}>
-              {`<`}
-            </NavButton>
-            <PageInfo>
-              Page {pageNum} / {maxPage}
-            </PageInfo>
-            <NavButton onClick={(): void => handleChangePage({ offset: 1 })}>
-              {`>`}
-            </NavButton>
-            <NavButton
-              onClick={(): void => handleChangePage({ goto: maxPage })}
-            >
-              {`>>`}
-            </NavButton>
-          </ButtonsContainer>
-        </NavBar>
+        <NavBar
+          pageNum={pageNum}
+          maxPage={maxPage}
+          handleChangePage={handleChangePage}
+        />
         {pdfFile ? (
           <PDFView
             file={`https://beam-me-up-scotty.s3.amazonaws.com/${pdfFile}`}
@@ -99,7 +74,7 @@ const Room: React.FC<PropType> = ({ id }): ReactElement => {
     )
   }
 
-  return <div>{error ? `ERROR: ${error}` : renderElmts()}</div>
+  return <div>{error ? `ERROR: ${error}` : renderRoom()}</div>
 }
 
 export default Room
