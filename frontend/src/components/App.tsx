@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react"
 import { HashRouter as Router, Route } from "react-router-dom"
+import { hot } from "react-hot-loader/root"
 
 import Home from "./Home"
 import Room from "./Room"
@@ -18,4 +19,4 @@ const App: React.FC<{}> = (): ReactElement => {
   )
 }
 
-export default App
+export default hot(App)
