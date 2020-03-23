@@ -29,7 +29,6 @@ const Home: React.FC<{}> = (): ReactElement => {
     })
 
     const uuidv4 = v4()
-    // await axios.post("/api/upload", { roomID: uuidv4, pdfUrl: Key })
 
     // Create and redirect to room
     socket.emit("create room", { roomID: uuidv4, pdfUrl: Key })
