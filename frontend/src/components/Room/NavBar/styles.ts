@@ -10,6 +10,11 @@ const NavBarContainer = styled.div`
   z-index: 99;
 `
 
+const NameContainer = styled.div`
+  font-family: sans-serif;
+  margin: auto;
+`
+
 const ButtonsContainer = styled.div`
   margin: auto;
 `
@@ -21,7 +26,7 @@ const NavButton = styled.button`
   border-radius: 0.5rem;
   margin: 0 0.25rem;
   cursor: pointer;
-  font-weight: bold;
+  font-family: sans-serif;
 
   &:hover {
     background-color: darkgray;
@@ -39,4 +44,4 @@ const PageInfo = styled.span`
   font-weight: bold;
 `
 
-export { ButtonsContainer, NavBarContainer, NavButton, PageInfo }
+export { ButtonsContainer, NameContainer, NavBarContainer, NavButton, PageInfo }
