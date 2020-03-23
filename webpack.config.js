@@ -1,10 +1,20 @@
 const path = require("path")
 const TerserPlugin = require("terser-webpack-plugin")
-
-console.log("NODE_ENV:", process.env.NODE_ENV)
+const webpack = require("webpack")
 
 let optimization = {}
-if (process.env.NODE_ENV === "production") {
+let resolve = {
+  extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
+}
+
+if (process.env.NODE_ENV === "development") {
+  resolve = {
+    ...resolve,
+    alias: {
+      "react-dom": "@hot-loader/react-dom",
+    },
+  }
+} else if (process.env.NODE_ENV === "production") {
   optimization = {
     minimize: true,
     minimizer: [new TerserPlugin()],
@@ -12,28 +22,27 @@ if (process.env.NODE_ENV === "production") {
 }
 
 module.exports = {
-  entry: "./frontend/src/index.tsx",
+  entry: ["webpack-hot-middleware/client", "./frontend/src/index.tsx"],
   output: {
     filename: "index.js",
-    path: path.join(__dirname, "/frontend/static"),
+    path: path.join(__dirname, "/frontend/dist"),
   },
   mode: process.env.NODE_ENV || "development",
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.tsx*$/,
         exclude: /node_modules/,
         use: ["ts-loader"],
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx*$/,
         exclude: /node_modules/,
         use: ["babel-loader"],
       },
     ],
   },
-  resolve: {
-    extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
-  },
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+  resolve,
   optimization,
 }
