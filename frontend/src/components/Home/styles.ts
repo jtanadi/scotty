@@ -9,10 +9,11 @@ const Background = styled.div`
 `
 
 const Form = styled.form`
-  width: 30%;
+  width: 25%;
+  min-width: 250px;
   margin: auto;
   display: flex;
-  padding: 1.5rem 2rem;
+  padding: 1.75rem 2rem;
   flex-direction: column;
   background-color: white;
   border-radius: 1rem;
@@ -40,7 +41,7 @@ const Input = styled.input`
 
 const Label = styled.label`
   margin: auto;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
   background-color: #b7e3eb;
   border-radius: 0.5rem;
   width: calc(100% - 2rem);
