@@ -8,9 +8,10 @@ import { RoomContainer } from "./styles"
 
 type PropTypes = {
   id: string
+  originalFilename: string
 }
 
-const Room: React.FC<PropTypes> = ({ id }): ReactElement => {
+const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
   const [error, setError] = useState("")
 
@@ -61,6 +62,7 @@ const Room: React.FC<PropTypes> = ({ id }): ReactElement => {
         <NavBar
           pageNum={pageNum}
           maxPage={maxPage}
+          filename={originalFilename}
           handleChangePage={handleChangePage}
         />
         {pdfFile ? (

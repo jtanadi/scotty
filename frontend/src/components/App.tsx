@@ -12,8 +12,10 @@ const App: React.FC<{}> = (): ReactElement => {
         <Home />
       </Route>
       <Route
-        path="/room=:id"
-        render={({ match }): ReactElement => <Room id={match.params.id} />}
+        path="/room=:id/file=:filename"
+        render={({ match }): ReactElement => (
+          <Room id={match.params.id} originalFilename={match.params.filename} />
+        )}
       />
     </Router>
   )

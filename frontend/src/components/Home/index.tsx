@@ -56,7 +56,11 @@ const Home: React.FC<{}> = (): ReactElement => {
 
   return (
     <Background>
-      {roomID ? <Redirect to={`/room=${roomID}`} /> : renderInput()}
+      {roomID ? (
+        <Redirect to={`/room=${roomID}/file=${pdfFile.name}`} />
+      ) : (
+        renderInput()
+      )}
     </Background>
   )
 }
