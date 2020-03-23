@@ -1,13 +1,17 @@
 import React, { useState, useEffect, ReactElement } from "react"
 
+import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
 import socket from "../../socket"
 
-type PropType = {
+import { RoomContainer } from "./styles"
+
+type PropTypes = {
   id: string
+  originalFilename: string
 }
 
-const Room: React.FC<PropType> = ({ id }): ReactElement => {
+const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
   const [error, setError] = useState("")
 
@@ -17,13 +21,21 @@ const Room: React.FC<PropType> = ({ id }): ReactElement => {
   }
 
   const [pageNum, setPageNum] = useState(1)
-  const handleChangePage = (offset: number): void => {
+  const handleChangePage = (option: PageOption): void => {
+    const { offset, goto } = option
     setPageNum(current => {
-      const newPageNum = current + offset
+      let newPageNum: number
+      if (offset) {
+        newPageNum = current + offset
+      } else if (goto) {
+        newPageNum = goto
+      }
+
       if (newPageNum <= maxPage && newPageNum >= 1) {
         socket.emit("client change page", { roomID: id, pageNum: newPageNum })
         return newPageNum
       }
+
       return current
     })
   }
@@ -44,24 +56,27 @@ const Room: React.FC<PropType> = ({ id }): ReactElement => {
     })
   }, [])
 
-  const renderElmts = (): ReactElement => {
+  const renderRoom = (): ReactElement => {
     return (
-      <>
-        <button onClick={(): void => handleChangePage(-1)}>Prev</button>
-        <button onClick={(): void => handleChangePage(1)}>Next</button>
+      <RoomContainer>
+        <NavBar
+          pageNum={pageNum}
+          maxPage={maxPage}
+          filename={originalFilename}
+          handleChangePage={handleChangePage}
+        />
         {pdfFile ? (
           <PDFView
             file={`https://beam-me-up-scotty.s3.amazonaws.com/${pdfFile}`}
             pageNumber={pageNum}
-            maxPage={maxPage}
             handleLoadSuccess={handleDocumentLoad}
           />
         ) : null}
-      </>
+      </RoomContainer>
     )
   }
 
-  return <div>{error ? `ERROR: ${error}` : renderElmts()}</div>
+  return <div>{error ? `ERROR: ${error}` : renderRoom()}</div>
 }
 
 export default Room

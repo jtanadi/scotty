@@ -1,7 +1,6 @@
 node_modules/
 sample-pdfs/
-frontend/static/*.js
-frontend/static/*.txt
+frontend/dist/
 *.swp
 .DS_Store
 .env

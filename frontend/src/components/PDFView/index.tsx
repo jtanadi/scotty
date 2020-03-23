@@ -1,28 +1,27 @@
 import React, { ReactElement } from "react"
 import { Document, Page } from "react-pdf/dist/entry.webpack"
 
+import { ViewContainer, DocumentContainer } from "./styles"
+
 type PropType = {
   file: string
   pageNumber: number
-  maxPage: number
   handleLoadSuccess({ numPages: number }): void
 }
 
 const PDFView: React.FC<PropType> = ({
   file,
   pageNumber,
-  maxPage,
   handleLoadSuccess,
 }): ReactElement => {
   return (
-    <div>
-      <h3>
-        Page {pageNumber} / {maxPage}
-      </h3>
-      <Document file={file} onLoadSuccess={handleLoadSuccess}>
-        <Page pageNumber={pageNumber} />
-      </Document>
-    </div>
+    <ViewContainer>
+      <DocumentContainer>
+        <Document file={file} onLoadSuccess={handleLoadSuccess}>
+          <Page pageNumber={pageNumber} renderAnnotationLayer={false} />
+        </Document>
+      </DocumentContainer>
+    </ViewContainer>
   )
 }
 
