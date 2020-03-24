@@ -7,6 +7,7 @@ import {
   NavButton,
   PageInfo,
   NameContainer,
+  CloseButton,
 } from "./styles"
 
 export type PageOption = {
@@ -49,7 +50,7 @@ const NavBar: React.FC<PropTypes> = ({
       </ButtonsContainer>
       <ButtonsContainer>
         <Link to="/">
-          <NavButton>Close</NavButton>
+          <CloseButton>Close</CloseButton>
         </Link>
       </ButtonsContainer>
     </NavBarContainer>

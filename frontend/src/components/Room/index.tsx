@@ -4,7 +4,7 @@ import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
 import socket from "../../socket"
 
-import { RoomContainer } from "./styles"
+import { RoomBackground } from "./styles"
 
 type PropTypes = {
   id: string
@@ -58,7 +58,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
 
   const renderRoom = (): ReactElement => {
     return (
-      <RoomContainer>
+      <RoomBackground>
         <NavBar
           pageNum={pageNum}
           maxPage={maxPage}
@@ -72,7 +72,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
             handleLoadSuccess={handleDocumentLoad}
           />
         ) : null}
-      </RoomContainer>
+      </RoomBackground>
     )
   }
 

@@ -1,5 +1,9 @@
 import styled from "styled-components"
 
-const RoomContainer = styled.div``
+import { Background } from "../globalStyles"
 
-export { RoomContainer }
+const RoomBackground = styled(Background)`
+  background-color: lightgray;
+`
+
+export { RoomBackground }
