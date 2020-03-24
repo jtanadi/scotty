@@ -1,13 +1,5 @@
 import styled from "styled-components"
 
-const Background = styled.div`
-  width: 100vw;
-  height: 100vh;
-  margin: 0 auto;
-  background-color: white;
-  display: flex;
-`
-
 const Form = styled.form`
   width: 25%;
   min-width: 250px;
@@ -78,4 +70,4 @@ const UploadButton = styled.button`
   }
 `
 
-export { Background, Form, Label, Input, UploadButton }
+export { Form, Label, Input, UploadButton }

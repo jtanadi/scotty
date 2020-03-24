@@ -13,6 +13,7 @@ const NavBarContainer = styled.div`
 const NameContainer = styled.div`
   font-family: sans-serif;
   margin: auto;
+  font-weight: bold;
 `
 
 const ButtonsContainer = styled.div`
@@ -27,6 +28,7 @@ const NavButton = styled.button`
   margin: 0 0.25rem;
   cursor: pointer;
   font-family: sans-serif;
+  font-weight: bold;
 
   &:hover {
     background-color: darkgray;
@@ -38,10 +40,22 @@ const NavButton = styled.button`
   }
 `
 
+const CloseButton = styled(NavButton)`
+  color: white;
+  background-color: tomato;
+`
+
 const PageInfo = styled.span`
   margin: 0 0.5rem;
   font-family: sans-serif;
   font-weight: bold;
 `
 
-export { ButtonsContainer, NameContainer, NavBarContainer, NavButton, PageInfo }
+export {
+  ButtonsContainer,
+  NameContainer,
+  NavBarContainer,
+  NavButton,
+  CloseButton,
+  PageInfo,
+}
