@@ -7,12 +7,14 @@ import { sumPadding } from "../../utils/sumPadding"
 type PropType = {
   file: string
   pageNumber: number
+  scale: number
   handleLoadSuccess({ numPages: number }): void
 }
 
 const PDFView: React.FC<PropType> = ({
   file,
   pageNumber,
+  scale,
   handleLoadSuccess,
 }): ReactElement => {
   const [containerPadding, setContainerPadding] = useState({
@@ -93,6 +95,7 @@ const PDFView: React.FC<PropType> = ({
           height={pageHeight}
           width={pageWidth}
           pageNumber={pageNumber}
+          scale={scale}
           inputRef={handlePageRef}
           renderAnnotationLayer={false}
         />

@@ -40,6 +40,14 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     })
   }
 
+  const [scale, setScale] = useState(1)
+  const handleZoom = (offset: number): void => {
+    setScale(prev => {
+      console.log(prev)
+      return prev + offset < 1 || prev + offset > 2 ? prev : prev + offset
+    })
+  }
+
   useEffect(() => {
     socket.emit("join room", { roomID: id })
 
@@ -64,11 +72,13 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
           maxPage={maxPage}
           filename={originalFilename}
           handleChangePage={handleChangePage}
+          handleZoom={handleZoom}
         />
         {pdfFile ? (
           <PDFView
             file={`https://beam-me-up-scotty.s3.amazonaws.com/${pdfFile}`}
             pageNumber={pageNum}
+            scale={scale}
             handleLoadSuccess={handleDocumentLoad}
           />
         ) : null}
