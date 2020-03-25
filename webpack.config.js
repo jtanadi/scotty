@@ -7,6 +7,7 @@ let resolve = {
   extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
 }
 
+let entry = ["./frontend/src/index.tsx"]
 if (process.env.NODE_ENV === "development") {
   resolve = {
     ...resolve,
@@ -14,6 +15,8 @@ if (process.env.NODE_ENV === "development") {
       "react-dom": "@hot-loader/react-dom",
     },
   }
+
+  entry = ["webpack-hot-middleware/client", ...entry]
 } else if (process.env.NODE_ENV === "production") {
   optimization = {
     minimize: true,
@@ -22,7 +25,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 module.exports = {
-  entry: ["webpack-hot-middleware/client", "./frontend/src/index.tsx"],
+  entry,
   output: {
     filename: "index.js",
     path: path.join(__dirname, "/frontend/dist"),
