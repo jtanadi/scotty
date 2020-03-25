@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ReactElement } from "react"
+import { useHistory } from "react-router-dom"
 
 import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
@@ -70,6 +71,12 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     })
   }, [])
 
+  const history = useHistory()
+  const handleClose = (): void => {
+    socket.emit("client close")
+    history.push("/")
+  }
+
   const renderRoom = (): ReactElement => {
     return (
       <RoomBackground>
@@ -79,6 +86,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
           filename={originalFilename}
           handleChangePage={handleChangePage}
           handleZoom={handleZoom}
+          handleClose={handleClose}
         />
         {pdfFile ? (
           <PDFView
