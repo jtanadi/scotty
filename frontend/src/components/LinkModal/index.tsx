@@ -55,7 +55,7 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
           <Body>
             <Code>scotty</Code> is encrypted end-to-end. PDFs are only available
             for the duration of the session and are stored in a restricted S3
-            bucket with very limited access.
+            bucket with very limited read/write access.
           </Body>
         </Island>
       </Cover>
