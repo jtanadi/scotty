@@ -49,7 +49,7 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
           <HR />
 
           <Subtitle>
-            &ldquo;You suspect some danger?&rdquo;{" "}
+            &ldquo;You suspect some danger?&rdquo;
             <QuoteAttr>—Captain Kirk</QuoteAttr>
           </Subtitle>
           <Body>
