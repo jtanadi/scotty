@@ -21,6 +21,10 @@ module.exports = server => {
       onChangePage({ io, socket }, data)
     })
 
+    socket.on("client close", () => {
+      onDisconnect({ io, socket })
+    })
+
     socket.on("disconnect", () => {
       onDisconnect({ io, socket })
     })
