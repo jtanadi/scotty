@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { ButtonNotOK } from "../../globalStyles"
 
 const NavBarContainer = styled.div`
   width: 100%;
@@ -40,9 +41,9 @@ const NavButton = styled.button`
   }
 `
 
-const CloseButton = styled(NavButton)`
-  color: white;
-  background-color: tomato;
+const CloseButton = styled(ButtonNotOK)`
+  font-weight: bold;
+  padding: 0.5rem 1rem;
 `
 
 const PageInfo = styled.span`

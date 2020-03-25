@@ -1,6 +1,8 @@
 import styled from "styled-components"
 
-const Form = styled.form`
+import { ButtonOK } from "../globalStyles"
+
+export const Form = styled.form`
   width: 25%;
   min-width: 250px;
   margin: auto;
@@ -9,12 +11,12 @@ const Form = styled.form`
   flex-direction: column;
   background-color: white;
   border-radius: 1rem;
-  box-shadow: 0rem 0rem 1.5rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
   font-family: sans-serif;
 `
 
 // Effectively hiding input
-const Input = styled.input`
+export const Input = styled.input`
   width: 0.01px;
   height: 0.01px;
   opacity: 0;
@@ -27,14 +29,14 @@ const Input = styled.input`
   }
 
   &:active + label {
-    background-color: #7cb8c2;
+    background-color: #56aab8;
   }
 `
 
-const Label = styled.label`
+export const Label = styled.label`
   margin: auto;
   margin-bottom: 1.75rem;
-  background-color: #b7e3eb;
+  background-color: #8ad7e6;
   border-radius: 0.5rem;
   width: calc(100% - 2rem);
   padding: 1rem;
@@ -42,32 +44,10 @@ const Label = styled.label`
   cursor: pointer;
 
   &:hover {
-    background-color: #8cc5cf;
+    background-color: #6cbecc;
   }
 `
 
-const UploadButton = styled.button`
-  border: 0;
-  border-radius: 0.5rem;
-  padding: 1rem;
+export const UploadButton = styled(ButtonOK)`
   width: 100%;
-  background-color: #7aeb89;
-  margin: 0 auto;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #67c974;
-  }
-
-  &:active {
-    background-color: #4cba5b;
-  }
-
-  &:disabled {
-    color: gray;
-    background-color: lightgray;
-    cursor: not-allowed;
-  }
 `
-
-export { Form, Label, Input, UploadButton }

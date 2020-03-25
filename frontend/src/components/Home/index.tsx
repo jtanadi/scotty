@@ -1,10 +1,10 @@
 import React, { useState, ChangeEvent, ReactElement, MouseEvent } from "react"
 import axios from "axios"
-import { Redirect } from "react-router-dom"
 import { v4 } from "uuid"
 
 import socket from "../../socket"
 
+import LinkModal from "../LinkModal"
 import { Background } from "../globalStyles"
 import { Form, Label, Input, UploadButton } from "./styles"
 
@@ -38,6 +38,9 @@ const Home: React.FC<{}> = (): ReactElement => {
 
     // Create and redirect to room
     socket.emit("create room", { roomID: uuidv4, pdfUrl: Key })
+
+    // When roomID is set, LinkModal will be displayed
+    // LinkModal will take care of redirecting to Room
     setRoomID(uuidv4)
   }
 
@@ -63,7 +66,11 @@ const Home: React.FC<{}> = (): ReactElement => {
   return (
     <Background>
       {roomID ? (
-        <Redirect to={`/room=${roomID}/file=${pdfFile.name}`} />
+        <LinkModal
+          link={`${window.location.toString()}room=${roomID}/file=${
+            pdfFile.name
+          }`}
+        />
       ) : (
         renderInput()
       )}
