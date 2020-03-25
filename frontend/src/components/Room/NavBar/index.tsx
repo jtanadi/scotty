@@ -1,5 +1,4 @@
 import React, { ReactElement } from "react"
-import { Link } from "react-router-dom"
 
 import {
   ButtonsContainer,
@@ -21,6 +20,7 @@ type PropTypes = {
   filename: string
   handleChangePage(option: PageOption): void
   handleZoom(scaleOffset: number): void
+  handleClose(): void
 }
 
 const NavBar: React.FC<PropTypes> = ({
@@ -29,6 +29,7 @@ const NavBar: React.FC<PropTypes> = ({
   filename,
   handleChangePage,
   handleZoom,
+  handleClose,
 }): ReactElement => {
   return (
     <NavBarContainer>
@@ -53,9 +54,7 @@ const NavBar: React.FC<PropTypes> = ({
         </NavButton>
       </ButtonsContainer>
       <ButtonsContainer>
-        <Link to="/">
-          <CloseButton>Close</CloseButton>
-        </Link>
+        <CloseButton onClick={handleClose}>Close</CloseButton>
       </ButtonsContainer>
     </NavBarContainer>
   )
