@@ -34,6 +34,8 @@ const NavBar: React.FC<PropTypes> = ({
     <NavBarContainer>
       <NameContainer>{filename}</NameContainer>
       <ButtonsContainer>
+        <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton>
+        <NavButton onClick={(): void => handleZoom(1)}>{"+"}</NavButton>
         <NavButton onClick={(): void => handleChangePage({ goto: 1 })}>
           {"<<"}
         </NavButton>
@@ -49,8 +51,6 @@ const NavBar: React.FC<PropTypes> = ({
         <NavButton onClick={(): void => handleChangePage({ goto: maxPage })}>
           {">>"}
         </NavButton>
-        <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton>
-        <NavButton onClick={(): void => handleZoom(1)}>{"+"}</NavButton>
       </ButtonsContainer>
       <ButtonsContainer>
         <Link to="/">

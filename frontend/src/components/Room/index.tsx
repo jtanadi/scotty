@@ -6,6 +6,11 @@ import socket from "../../socket"
 
 import { RoomBackground } from "./styles"
 
+enum ZOOMLIMIT {
+  MIN = 1,
+  MAX = 5,
+}
+
 type PropTypes = {
   id: string
   originalFilename: string
@@ -43,8 +48,9 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [scale, setScale] = useState(1)
   const handleZoom = (offset: number): void => {
     setScale(prev => {
-      console.log(prev)
-      return prev + offset < 1 || prev + offset > 2 ? prev : prev + offset
+      return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX
+        ? prev
+        : prev + offset
     })
   }
 
