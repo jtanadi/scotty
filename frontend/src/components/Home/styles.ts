@@ -27,14 +27,14 @@ const Input = styled.input`
   }
 
   &:active + label {
-    background-color: #7cb8c2;
+    background-color: #56aab8;
   }
 `
 
 const Label = styled.label`
   margin: auto;
   margin-bottom: 1.75rem;
-  background-color: #b7e3eb;
+  background-color: #8ad7e6;
   border-radius: 0.5rem;
   width: calc(100% - 2rem);
   padding: 1rem;
@@ -42,7 +42,7 @@ const Label = styled.label`
   cursor: pointer;
 
   &:hover {
-    background-color: #8cc5cf;
+    background-color: #6cbecc;
   }
 `
 
@@ -51,16 +51,16 @@ const UploadButton = styled.button`
   border-radius: 0.5rem;
   padding: 1rem;
   width: 100%;
-  background-color: #7aeb89;
+  background-color: #67e678;
   margin: 0 auto;
   cursor: pointer;
 
   &:hover {
-    background-color: #67c974;
+    background-color: #54c463;
   }
 
   &:active {
-    background-color: #4cba5b;
+    background-color: #40a84e;
   }
 
   &:disabled {
