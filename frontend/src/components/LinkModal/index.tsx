@@ -63,7 +63,7 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
   }
 
   return ready ? (
-    <Redirect to={`${link.replace(window.location.toString(), "/")}`} />
+    <Redirect push to={`${link.replace(window.location.toString(), "/")}`} />
   ) : (
     renderModal()
   )
