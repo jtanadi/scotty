@@ -1,8 +1,8 @@
 import React, { ReactElement, FC, useRef, useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 
+import { Cover, Code } from "../globalStyles"
 import {
-  Cover,
   Island,
   Input,
   ButtonsContainer,
@@ -13,7 +13,6 @@ import {
   Body,
   QuoteAttr,
 } from "./styles"
-import { Code } from "../globalStyles"
 
 type PropTypes = {
   link: string
