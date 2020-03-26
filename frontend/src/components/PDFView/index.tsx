@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState, useRef } from "react"
 import { Document, Page } from "react-pdf/dist/entry.webpack"
 
+import Loading from "../Loading"
+
 import { DocumentContainer } from "./styles"
 import { sumPadding } from "../../utils/sumPadding"
 
@@ -92,7 +94,7 @@ const PDFView: React.FC<PropType> = ({
 
   return (
     <DocumentContainer ref={docContainerRef}>
-      <Document file={file} onLoadSuccess={handleLoadSuccess}>
+      <Document loading={Loading} file={file} onLoadSuccess={handleLoadSuccess}>
         <Page
           height={pageHeight}
           width={pageWidth}
