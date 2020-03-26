@@ -2,17 +2,6 @@ import styled from "styled-components"
 
 import { H2, H3, P, ButtonOK } from "../globalStyles"
 
-export const Cover = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 90;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-`
-
 export const Island = styled.div`
   width: 40%;
   min-width: 500px;
