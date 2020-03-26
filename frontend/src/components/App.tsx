@@ -8,9 +8,7 @@ import Room from "./Room"
 const App: React.FC<{}> = (): ReactElement => {
   return (
     <Router>
-      <Route exact path="/">
-        <Home />
-      </Route>
+      <Route exact path="/" component={Home} />
       <Route
         path="/room=:id/file=:filename"
         render={({ match }): ReactElement => (
