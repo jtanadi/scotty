@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "es2015",
-    "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
     "jsx": "react",
     "lib": ["dom", "es2015"],
-    "moduleResolution": "node"
-  }
+    "moduleResolution": "node",
+    "outDir": "./backend/dist",
+    "sourceMap": true,
+    "target": "ES6"
+  },
+  "exclude": ["node_modules"]
 }
