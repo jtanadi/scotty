@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { ButtonNotOK } from "../../globalStyles"
+import { Button, ButtonNotOK } from "../../globalStyles"
 
 const NavBarContainer = styled.div`
   width: 100%;
@@ -21,24 +21,10 @@ const ButtonsContainer = styled.div`
   margin: auto;
 `
 
-const NavButton = styled.button`
-  border: 0;
-  background-color: lightgray;
+const NavButton = styled(Button)`
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
   margin: 0 0.25rem;
-  cursor: pointer;
-  font-family: sans-serif;
   font-weight: bold;
-
-  &:hover {
-    background-color: darkgray;
-  }
-
-  &:active {
-    color: white;
-    background-color: gray;
-  }
 `
 
 const CloseButton = styled(ButtonNotOK)`
