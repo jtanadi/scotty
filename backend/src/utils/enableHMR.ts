@@ -3,7 +3,8 @@ import webpack from "webpack"
 import webpackDev from "webpack-dev-middleware"
 import webpackHot from "webpack-hot-middleware"
 
-const enableHMR = (app: Application): void => {
+// Keep this as module.exports because we import with require()
+module.exports = (app: Application): void => {
   const config = require("../../../webpack.config")
   const compiler = webpack(config)
 
@@ -15,5 +16,3 @@ const enableHMR = (app: Application): void => {
 
   app.use(webpackHot(compiler))
 }
-
-export default enableHMR

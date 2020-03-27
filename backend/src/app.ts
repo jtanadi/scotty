@@ -2,8 +2,6 @@ import express, { Application } from "express"
 import bodyParser from "body-parser"
 import path from "path"
 
-import enableHMR from "./utils/enableHMR"
-
 // Middlewares
 import useHttps from "./middlewares/useHttps"
 
@@ -14,7 +12,10 @@ const app: Application = express()
 
 // Enable HMR for dev server
 if (process.env.NODE_ENV === "development") {
-  enableHMR(app)
+  // Use require(): we want conditional import
+  // because heroku prunes devDependencies and
+  // all imports in enableHMR are devDependencies
+  require("./utils/enableHMR")(app)
 }
 
 app.use(useHttps)
