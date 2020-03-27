@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom"
 import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
 import socket from "../../socket"
+import { SocketData } from "../../../../shared/types"
 
 import { RoomBackground } from "./styles"
 
@@ -58,22 +59,28 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   useEffect(() => {
     socket.emit("join room", { roomID: id })
 
-    socket.on("sync document", (data): void => {
+    socket.on("sync document", (data: SocketData): void => {
       setPdfFile(data.pdfUrl)
     })
 
-    socket.on("sync page", (data): void => {
+    socket.on("sync page", (data: SocketData): void => {
       setPageNum(data.pageNum)
     })
 
-    socket.on("error", (data): void => {
+    socket.on("error", (data: Error): void => {
       setError(data.message)
     })
+
+    return (): void => {
+      socket.off("sync document")
+      socket.off("sync page")
+      socket.off("error")
+    }
   }, [])
 
   const history = useHistory()
   const handleClose = (): void => {
-    socket.emit("client close")
+    socket.emit("leave room")
     history.push("/")
   }
 
