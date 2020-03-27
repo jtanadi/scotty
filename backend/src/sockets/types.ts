@@ -5,8 +5,3 @@ export type Connection = {
   socket: Socket
 }
 
-export type ClientData = {
-  roomID: string
-  pdfUrl?: string
-  pageNum?: number
-}
