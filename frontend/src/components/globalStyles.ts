@@ -20,21 +20,22 @@ export const Cover = styled.div`
   display: flex;
 `
 
-export const ButtonOK = styled.button`
-  font-family: sans-serif;
+export const Button = styled.button`
   border: 0;
   border-radius: 0.5rem;
   padding: 1rem;
-  background-color: #67e678;
   margin: 0 auto;
   cursor: pointer;
+  background-color: lightgray;
+  font-family: sans-serif;
 
   &:hover {
-    background-color: #54c463;
+    background-color: darkgray;
   }
 
   &:active {
-    background-color: #40a84e;
+    color: white;
+    background-color: gray;
   }
 
   &:disabled {
@@ -44,7 +45,20 @@ export const ButtonOK = styled.button`
   }
 `
 
-export const ButtonNotOK = styled(ButtonOK)`
+export const ButtonOK = styled(Button)`
+  background-color: #67e678;
+
+  &:hover {
+    background-color: #54c463;
+  }
+
+  &:active {
+    color: black;
+    background-color: #40a84e;
+  }
+`
+
+export const ButtonNotOK = styled(Button)`
   background-color: #ff6347;
   color: white;
 

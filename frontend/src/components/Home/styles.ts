@@ -42,6 +42,11 @@ export const Label = styled.label`
   padding: 1rem;
   text-align: center;
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   &:hover {
     background-color: #6cbecc;
