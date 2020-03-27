@@ -1,4 +1,6 @@
-module.exports = (req, res, next) => {
+import { Request, Response, NextFunction } from "express"
+
+const useHttps = (req: Request, res: Response, next: NextFunction): void => {
   const forwardedProtocol = req.headers["x-forwarded-proto"] || ""
   const isSecure = req.secure || forwardedProtocol === "https"
 
@@ -9,3 +11,5 @@ module.exports = (req, res, next) => {
     res.redirect(301, httpsUrl)
   }
 }
+
+export default useHttps

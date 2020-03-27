@@ -1,15 +1,16 @@
-const s3 = require("../utils/s3")
+import s3 from "../utils/s3"
+import { rooms, users } from "./cache"
 
-const { rooms, users } = require("./cache")
+import { Connection } from "./types"
 
-module.exports = connection => {
+export default (connection: Connection): void => {
   const { socket } = connection
 
   const roomID = users[socket.id]
   if (!roomID) return
 
   const room = rooms[roomID]
-  room.users = room.users.filter(id => id !== socket.id)
+  room.users = room.users.filter((id: string) => id !== socket.id)
 
   // When room is empty, delete object from S3 bucket
   // and clear the associated value in our cache
