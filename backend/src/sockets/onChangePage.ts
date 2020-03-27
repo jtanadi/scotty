@@ -1,6 +1,5 @@
 import { rooms } from "./cache"
-import { Connection } from "./types"
-import { SocketData } from "../../../shared/types"
+import { Connection, SocketData } from "./types"
 
 export default (connection: Connection, data: SocketData): void => {
   const { io } = connection

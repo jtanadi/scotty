@@ -3,8 +3,7 @@ import { useHistory } from "react-router-dom"
 
 import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
-import socket from "../../socket"
-import { SocketData } from "../../../../shared/types"
+import socket, { SocketData } from "../../socket"
 
 import { RoomBackground } from "./styles"
 
