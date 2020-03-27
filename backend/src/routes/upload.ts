@@ -1,4 +1,4 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import { v4 } from "uuid"
 
 import s3 from "../utils/s3"
@@ -6,7 +6,7 @@ import s3 from "../utils/s3"
 const router = express.Router()
 
 // get Key and URL from S3
-router.get("/", (req, res): void => {
+router.get("/", (req: Request, res: Response): void => {
   const Key = `${v4()}.pdf`
 
   s3.getSignedUrl(
@@ -16,7 +16,7 @@ router.get("/", (req, res): void => {
       ContentType: "application/pdf",
       Key,
     },
-    (err, url) => {
+    (err: Error, url: string): void => {
       if (err) throw err
       res.send({ Key, url })
     }
