@@ -1,12 +1,12 @@
-const express = require("express")
-const { v4 } = require("uuid")
+import express from "express"
+import { v4 } from "uuid"
 
-const s3 = require("../utils/s3")
+import s3 from "../utils/s3"
 
 const router = express.Router()
 
 // get Key and URL from S3
-router.get("/", (req, res) => {
+router.get("/", (req, res): void => {
   const Key = `${v4()}.pdf`
 
   s3.getSignedUrl(
@@ -23,4 +23,4 @@ router.get("/", (req, res) => {
   )
 })
 
-module.exports = router
+export default router

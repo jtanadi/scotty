@@ -1,13 +1,13 @@
-const { users, rooms } = require("./cache")
+import { users, rooms } from "./cache"
+import { Connection, ClientData } from "./types"
 
-module.exports = (connection, data) => {
+export default (connection: Connection, data: ClientData): void => {
   const { io, socket } = connection
   const { roomID } = data
 
   if (!rooms[roomID]) {
-    return io
-      .to(socket.id)
-      .emit("error", { message: `Room ${roomID} doesn't exist` })
+    io.to(socket.id).emit("error", { message: `Room ${roomID} doesn't exist` })
+    return
   }
 
   rooms[roomID].users.push(socket.id)

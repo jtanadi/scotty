@@ -1,11 +1,12 @@
-const socket = require("socket.io")
+import { Server } from "http"
+import socket from "socket.io"
 
-const onChangePage = require("./onChangePage")
-const onCreateRoom = require("./onCreateRoom")
-const onDisconnect = require("./onDisconnect")
-const onJoinRoom = require("./onJoinRoom")
+import onChangePage from "./onChangePage"
+import onCreateRoom from "./onCreateRoom"
+import onDisconnect from "./onDisconnect"
+import onJoinRoom from "./onJoinRoom"
 
-module.exports = server => {
+export default (server: Server): void => {
   const io = socket(server)
 
   io.on("connection", socket => {

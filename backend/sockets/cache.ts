@@ -13,7 +13,5 @@ users = {
 }
 */
 
-const rooms = {}
-const users = {}
-
-module.exports = { rooms, users }
+export const rooms = {}
+export const users = {}
