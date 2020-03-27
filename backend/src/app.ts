@@ -18,14 +18,16 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(useHttps)
-
 app.use(bodyParser.json())
 
-app.use("/", express.static(path.join(__dirname, "../frontend/dist")))
-app.use("/static", express.static(path.join(__dirname, "../frontend/static")))
+app.use("/", express.static(path.join(__dirname, "../../frontend/dist")))
+app.use(
+  "/static",
+  express.static(path.join(__dirname, "../../frontend/static"))
+)
 
 app.get("/", (req, res): void => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/index.html"))
 })
 
 app.use("/api/upload", uploadRouter)
