@@ -1,4 +1,6 @@
-import { Server } from "http"
+import { Server as HTTPserver } from "http"
+import { Server as HTTPSserver } from "https"
+
 import socket from "socket.io"
 
 import onChangePage from "./onChangePage"
@@ -6,7 +8,7 @@ import onCreateRoom from "./onCreateRoom"
 import onDisconnect from "./onDisconnect"
 import onJoinRoom from "./onJoinRoom"
 
-export default (server: Server): void => {
+export default (server: HTTPserver | HTTPSserver): void => {
   const io = socket(server)
 
   io.on("connection", socket => {
@@ -22,7 +24,7 @@ export default (server: Server): void => {
       onChangePage({ io, socket }, data)
     })
 
-    socket.on("client close", () => {
+    socket.on("leave room", () => {
       onDisconnect({ io, socket })
     })
 

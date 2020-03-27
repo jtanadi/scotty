@@ -1,7 +1,8 @@
 import { rooms } from "./cache"
-import { Connection, ClientData } from "./types"
+import { Connection } from "./types"
+import { SocketData } from "../../../shared/types"
 
-export default (connection: Connection, data: ClientData): void => {
+export default (connection: Connection, data: SocketData): void => {
   const { roomID, pdfUrl } = data
   rooms[roomID] = {
     users: [],
