@@ -11,9 +11,14 @@ const NavBarContainer = styled.div`
   z-index: 99;
 `
 
-const NameContainer = styled.div`
+const InfoContainer = styled.div`
   font-family: sans-serif;
   margin: auto;
+  flex: 1;
+  text-align: center;
+`
+
+const Filename = styled.span`
   font-weight: bold;
 `
 
@@ -40,7 +45,8 @@ const PageInfo = styled.span`
 
 export {
   ButtonsContainer,
-  NameContainer,
+  InfoContainer,
+  Filename,
   NavBarContainer,
   NavButton,
   CloseButton,

@@ -1,17 +1,17 @@
-/*
-For temp reference; turn into TS type or interface later
-rooms = {
-  id: {
-    users: number
-    pdfUrl: string,
-    currentPage: number
-  }
+type Room = {
+  userIDs: Array<string>
+  pdfUrl: string
+  pageNum: number
 }
 
-users = {
-  userID: roomID
+type Rooms = {
+  [id: string]: Room
 }
-*/
 
-export const rooms = {}
-export const users = {}
+// Maps user ID to room ID
+type Users = {
+  [userID: string]: string
+}
+
+export const rooms: Rooms = {}
+export const users: Users = {}

@@ -10,7 +10,7 @@ export default (connection: Connection, data: SocketData): void => {
     return
   }
 
-  rooms[roomID].users.push(socket.id)
+  rooms[roomID].userIDs.push(socket.id)
   users[socket.id] = roomID
   socket.join(roomID)
 
@@ -20,4 +20,7 @@ export default (connection: Connection, data: SocketData): void => {
 
   const pageNum = rooms[roomID].pageNum || 1
   io.to(socket.id).emit("sync page", { pageNum })
+
+  const participants = rooms[roomID].userIDs
+  io.to(roomID).emit("update participants", { participants })
 }
