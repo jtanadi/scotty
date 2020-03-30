@@ -56,6 +56,12 @@ export const ButtonOK = styled(Button)`
     color: black;
     background-color: #40a84e;
   }
+
+  &:disabled {
+    color: gray;
+    background-color: lightgray;
+    cursor: not-allowed;
+  }
 `
 
 export const ButtonNotOK = styled(Button)`
