@@ -4,8 +4,8 @@ import { Connection, SocketData } from "./types"
 export default (connection: Connection, data: SocketData): void => {
   const { roomID, pdfUrl } = data
   rooms[roomID] = {
-    users: [],
+    userIDs: [],
     pdfUrl,
-    currentPage: 1,
+    pageNum: 1,
   }
 }
