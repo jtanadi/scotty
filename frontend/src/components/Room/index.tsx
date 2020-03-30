@@ -3,7 +3,8 @@ import { useHistory } from "react-router-dom"
 
 import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
-import socket, { SocketData } from "../../socket"
+import { SocketData } from "../../../../backend/src/sockets/types"
+import socket from "../../socket"
 
 import { RoomBackground } from "./styles"
 
@@ -19,6 +20,7 @@ type PropTypes = {
 
 const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
+  const [participants, setParticipants] = useState<Array<string>>([])
   const [error, setError] = useState("")
 
   const [maxPage, setMaxPage] = useState(1)
@@ -66,6 +68,10 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
       setPageNum(data.pageNum)
     })
 
+    socket.on("update participants", (data: SocketData): void => {
+      setParticipants(data.participants)
+    })
+
     socket.on("error", (data: Error): void => {
       setError(data.message)
     })
@@ -73,6 +79,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     return (): void => {
       socket.off("sync document")
       socket.off("sync page")
+      socket.off("update participants")
       socket.off("error")
     }
   }, [])
@@ -90,6 +97,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
           pageNum={pageNum}
           maxPage={maxPage}
           filename={originalFilename}
+          participants={participants}
           handleChangePage={handleChangePage}
           handleZoom={handleZoom}
           handleClose={handleClose}

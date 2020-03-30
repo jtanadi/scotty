@@ -5,7 +5,8 @@ import {
   NavBarContainer,
   NavButton,
   PageInfo,
-  NameContainer,
+  Filename,
+  InfoContainer,
   CloseButton,
 } from "./styles"
 
@@ -18,6 +19,7 @@ type PropTypes = {
   pageNum: number
   maxPage: number
   filename: string
+  participants: Array<string>
   handleChangePage(option: PageOption): void
   handleZoom(scaleOffset: number): void
   handleClose(): void
@@ -27,13 +29,19 @@ const NavBar: React.FC<PropTypes> = ({
   pageNum,
   maxPage,
   filename,
+  participants,
   handleChangePage,
   handleZoom,
   handleClose,
 }): ReactElement => {
   return (
     <NavBarContainer>
-      <NameContainer>{filename}</NameContainer>
+      <InfoContainer>
+        <Filename>{filename}</Filename>
+        {` - ${participants.length} ${
+          participants.length > 1 ? "participants" : "participant"
+        }`}
+      </InfoContainer>
       <ButtonsContainer>
         <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton>
         <NavButton onClick={(): void => handleZoom(1)}>{"+"}</NavButton>
@@ -53,9 +61,9 @@ const NavBar: React.FC<PropTypes> = ({
           {">>"}
         </NavButton>
       </ButtonsContainer>
-      <ButtonsContainer>
+      <InfoContainer>
         <CloseButton onClick={handleClose}>Close</CloseButton>
-      </ButtonsContainer>
+      </InfoContainer>
     </NavBarContainer>
   )
 }
