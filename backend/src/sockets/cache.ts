@@ -1,4 +1,4 @@
-import { Rooms, UsersMap } from "./types"
+import { RoomsMap, UsersMap } from "./types"
 
-export const rooms: Rooms = {}
+export const rooms: RoomsMap = {}
 export const usersMap: UsersMap = {}

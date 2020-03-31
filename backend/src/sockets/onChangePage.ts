@@ -1,10 +1,12 @@
 import { rooms } from "./cache"
-import { Connection, SocketData } from "./types"
+import { Connection, ChangePageData, SyncPageData } from "./types"
 
-export default (connection: Connection, data: SocketData): void => {
+export default (connection: Connection, data: ChangePageData): void => {
   const { io } = connection
   const { roomID, pageNum } = data
 
   rooms[roomID].pageNum = pageNum
-  io.to(roomID).emit("sync page", data)
+
+  const syncPageData: SyncPageData = { pageNum: rooms[roomID].pageNum }
+  io.to(roomID).emit("sync page", syncPageData)
 }

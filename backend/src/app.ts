@@ -1,4 +1,4 @@
-import express, { Application } from "express"
+import express, { Application, Request, Response } from "express"
 import bodyParser from "body-parser"
 import path from "path"
 
@@ -27,7 +27,7 @@ app.use(
   express.static(path.join(__dirname, "../../frontend/static"))
 )
 
-app.get("/", (req, res): void => {
+app.get("/", (req: Request, res: Response): void => {
   res.sendFile(path.join(__dirname, "../../frontend/index.html"))
 })
 

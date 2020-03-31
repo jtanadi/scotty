@@ -17,7 +17,8 @@ export type Room = {
   pageNum: number
 }
 
-export type Rooms = {
+// Maps roomID to Room
+export type RoomsMap = {
   [id: string]: Room
 }
 
@@ -26,12 +27,42 @@ export type UsersMap = {
   [userID: string]: string
 }
 
-export type SocketData = {
+///////////////////////////
+// Client -> Server types//
+///////////////////////////
+
+export type JoinRoomData = {
   roomID: string
-  userID?: string
-  pdfUrl?: string
-  pageNum?: number
-  users?: User[]
-  mouseX?: number
-  mouseY?: number
+}
+
+export type CreateRoomData = {
+  roomID: string
+  pdfUrl: string
+}
+export type ChangePageData = {
+  roomID: string
+  pageNum: number
+}
+
+export type MouseMoveData = {
+  roomID: string
+  mouseX: number
+  mouseY: number
+}
+
+///////////////////////////
+// Server -> Client types//
+///////////////////////////
+
+export type SyncDocData = {
+  pdfUrl: string
+  userID: string
+}
+
+export type SyncPageData = {
+  pageNum: number
+}
+
+export type UsersData = {
+  users: User[]
 }

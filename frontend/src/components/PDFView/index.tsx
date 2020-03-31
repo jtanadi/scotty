@@ -3,7 +3,7 @@ import { Document, Page } from "react-pdf/dist/entry.webpack"
 
 import Loading from "../Loading"
 
-import { DocumentContainer } from "./styles"
+import { DocumentContainer, PageContainer } from "./styles"
 import { sumPadding } from "../../utils/sumPadding"
 
 const defaultPadding = {
@@ -95,14 +95,16 @@ const PDFView: React.FC<PropType> = ({
   return (
     <DocumentContainer ref={docContainerRef}>
       <Document loading={Loading} file={file} onLoadSuccess={handleLoadSuccess}>
-        <Page
-          height={pageHeight}
-          width={pageWidth}
-          pageNumber={pageNumber}
-          scale={scale}
-          inputRef={handleRatioConstrains}
-          renderAnnotationLayer={false}
-        />
+        <PageContainer>
+          <Page
+            height={pageHeight}
+            width={pageWidth}
+            pageNumber={pageNumber}
+            scale={scale}
+            inputRef={handleRatioConstrains}
+            renderAnnotationLayer={false}
+          />
+        </PageContainer>
       </Document>
     </DocumentContainer>
   )
