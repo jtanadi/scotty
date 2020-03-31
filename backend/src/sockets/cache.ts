@@ -1,17 +1,4 @@
-type Room = {
-  userIDs: Array<string>
-  pdfUrl: string
-  pageNum: number
-}
-
-type Rooms = {
-  [id: string]: Room
-}
-
-// Maps user ID to room ID
-type Users = {
-  [userID: string]: string
-}
+import { Rooms, UsersMap } from "./types"
 
 export const rooms: Rooms = {}
-export const users: Users = {}
+export const usersMap: UsersMap = {}
