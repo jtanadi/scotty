@@ -1,9 +1,12 @@
 import React, { useState, useEffect, ReactElement } from "react"
 import { useHistory } from "react-router-dom"
 
+// Components
 import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
-import { SocketData } from "../../../../backend/src/sockets/types"
+import Pointer from "../Pointer"
+
+import { User, SocketData } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
 
 import { RoomBackground } from "./styles"
@@ -19,10 +22,6 @@ type PropTypes = {
 }
 
 const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
-  const [pdfFile, setPdfFile] = useState("")
-  const [participants, setParticipants] = useState<Array<string>>([])
-  const [error, setError] = useState("")
-
   const [maxPage, setMaxPage] = useState(1)
   const handleDocumentLoad = ({ numPages }): void => {
     setMaxPage(numPages)
@@ -57,10 +56,23 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     })
   }
 
+  const handleMouseMove = (ev: MouseEvent): void => {
+    socket.emit("mousemove", {
+      roomID: id,
+      mouseX: ev.clientX,
+      mouseY: ev.clientY,
+    })
+  }
+
+  const [userID, setUserID] = useState("")
+  const [users, setUsers] = useState<User[]>([])
+  const [pdfFile, setPdfFile] = useState("")
+  const [error, setError] = useState("")
   useEffect(() => {
     socket.emit("join room", { roomID: id })
 
     socket.on("sync document", (data: SocketData): void => {
+      setUserID(data.userID)
       setPdfFile(data.pdfUrl)
     })
 
@@ -68,19 +80,23 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
       setPageNum(data.pageNum)
     })
 
-    socket.on("update participants", (data: SocketData): void => {
-      setParticipants(data.participants)
+    socket.on("update users", (data: SocketData): void => {
+      setUsers(data.users)
     })
 
     socket.on("error", (data: Error): void => {
       setError(data.message)
     })
 
+    document.addEventListener("mousemove", handleMouseMove)
+
     return (): void => {
       socket.off("sync document")
       socket.off("sync page")
-      socket.off("update participants")
+      socket.off("update users")
       socket.off("error")
+
+      document.removeEventListener("mousemove", handleMouseMove)
     }
   }, [])
 
@@ -90,14 +106,34 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     history.push("/")
   }
 
+  const renderPointers = (): ReactElement => {
+    return (
+      <>
+        {users.map(user => {
+          if (user.id !== userID) {
+            return (
+              <Pointer
+                key={user.id}
+                x={user.mouseX}
+                y={user.mouseY}
+                color="red"
+              />
+            )
+          }
+        })}
+      </>
+    )
+  }
+
   const renderRoom = (): ReactElement => {
     return (
       <RoomBackground>
+        {renderPointers()}
         <NavBar
           pageNum={pageNum}
           maxPage={maxPage}
           filename={originalFilename}
-          participants={participants}
+          users={users}
           handleChangePage={handleChangePage}
           handleZoom={handleZoom}
           handleClose={handleClose}
