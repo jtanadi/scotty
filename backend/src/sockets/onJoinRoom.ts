@@ -1,26 +1,35 @@
-import { users, rooms } from "./cache"
-import { Connection, SocketData } from "./types"
+import { usersMap, rooms } from "./cache"
+import { Connection, SocketData, User } from "./types"
+
+const createUser = (id: string): User => {
+  return {
+    id,
+    mouseX: 0,
+    mouseY: 0,
+  }
+}
 
 export default (connection: Connection, data: SocketData): void => {
   const { io, socket } = connection
   const { roomID } = data
 
-  if (!rooms[roomID]) {
+  const room = rooms[roomID]
+  if (!room) {
     io.to(socket.id).emit("error", { message: `Room ${roomID} doesn't exist` })
     return
   }
 
-  rooms[roomID].userIDs.push(socket.id)
-  users[socket.id] = roomID
+  room.users.push(createUser(socket.id))
+  usersMap[socket.id] = roomID
   socket.join(roomID)
 
   // Make sure we're looking at the same doc & page when joining
-  const pdfUrl = rooms[roomID].pdfUrl || ""
-  io.to(socket.id).emit("sync document", { pdfUrl })
+  // and send userID to client
+  const pdfUrl = room.pdfUrl || ""
+  io.to(socket.id).emit("sync document", { pdfUrl, userID: socket.id })
 
-  const pageNum = rooms[roomID].pageNum || 1
+  const pageNum = room.pageNum || 1
   io.to(socket.id).emit("sync page", { pageNum })
 
-  const participants = rooms[roomID].userIDs
-  io.to(roomID).emit("update participants", { participants })
+  io.to(roomID).emit("update users", { users: room.users })
 }

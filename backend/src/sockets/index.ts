@@ -7,6 +7,7 @@ import onChangePage from "./onChangePage"
 import onCreateRoom from "./onCreateRoom"
 import onDisconnect from "./onDisconnect"
 import onJoinRoom from "./onJoinRoom"
+import onMouseMove from "./onMouseMove"
 
 export default (server: HTTPserver | HTTPSserver): void => {
   const io = socket(server)
@@ -30,6 +31,10 @@ export default (server: HTTPserver | HTTPSserver): void => {
 
     socket.on("disconnect", () => {
       onDisconnect({ io, socket })
+    })
+
+    socket.on("mousemove", data => {
+      onMouseMove({ io, socket }, data)
     })
   })
 }

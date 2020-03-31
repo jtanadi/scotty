@@ -1,5 +1,7 @@
 import React, { ReactElement } from "react"
 
+import { User } from "../../../../../backend/src/sockets/types"
+
 import {
   ButtonsContainer,
   NavBarContainer,
@@ -19,7 +21,7 @@ type PropTypes = {
   pageNum: number
   maxPage: number
   filename: string
-  participants: Array<string>
+  users: User[]
   handleChangePage(option: PageOption): void
   handleZoom(scaleOffset: number): void
   handleClose(): void
@@ -29,7 +31,7 @@ const NavBar: React.FC<PropTypes> = ({
   pageNum,
   maxPage,
   filename,
-  participants,
+  users,
   handleChangePage,
   handleZoom,
   handleClose,
@@ -38,9 +40,7 @@ const NavBar: React.FC<PropTypes> = ({
     <NavBarContainer>
       <InfoContainer>
         <Filename>{filename}</Filename>
-        {` - ${participants.length} ${
-          participants.length > 1 ? "participants" : "participant"
-        }`}
+        {` - ${users.length} ${users.length > 1 ? "users" : "user"}`}
       </InfoContainer>
       <ButtonsContainer>
         <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton>
