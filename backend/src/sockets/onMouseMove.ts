@@ -2,11 +2,14 @@ import { rooms } from "./cache"
 import { Connection, SocketData } from "./types"
 
 export default (connection: Connection, data: SocketData): void => {
-  const { socket } = connection
+  const { io, socket } = connection
   const { roomID, mouseX, mouseY } = data
 
   const room = rooms[roomID]
-  if (!room) return
+  if (!room) {
+    io.to(socket.id).emit("error", { message: `Room ${roomID} doesn't exist` })
+    return
+  }
 
   room.users = room.users.map(user => {
     if (user.id === socket.id) {
