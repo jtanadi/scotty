@@ -6,6 +6,7 @@ import {
   ButtonsContainer,
   NavBarContainer,
   NavButton,
+  PointerButton,
   PageInfo,
   Filename,
   InfoContainer,
@@ -22,9 +23,11 @@ type PropTypes = {
   maxPage: number
   filename: string
   users: User[]
+  showMouse: boolean
   handleChangePage(option: PageOption): void
   handleZoom(scaleOffset: number): void
   handleClose(): void
+  handlePointerToggle(): void
 }
 
 const NavBar: React.FC<PropTypes> = ({
@@ -32,9 +35,11 @@ const NavBar: React.FC<PropTypes> = ({
   maxPage,
   filename,
   users,
+  showMouse,
   handleChangePage,
   handleZoom,
   handleClose,
+  handlePointerToggle,
 }): ReactElement => {
   return (
     <NavBarContainer>
@@ -60,6 +65,9 @@ const NavBar: React.FC<PropTypes> = ({
         <NavButton onClick={(): void => handleChangePage({ goto: maxPage })}>
           {">>"}
         </NavButton>
+        <PointerButton showMouse={showMouse} onClick={handlePointerToggle}>
+          🏹️
+        </PointerButton>
       </ButtonsContainer>
       <InfoContainer>
         <CloseButton onClick={handleClose}>Close</CloseButton>

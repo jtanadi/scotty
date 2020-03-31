@@ -32,6 +32,16 @@ const NavButton = styled(Button)`
   font-weight: bold;
 `
 
+type PointerButtonProp = {
+  showMouse: boolean
+}
+
+const PointerButton = styled(NavButton).attrs((p: PointerButtonProp) => {
+  if (p.showMouse) {
+    return { style: { backgroundColor: "#67e678" } }
+  }
+})<PointerButtonProp>``
+
 const CloseButton = styled(ButtonNotOK)`
   font-weight: bold;
   padding: 0.5rem 1rem;
@@ -49,6 +59,7 @@ export {
   Filename,
   NavBarContainer,
   NavButton,
+  PointerButton,
   CloseButton,
   PageInfo,
 }
