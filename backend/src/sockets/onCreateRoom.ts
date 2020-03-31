@@ -1,11 +1,13 @@
 import { rooms } from "./cache"
-import { Connection, SocketData, Room } from "./types"
+import { Connection, CreateRoomData, Room } from "./types"
 
-export default (connection: Connection, data: SocketData): void => {
+export default (connection: Connection, data: CreateRoomData): void => {
   const { roomID, pdfUrl } = data
-  rooms[roomID] = <Room>{
+
+  const newRoom: Room = {
     users: [],
     pdfUrl,
     pageNum: 1,
   }
+  rooms[roomID] = newRoom
 }

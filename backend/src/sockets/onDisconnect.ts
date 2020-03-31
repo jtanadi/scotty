@@ -1,7 +1,7 @@
 import s3 from "../utils/s3"
 import { rooms, usersMap } from "./cache"
 
-import { Connection, User } from "./types"
+import { Connection, User, UsersData } from "./types"
 
 export default (connection: Connection): void => {
   const { io, socket } = connection
@@ -31,5 +31,7 @@ export default (connection: Connection): void => {
   }
 
   usersMap[socket.id] = null
-  io.to(roomID).emit("update users", { users: room.users })
+
+  const usersData: UsersData = { users: room.users }
+  io.to(roomID).emit("update users", usersData)
 }

@@ -1,5 +1,12 @@
 import { usersMap, rooms } from "./cache"
-import { Connection, SocketData, User } from "./types"
+import {
+  Connection,
+  JoinRoomData,
+  SyncDocData,
+  SyncPageData,
+  User,
+  UsersData,
+} from "./types"
 
 const createUser = (id: string): User => {
   return {
@@ -9,7 +16,7 @@ const createUser = (id: string): User => {
   }
 }
 
-export default (connection: Connection, data: SocketData): void => {
+export default (connection: Connection, data: JoinRoomData): void => {
   const { io, socket } = connection
   const { roomID } = data
 
@@ -26,10 +33,14 @@ export default (connection: Connection, data: SocketData): void => {
   // Make sure we're looking at the same doc & page when joining
   // and send userID to client
   const pdfUrl = room.pdfUrl || ""
-  io.to(socket.id).emit("sync document", { pdfUrl, userID: socket.id })
+
+  const syncDocData: SyncDocData = { pdfUrl, userID: socket.id }
+  io.to(socket.id).emit("sync document", syncDocData)
 
   const pageNum = room.pageNum || 1
-  io.to(socket.id).emit("sync page", { pageNum })
+  const syncPageData: SyncPageData = { pageNum }
+  io.to(socket.id).emit("sync page", syncPageData)
 
-  io.to(roomID).emit("update users", { users: room.users })
+  const usersData: UsersData = { users: room.users }
+  io.to(roomID).emit("update users", usersData)
 }

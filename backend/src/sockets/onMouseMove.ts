@@ -1,7 +1,7 @@
 import { rooms } from "./cache"
-import { Connection, SocketData } from "./types"
+import { Connection, MouseMoveData, UsersData } from "./types"
 
-export default (connection: Connection, data: SocketData): void => {
+export default (connection: Connection, data: MouseMoveData): void => {
   const { io, socket } = connection
   const { roomID, mouseX, mouseY } = data
 
@@ -19,5 +19,6 @@ export default (connection: Connection, data: SocketData): void => {
     return user
   })
 
-  socket.broadcast.to(roomID).emit("update users", { users: room.users })
+  const usersData: UsersData = { users: room.users }
+  socket.broadcast.to(roomID).emit("update users", usersData)
 }
