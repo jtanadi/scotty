@@ -8,6 +8,7 @@ import Pointer from "../Pointer"
 
 import {
   JoinRoomData,
+  MouseMoveData,
   SyncDocData,
   SyncPageData,
   User,
@@ -16,6 +17,8 @@ import {
 import socket from "../../socket"
 
 import { RoomBackground } from "./styles"
+
+const S3URL = "https://beam-me-up-scotty.s3.amazonaws.com"
 
 enum ZOOMLIMIT {
   MIN = 1,
@@ -62,12 +65,17 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     })
   }
 
-  const handleMouseMove = (ev: MouseEvent): void => {
-    socket.emit("mousemove", {
+  const handleMouseMove = (ev?: MouseEvent): void => {
+    const mouseX: number = ev ? ev.clientX : null
+    const mouseY: number = ev ? ev.clientY : null
+
+    const mouseMoveData: MouseMoveData = {
       roomID: id,
-      mouseX: ev.clientX,
-      mouseY: ev.clientY,
-    })
+      mouseX,
+      mouseY,
+    }
+
+    socket.emit("mousemove", mouseMoveData)
   }
 
   const [userID, setUserID] = useState("")
@@ -95,17 +103,30 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
       setError(data.message)
     })
 
-    document.addEventListener("mousemove", handleMouseMove)
-
     return (): void => {
       socket.off("sync document")
       socket.off("sync page")
       socket.off("update users")
       socket.off("error")
-
-      document.removeEventListener("mousemove", handleMouseMove)
     }
   }, [])
+
+  const [showMouse, setShowMouse] = useState(false)
+  useEffect(() => {
+    if (showMouse) {
+      document.addEventListener("mousemove", handleMouseMove)
+    } else {
+      handleMouseMove()
+    }
+
+    return (): void => {
+      document.removeEventListener("mousemove", handleMouseMove)
+    }
+  }, [showMouse])
+
+  const handlePointerToggle = (): void => {
+    setShowMouse(prev => !prev)
+  }
 
   const history = useHistory()
   const handleClose = (): void => {
@@ -117,7 +138,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     return (
       <>
         {users.map(user => {
-          if (user.id !== userID) {
+          if (user.id !== userID && user.mouseX && user.mouseY) {
             return (
               <Pointer
                 key={user.id}
@@ -141,13 +162,15 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
           maxPage={maxPage}
           filename={originalFilename}
           users={users}
+          showMouse={showMouse}
           handleChangePage={handleChangePage}
           handleZoom={handleZoom}
           handleClose={handleClose}
+          handlePointerToggle={handlePointerToggle}
         />
         {pdfFile ? (
           <PDFView
-            file={`https://beam-me-up-scotty.s3.amazonaws.com/${pdfFile}`}
+            file={`${S3URL}/${pdfFile}`}
             pageNumber={pageNum}
             scale={scale}
             handleLoadSuccess={handleDocumentLoad}
