@@ -6,7 +6,13 @@ import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
 import Pointer from "../Pointer"
 
-import { User, SocketData } from "../../../../backend/src/sockets/types"
+import {
+  JoinRoomData,
+  SyncDocData,
+  SyncPageData,
+  User,
+  UsersData,
+} from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
 
 import { RoomBackground } from "./styles"
@@ -69,18 +75,19 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    socket.emit("join room", { roomID: id })
+    const joinRoomData: JoinRoomData = { roomID: id }
+    socket.emit("join room", joinRoomData)
 
-    socket.on("sync document", (data: SocketData): void => {
+    socket.on("sync document", (data: SyncDocData): void => {
       setUserID(data.userID)
       setPdfFile(data.pdfUrl)
     })
 
-    socket.on("sync page", (data: SocketData): void => {
+    socket.on("sync page", (data: SyncPageData): void => {
       setPageNum(data.pageNum)
     })
 
-    socket.on("update users", (data: SocketData): void => {
+    socket.on("update users", (data: UsersData): void => {
       setUsers(data.users)
     })
 
