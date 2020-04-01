@@ -5,8 +5,7 @@ if (process.env.NODE_ENV === "production") {
   socket = io()
 } else {
   // Default back end port
-  const PORT = process.env.PORT || 3030
-  socket = io(`http://localhost:${PORT}`)
+  socket = io(`http://localhost:3030`)
 }
 
 export default socket
