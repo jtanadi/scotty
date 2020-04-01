@@ -2,6 +2,11 @@ const path = require("path")
 const TerserPlugin = require("terser-webpack-plugin")
 const webpack = require("webpack")
 
+// Important that this port is 3000
+// because of our restrictive S3 bucket
+const PORT = 3000
+const PROXY = process.env.PROXY || "http://localhost:3030"
+
 let optimization = {}
 let resolve = {
   extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
@@ -15,8 +20,6 @@ if (process.env.NODE_ENV === "development") {
       "react-dom": "@hot-loader/react-dom",
     },
   }
-
-  // entry = ["webpack-hot-middleware/client", ...entry]
 } else if (process.env.NODE_ENV === "production") {
   optimization = {
     minimize: true,
@@ -29,6 +32,11 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "/frontend/"),
     compress: true,
+    hot: true,
+    port: PORT,
+    proxy: {
+      "/": PROXY,
+    },
   },
   output: {
     filename: "index.js",
