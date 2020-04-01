@@ -3,7 +3,7 @@ import https, { Server as HTTPSserver } from "https"
 
 import app from "./app"
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3030
 
 let server: HTTPserver | HTTPSserver
 if (process.env.NOD_ENV === "production") {
