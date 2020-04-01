@@ -8,9 +8,9 @@
   },
   "scripts": {
     "compile": "tsc",
-    "build": "npm run compile && NODE_ENV=production webpack",
+    "build": "npm run compile && webpack --config webpack.prod.js",
     "dev": "npm run dev:front & npm run dev:server",
-    "dev:front": "NODE_ENV=development webpack-dev-server",
+    "dev:front": "webpack-dev-server --config webpack.dev.js",
     "dev:server": "NODE_ENV=development nodemon",
     "start": "node backend/dist/index.js",
     "test": "jest"
@@ -81,6 +81,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.10.3",
-    "webpack-hot-middleware": "^2.25.0"
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-merge": "^4.2.2"
   }
 }
