@@ -94,7 +94,11 @@ const PDFView: React.FC<PropType> = ({
 
   return (
     <DocumentContainer ref={docContainerRef}>
-      <Document loading={Loading} file={file} onLoadSuccess={handleLoadSuccess}>
+      <Document
+        loading={<Loading />}
+        file={file}
+        onLoadSuccess={handleLoadSuccess}
+      >
         <PageContainer>
           <Page
             height={pageHeight}
