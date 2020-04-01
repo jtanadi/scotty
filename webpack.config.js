@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === "development") {
     },
   }
 
-  entry = ["webpack-hot-middleware/client", ...entry]
+  // entry = ["webpack-hot-middleware/client", ...entry]
 } else if (process.env.NODE_ENV === "production") {
   optimization = {
     minimize: true,
@@ -26,6 +26,10 @@ if (process.env.NODE_ENV === "development") {
 
 module.exports = {
   entry,
+  devServer: {
+    contentBase: path.join(__dirname, "/frontend/"),
+    compress: true,
+  },
   output: {
     filename: "index.js",
     path: path.join(__dirname, "/frontend/dist"),
