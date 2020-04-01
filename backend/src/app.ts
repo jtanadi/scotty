@@ -10,14 +10,6 @@ import uploadRouter from "./routes/upload"
 
 const app: Application = express()
 
-// Enable HMR for dev server
-if (process.env.NODE_ENV === "development") {
-  // Use require(): we want conditional import
-  // because heroku prunes devDependencies and
-  // all imports in enableHMR are devDependencies
-  require("./utils/enableHMR")(app)
-}
-
 app.use(useHttps)
 app.use(bodyParser.json())
 
