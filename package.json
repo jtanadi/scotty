@@ -4,7 +4,7 @@
   "description": "WebSocket-enabled PDF viewer",
   "main": "backend/index.js",
   "engines": {
-    "node": ">=12.16.1"
+    "node": "^12.16.1"
   },
   "scripts": {
     "compile": "tsc",
