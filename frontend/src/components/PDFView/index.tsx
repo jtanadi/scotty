@@ -4,13 +4,23 @@ import { Document, Page } from "react-pdf/dist/entry.webpack"
 import Loading from "../Loading"
 
 import { DocumentContainer, PageContainer } from "./styles"
-import { sumPadding } from "../../utils/sumPadding"
+import { Padding, sumPadding } from "../../utils/paddingUtils"
 
-const defaultPadding = {
+type Dims = {
+  width: number
+  height: number
+}
+
+const defaultPadding: Padding = {
   top: "",
   right: "",
   bottom: "",
   left: "",
+}
+
+const defaultDims: Dims = {
+  width: 0,
+  height: 0,
 }
 
 type PropType = {
@@ -27,7 +37,7 @@ const PDFView: React.FC<PropType> = ({
   handleLoadSuccess,
 }): ReactElement => {
   const docContainerRef = useRef(null)
-  const [docPadding, setDocPadding] = useState(defaultPadding)
+  const [docPadding, setDocPadding] = useState<Padding>(defaultPadding)
   const calcContainerPadding = (): void => {
     const {
       paddingTop,
@@ -43,54 +53,44 @@ const PDFView: React.FC<PropType> = ({
     })
   }
 
-  const [constrainByWidth, setConstrainByWidth] = useState(false)
-  const handleRatioConstrains = (ref: HTMLDivElement): void => {
-    if (!ref) return
+  const [originalDims, setOriginalDims] = useState<Dims>(defaultDims)
+  const handlePageSuccess = ({ originalWidth, originalHeight }): void => {
+    setOriginalDims({ width: originalWidth, height: originalHeight })
+  }
 
-    // Determine if we should use width or height constrain
-    // by comparing PDF ratio to window ratio
-    const { clientWidth, clientHeight } = ref
-    const pdfRatio = clientWidth / clientHeight
+  const [pageDims, setPageDims] = useState<Dims>(defaultDims)
+  const handleResize = (): void => {
+    if (!originalDims.width && !originalDims.height) return
+
+    const pageRatio = originalDims.width / originalDims.height
 
     const { top, bottom, left, right } = docPadding
-    const vPad = sumPadding(top, bottom)
-    const hPad = sumPadding(left, right)
-    const innerRatio = (window.innerWidth - hPad) / (window.innerHeight - vPad)
+    const viewWidth = window.innerWidth - sumPadding(left, right)
+    const viewHeight = window.innerHeight - sumPadding(top, bottom)
+    const viewRatio = viewWidth / viewHeight
 
     // If window is taller than PDF, constrain by width
     // otherwise constrain by height
-    if (innerRatio < pdfRatio) {
-      return setConstrainByWidth(true)
+    if (viewRatio < pageRatio) {
+      return setPageDims({ width: viewWidth, height: 0 })
     }
-    return setConstrainByWidth(false)
+    return setPageDims({ height: viewHeight, width: 0 })
   }
 
-  const [pageHeight, setPageHeight] = useState(0)
-  const [pageWidth, setPageWidth] = useState(0)
-  const handleResize = (): void => {
-    // pageWidth has precedence over pageHeight
-    const { top, bottom, left, right } = docPadding
-
-    if (constrainByWidth) {
-      const calculatedPadding = sumPadding(left, right)
-      setPageWidth(window.innerWidth - calculatedPadding)
-      setPageHeight(0)
-    } else {
-      const calculatedPadding = sumPadding(top, bottom)
-      setPageHeight(window.innerHeight - calculatedPadding)
-      setPageWidth(0)
-    }
-  }
+  useEffect((): void => {
+    calcContainerPadding()
+  }, [])
 
   useEffect((): (() => void) => {
-    calcContainerPadding()
     handleResize()
     window.addEventListener("resize", handleResize)
 
     return (): void => {
       window.removeEventListener("resize", handleResize)
     }
-  }, [constrainByWidth])
+  }, [originalDims])
+
+  console.log("Render")
 
   return (
     <DocumentContainer ref={docContainerRef}>
@@ -101,11 +101,11 @@ const PDFView: React.FC<PropType> = ({
       >
         <PageContainer>
           <Page
-            height={pageHeight}
-            width={pageWidth}
+            height={pageDims.height}
+            width={pageDims.width}
+            onLoadSuccess={handlePageSuccess}
             pageNumber={pageNumber}
             scale={scale}
-            inputRef={handleRatioConstrains}
             renderAnnotationLayer={false}
           />
         </PageContainer>
