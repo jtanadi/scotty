@@ -90,8 +90,6 @@ const PDFView: React.FC<PropType> = ({
     }
   }, [originalDims])
 
-  console.log("Render")
-
   return (
     <DocumentContainer ref={docContainerRef}>
       <Document

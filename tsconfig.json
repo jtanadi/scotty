@@ -10,8 +10,7 @@
     "outDir": "./backend/dist",
     "sourceMap": true,
     "target": "ES6",
-    "typeRoots": ["node_modules/@types"],
-    "types": []
+    "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules"],
   "include": ["backend/src/**/*.ts"]
