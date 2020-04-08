@@ -1,11 +1,7 @@
 import React, { useState, useEffect, ReactElement } from "react"
 import { useHistory } from "react-router-dom"
 
-// Components
-import NavBar, { PageOption } from "./NavBar"
-import PDFView from "../PDFView"
-import Pointer from "../Pointer"
-
+// Utils, etc.
 import {
   JoinRoomData,
   MouseMoveData,
@@ -15,6 +11,12 @@ import {
   UsersData,
 } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
+import roundTo from "../../utils/roundTo"
+
+// Components
+import NavBar, { PageOption } from "./NavBar"
+import PDFView from "../PDFView"
+import Pointer from "../Pointer"
 
 import { RoomBackground } from "./styles"
 
@@ -29,6 +31,8 @@ type PropTypes = {
   id: string
   originalFilename: string
 }
+
+const roundTo2 = roundTo(2)
 
 const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [maxPage, setMaxPage] = useState(1)
@@ -66,8 +70,8 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   }
 
   const handleMouseMove = (ev?: MouseEvent): void => {
-    const mouseX: number = ev ? ev.clientX : null
-    const mouseY: number = ev ? ev.clientY : null
+    const mouseX: number = ev ? roundTo2(ev.clientX / windowWidth) : null
+    const mouseY: number = ev ? roundTo2(ev.clientY / windowHeight) : null
 
     const mouseMoveData: MouseMoveData = {
       roomID: id,
@@ -76,6 +80,13 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     }
 
     socket.emit("mousemove", mouseMoveData)
+  }
+
+  const [windowWidth, setWindowWidth] = useState(0)
+  const [windowHeight, setWindowHeight] = useState(0)
+  const handleWindowResize = (): void => {
+    setWindowWidth(window.innerWidth)
+    setWindowHeight(window.innerHeight)
   }
 
   const [userID, setUserID] = useState("")
@@ -103,11 +114,15 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
       setError(data.message)
     })
 
+    handleWindowResize()
+    window.addEventListener("resize", handleWindowResize)
+
     return (): void => {
       socket.off("sync document")
       socket.off("sync page")
       socket.off("update users")
       socket.off("error")
+      window.removeEventListener("resize", handleWindowResize)
     }
   }, [])
 
@@ -142,8 +157,8 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
             return (
               <Pointer
                 key={user.id}
-                x={user.mouseX}
-                y={user.mouseY}
+                x={user.mouseX * windowWidth}
+                y={user.mouseY * windowHeight}
                 color="red"
               />
             )
