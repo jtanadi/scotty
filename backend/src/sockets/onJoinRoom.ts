@@ -1,7 +1,7 @@
 import { usersMap, rooms } from "./cache"
 import {
   Connection,
-  JoinRoomData,
+  JoinLeaveRoomData,
   SyncDocData,
   SyncPageData,
   User,
@@ -16,18 +16,18 @@ const createUser = (id: string): User => {
   }
 }
 
-export default (connection: Connection, data: JoinRoomData): void => {
+export default (connection: Connection, data: JoinLeaveRoomData): void => {
   const { io, socket } = connection
   const { roomID } = data
-
   const room = rooms[roomID]
-  if (!room) {
-    io.to(socket.id).emit("error", { message: `Room ${roomID} doesn't exist` })
-    return
-  }
 
   room.users.push(createUser(socket.id))
-  usersMap[socket.id] = roomID
+
+  // Room creator is already cached, so don't redo work
+  if (!usersMap[socket.id]) {
+    usersMap[socket.id] = roomID
+  }
+
   socket.join(roomID)
 
   // Make sure we're looking at the same doc & page when joining
