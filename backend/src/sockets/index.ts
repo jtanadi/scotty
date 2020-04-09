@@ -3,6 +3,8 @@ import { Server as HTTPSserver } from "https"
 
 import socket from "socket.io"
 
+import checkRoom from "./middlewares/checkRoom"
+
 import onChangePage from "./onChangePage"
 import onCreateRoom from "./onCreateRoom"
 import onDisconnect from "./onDisconnect"
@@ -13,6 +15,8 @@ export default (server: HTTPserver | HTTPSserver): void => {
   const io = socket(server)
 
   io.on("connection", socket => {
+    socket.use((packet, next) => checkRoom({ io, socket }, packet, next))
+
     socket.on("create room", data => {
       onCreateRoom({ io, socket }, data)
     })
