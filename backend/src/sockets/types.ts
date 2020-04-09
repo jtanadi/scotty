@@ -31,7 +31,7 @@ export type UsersMap = {
 // Client -> Server types//
 ///////////////////////////
 
-export type JoinRoomData = {
+export type JoinLeaveRoomData = {
   roomID: string
 }
 

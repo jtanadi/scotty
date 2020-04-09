@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom"
 
 // Utils, etc.
 import {
-  JoinRoomData,
+  JoinLeaveRoomData,
   MouseMoveData,
   SyncDocData,
   SyncPageData,
@@ -94,7 +94,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    const joinRoomData: JoinRoomData = { roomID: id }
+    const joinRoomData: JoinLeaveRoomData = { roomID: id }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
@@ -145,7 +145,8 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
 
   const history = useHistory()
   const handleClose = (): void => {
-    socket.emit("leave room")
+    const leaveRoomData: JoinLeaveRoomData = { roomID: id }
+    socket.emit("leave room", leaveRoomData)
     history.push("/")
   }
 

@@ -10,6 +10,8 @@ export default (connection: Connection): void => {
   if (!roomID) return
 
   const room = rooms[roomID]
+  if (!room) return
+
   room.users = room.users.filter((user: User) => user.id !== socket.id)
 
   // When room is empty, delete object from S3 bucket
