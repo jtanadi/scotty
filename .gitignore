@@ -5,3 +5,4 @@ backend/dist/
 *.swp
 .DS_Store
 .env
+.eslintcache
