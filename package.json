@@ -70,7 +70,9 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
+    "lint-staged": "^10.1.2",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "terser-webpack-plugin": "^2.3.5",
@@ -83,5 +85,15 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^4.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.ts": "eslint --cache --fix",
+    "*.tsx": "eslint --cache --fix"
   }
 }
