@@ -151,7 +151,7 @@ const Room: React.FC<PropTypes> = ({
 
   const history = useHistory()
   const handleClose = (): void => {
-    const leaveRoomData: JoinLeaveRoomData = { roomID: id }
+    const leaveRoomData: RoomData = { roomID: id }
     socket.emit("leave room", leaveRoomData)
     history.push("/")
   }
