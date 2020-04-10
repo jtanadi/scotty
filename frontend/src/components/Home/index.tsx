@@ -1,12 +1,24 @@
-import React, { useState, ChangeEvent, ReactElement, MouseEvent } from "react"
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  ReactElement,
+  MouseEvent,
+} from "react"
 import axios from "axios"
+import { Redirect } from "react-router-dom"
 import { v4 } from "uuid"
 
 import socket from "../../socket"
+import { RoomData } from "../../../../backend/src/sockets/types"
 
-import LinkModal from "../LinkModal"
 import { Background } from "../globalStyles"
 import { Form, Label, Input, UploadButton } from "./styles"
+
+export type LocationState = {
+  host: boolean
+  filename: string
+}
 
 const Home: React.FC<{}> = (): ReactElement => {
   const [pdfFile, setPdfFile] = useState(null)
@@ -14,7 +26,6 @@ const Home: React.FC<{}> = (): ReactElement => {
     setPdfFile(e.target.files[0])
   }
 
-  const [roomID, setRoomID] = useState("")
   const [loading, setLoading] = useState(false)
   const handleUpload = async (
     e: MouseEvent<HTMLButtonElement>
@@ -36,13 +47,19 @@ const Home: React.FC<{}> = (): ReactElement => {
 
     const uuidv4 = v4()
 
-    // Create and redirect to room
     socket.emit("create room", { roomID: uuidv4, pdfUrl: Key })
-
-    // When roomID is set, LinkModal will be displayed
-    // LinkModal will take care of redirecting to Room
-    setRoomID(uuidv4)
   }
+
+  const [roomID, setRoomID] = useState("")
+  useEffect(() => {
+    socket.on("room created", (data: RoomData) => {
+      setRoomID(data.roomID)
+    })
+
+    return (): void => {
+      socket.off("room created")
+    }
+  }, [])
 
   const renderInput = (): ReactElement => {
     return (
@@ -63,19 +80,18 @@ const Home: React.FC<{}> = (): ReactElement => {
     )
   }
 
-  return (
-    <Background>
-      {roomID ? (
-        <LinkModal
-          link={`${window.location.toString()}room=${roomID}/file=${
-            pdfFile.name
-          }`}
-        />
-      ) : (
-        renderInput()
-      )}
-    </Background>
-  )
+  const redirectToRoom = (): ReactElement => {
+    return (
+      <Redirect
+        to={{
+          pathname: `/room=${roomID}/filename=${pdfFile.name}`,
+          state: { host: true },
+        }}
+      />
+    )
+  }
+
+  return <Background>{roomID ? redirectToRoom() : renderInput()}</Background>
 }
 
 export default Home
