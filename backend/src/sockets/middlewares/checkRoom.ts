@@ -1,7 +1,7 @@
 import { Packet } from "socket.io"
 
 import { rooms } from "../cache"
-import { Connection, ChangePageData, JoinLeaveRoomData } from "../types"
+import { Connection, RoomData } from "../types"
 
 export default (
   connection: Connection,
@@ -15,7 +15,7 @@ export default (
     next()
   }
 
-  const data: ChangePageData | JoinLeaveRoomData = packet[1]
+  const data: RoomData = packet[1]
   const { roomID } = data
 
   const room = rooms[roomID]

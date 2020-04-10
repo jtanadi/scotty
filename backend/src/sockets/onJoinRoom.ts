@@ -1,7 +1,7 @@
 import { usersMap, rooms } from "./cache"
 import {
   Connection,
-  JoinLeaveRoomData,
+  RoomData,
   SyncDocData,
   SyncPageData,
   User,
@@ -16,7 +16,7 @@ const createUser = (id: string): User => {
   }
 }
 
-export default (connection: Connection, data: JoinLeaveRoomData): void => {
+export default (connection: Connection, data: RoomData): void => {
   const { io, socket } = connection
   const { roomID } = data
   const room = rooms[roomID]
