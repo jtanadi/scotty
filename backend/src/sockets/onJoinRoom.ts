@@ -22,11 +22,7 @@ export default (connection: Connection, data: RoomData): void => {
   const room = rooms[roomID]
 
   room.users.push(createUser(socket.id))
-
-  // Room creator is already cached, so don't redo work
-  if (!usersMap[socket.id]) {
-    usersMap[socket.id] = roomID
-  }
+  usersMap[socket.id] = roomID
 
   socket.join(roomID)
 

@@ -1,8 +1,8 @@
-import { rooms, usersMap } from "./cache"
-import { Connection, CreateRoomData, Room } from "./types"
+import { rooms } from "./cache"
+import { Connection, CreateRoomData, Room, RoomData } from "./types"
 
 export default (connection: Connection, data: CreateRoomData): void => {
-  const { socket } = connection
+  const { io, socket } = connection
   const { roomID, pdfUrl } = data
 
   const newRoom: Room = {
@@ -13,6 +13,7 @@ export default (connection: Connection, data: CreateRoomData): void => {
 
   rooms[roomID] = newRoom
 
-  // Cache user to room without joining room
-  usersMap[socket.id] = roomID
+  // Send private message back to room creator with roomID
+  const roomCreatedData: RoomData = { roomID }
+  io.to(socket.id).emit("room created", roomCreatedData)
 }
