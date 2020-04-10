@@ -31,21 +31,18 @@ export type UsersMap = {
 // Client -> Server types//
 ///////////////////////////
 
-export type JoinLeaveRoomData = {
+export interface RoomData {
   roomID: string
 }
 
-export type CreateRoomData = {
-  roomID: string
+export interface CreateRoomData extends RoomData {
   pdfUrl: string
 }
-export type ChangePageData = {
-  roomID: string
+export interface ChangePageData extends RoomData {
   pageNum: number
 }
 
-export type MouseMoveData = {
-  roomID: string
+export interface MouseMoveData extends RoomData {
   mouseX: number
   mouseY: number
 }

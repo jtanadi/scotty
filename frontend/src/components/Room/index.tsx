@@ -1,9 +1,10 @@
 import React, { useState, useEffect, ReactElement } from "react"
-import { useHistory } from "react-router-dom"
+import { RouteComponentProps } from "react-router-dom"
+import { useHistory, withRouter } from "react-router-dom"
 
 // Utils, etc.
 import {
-  JoinLeaveRoomData,
+  RoomData,
   MouseMoveData,
   SyncDocData,
   SyncPageData,
@@ -17,24 +18,29 @@ import roundTo from "../../utils/roundTo"
 import NavBar, { PageOption } from "./NavBar"
 import PDFView from "../PDFView"
 import Pointer from "../Pointer"
+import { LocationState } from "../Home"
+import LinkModal from "../LinkModal"
 
 import { RoomBackground } from "./styles"
 
 const S3URL = "https://beam-me-up-scotty.s3.amazonaws.com"
 
+const roundTo2 = roundTo(2)
 enum ZOOMLIMIT {
   MIN = 1,
   MAX = 5,
 }
 
-type PropTypes = {
+interface PropTypes extends RouteComponentProps {
   id: string
-  originalFilename: string
+  filename: string
 }
 
-const roundTo2 = roundTo(2)
-
-const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
+const Room: React.FC<PropTypes> = ({
+  id,
+  filename,
+  location,
+}): ReactElement => {
   const [maxPage, setMaxPage] = useState(1)
   const handleDocumentLoad = ({ numPages }): void => {
     setMaxPage(numPages)
@@ -94,7 +100,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   const [pdfFile, setPdfFile] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    const joinRoomData: JoinLeaveRoomData = { roomID: id }
+    const joinRoomData: RoomData = { roomID: id }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
@@ -145,7 +151,7 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
 
   const history = useHistory()
   const handleClose = (): void => {
-    const leaveRoomData: JoinLeaveRoomData = { roomID: id }
+    const leaveRoomData: RoomData = { roomID: id }
     socket.emit("leave room", leaveRoomData)
     history.push("/")
   }
@@ -169,14 +175,22 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
     )
   }
 
+  const renderModal = (): ReactElement => {
+    if (!location?.state) return null
+    return (location.state as LocationState).host ? (
+      <LinkModal link={window.location.toString()} />
+    ) : null
+  }
+
   const renderRoom = (): ReactElement => {
     return (
       <RoomBackground>
+        {renderModal()}
         {renderPointers()}
         <NavBar
           pageNum={pageNum}
           maxPage={maxPage}
-          filename={originalFilename}
+          filename={filename}
           users={users}
           showMouse={showMouse}
           handleChangePage={handleChangePage}
@@ -199,4 +213,4 @@ const Room: React.FC<PropTypes> = ({ id, originalFilename }): ReactElement => {
   return <div>{error ? `ERROR: ${error}` : renderRoom()}</div>
 }
 
-export default Room
+export default withRouter(Room) as any

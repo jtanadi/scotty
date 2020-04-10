@@ -1,6 +1,10 @@
 import styled from "styled-components"
 
-import { H2, H3, P, ButtonOK } from "../globalStyles"
+import { Cover, H2, H3, P, ButtonOK } from "../globalStyles"
+
+export const LinkModalCover = styled(Cover)`
+  z-index: 9998;
+`
 
 export const Island = styled.div`
   width: 40%;

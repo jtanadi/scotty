@@ -1,8 +1,8 @@
 import React, { ReactElement, FC, useRef, useEffect, useState } from "react"
-import { Redirect } from "react-router-dom"
 
-import { Cover, Code } from "../globalStyles"
+import { Code } from "../globalStyles"
 import {
+  LinkModalCover,
   Island,
   Input,
   ButtonsContainer,
@@ -19,9 +19,9 @@ type PropTypes = {
 }
 
 const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
-  const [ready, setReady] = useState(false)
+  const [show, setShow] = useState(true)
   const handleOK = (): void => {
-    setReady(true)
+    setShow(false)
   }
 
   const inputRef = useRef(null)
@@ -34,7 +34,7 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
 
   const renderModal = (): ReactElement => {
     return (
-      <Cover>
+      <LinkModalCover>
         <Island>
           <Title>You&rsquo;re all set!</Title>
           <Body>Copy and share the following link to invite others.</Body>
@@ -57,15 +57,11 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
             bucket with very limited read/write access.
           </Body>
         </Island>
-      </Cover>
+      </LinkModalCover>
     )
   }
 
-  return ready ? (
-    <Redirect push to={`${link.replace(window.location.toString(), "/")}`} />
-  ) : (
-    renderModal()
-  )
+  return show ? renderModal() : null
 }
 
 export default LinkModal

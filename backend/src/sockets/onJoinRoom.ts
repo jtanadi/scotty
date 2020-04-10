@@ -1,7 +1,7 @@
 import { usersMap, rooms } from "./cache"
 import {
   Connection,
-  JoinLeaveRoomData,
+  RoomData,
   SyncDocData,
   SyncPageData,
   User,
@@ -16,17 +16,13 @@ const createUser = (id: string): User => {
   }
 }
 
-export default (connection: Connection, data: JoinLeaveRoomData): void => {
+export default (connection: Connection, data: RoomData): void => {
   const { io, socket } = connection
   const { roomID } = data
   const room = rooms[roomID]
 
   room.users.push(createUser(socket.id))
-
-  // Room creator is already cached, so don't redo work
-  if (!usersMap[socket.id]) {
-    usersMap[socket.id] = roomID
-  }
+  usersMap[socket.id] = roomID
 
   socket.join(roomID)
 
