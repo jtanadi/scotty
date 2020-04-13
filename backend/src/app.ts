@@ -7,6 +7,7 @@ import useHttps from "./middlewares/useHttps"
 
 // Routes
 import uploadRouter from "./routes/upload"
+import pingbackRouter from "./routes/pingback"
 
 const app: Application = express()
 
@@ -24,5 +25,6 @@ app.get("/", (req: Request, res: Response): void => {
 })
 
 app.use("/api/upload", uploadRouter)
+app.use("/api/pingback", pingbackRouter)
 
 export default app
