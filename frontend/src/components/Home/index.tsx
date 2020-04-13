@@ -11,6 +11,7 @@ import { v4 } from "uuid"
 
 import socket from "../../socket"
 import { RoomData } from "../../../../backend/src/sockets/types"
+import { conveyorAPI, pingbackAddress } from "../../utils/apis"
 
 import { Background } from "../globalStyles"
 import { Form, Label, Input, UploadButton } from "./styles"
@@ -35,23 +36,34 @@ const Home: React.FC<{}> = (): ReactElement => {
     if (!pdfFile) {
       return
     }
-    const { type } = pdfFile
-    const { Key, url } = (await axios.get("/api/upload")).data
 
     setLoading(true)
 
-    // Upload to S3 bucket
-    await axios.put(`${url}`, pdfFile, {
-      headers: { "Content-Type": type },
-    })
-
     const uuidv4 = v4()
+    const { type } = pdfFile
+    const { message } = (
+      await axios.post(`${conveyorAPI}/convert/pdf?out=png`, pdfFile, {
+        headers: {
+          "Content-Type": type,
+          "x-Pingback": pingbackAddress,
+          "x-Forward-Data": JSON.stringify({
+            hostID: socket.id,
+            roomID: uuidv4,
+          }),
+        },
+      })
+    ).data
 
-    socket.emit("create room", { roomID: uuidv4, pdfUrl: Key })
+    if (!message) {
+      console.error("Message not received")
+    }
   }
 
   const [roomID, setRoomID] = useState("")
   useEffect(() => {
+    // Ping conveyor on start, but don't wait for answer
+    axios.get(`${conveyorAPI}/ping`)
+
     socket.on("room created", (data: RoomData) => {
       setRoomID(data.roomID)
     })
