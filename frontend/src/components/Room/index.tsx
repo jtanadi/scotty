@@ -16,14 +16,13 @@ import roundTo from "../../utils/roundTo"
 
 // Components
 import NavBar, { PageOption } from "./NavBar"
-import PDFView from "../PDFView"
+/* import PDFView from "../PDFView" */
 import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
+import View from "../View"
 
 import { RoomBackground } from "./styles"
-
-const S3URL = "https://beam-me-up-scotty.s3.amazonaws.com"
 
 const roundTo2 = roundTo(2)
 enum ZOOMLIMIT {
@@ -41,10 +40,9 @@ const Room: React.FC<PropTypes> = ({
   filename,
   location,
 }): ReactElement => {
-  const [maxPage, setMaxPage] = useState(1)
-  const handleDocumentLoad = ({ numPages }): void => {
-    setMaxPage(numPages)
-  }
+  /* const handleDocumentLoad = ({ numPages }): void => { */
+  /*   setMaxPage(numPages) */
+  /* } */
 
   const [pageNum, setPageNum] = useState(1)
   const handleChangePage = (option: PageOption): void => {
@@ -66,13 +64,14 @@ const Room: React.FC<PropTypes> = ({
     })
   }
 
-  const [scale, setScale] = useState(1)
+  /* const [scale, setScale] = useState(1) */
   const handleZoom = (offset: number): void => {
-    setScale(prev => {
-      return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX
-        ? prev
-        : prev + offset
-    })
+    console.log(offset, ZOOMLIMIT.MIN)
+    /* setScale(prev => { */
+    /*   return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX */
+    /*     ? prev */
+    /*     : prev + offset */
+    /* }) */
   }
 
   const handleMouseMove = (ev?: MouseEvent): void => {
@@ -95,6 +94,7 @@ const Room: React.FC<PropTypes> = ({
     setWindowHeight(window.innerHeight)
   }
 
+  const [maxPage, setMaxPage] = useState(1)
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
   const [pdfFile, setPdfFile] = useState("")
@@ -106,6 +106,7 @@ const Room: React.FC<PropTypes> = ({
     socket.on("sync document", (data: SyncDocData): void => {
       setUserID(data.userID)
       setPdfFile(data.pdfUrl)
+      setMaxPage(data.numPages)
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
@@ -198,14 +199,7 @@ const Room: React.FC<PropTypes> = ({
           handleClose={handleClose}
           handlePointerToggle={handlePointerToggle}
         />
-        {pdfFile ? (
-          <PDFView
-            file={`${S3URL}/${pdfFile}`}
-            pageNumber={pageNum}
-            scale={scale}
-            handleLoadSuccess={handleDocumentLoad}
-          />
-        ) : null}
+        {pdfFile ? <View pdfUrl={pdfFile} pageNum={pageNum} /> : null}
       </RoomBackground>
     )
   }
