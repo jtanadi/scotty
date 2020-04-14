@@ -29,9 +29,9 @@ export default (connection: Connection, data: RoomData): void => {
   // Make sure we're looking at the same doc & page when joining
   // and send userID to client
   const pdfUrl = room.pdfUrl || ""
-  const numPages = room.numPages
+  const pages = room.pages
 
-  const syncDocData: SyncDocData = { pdfUrl, userID: socket.id, numPages }
+  const syncDocData: SyncDocData = { pdfUrl, userID: socket.id, pages }
   io.to(socket.id).emit("sync document", syncDocData)
 
   const pageNum = room.pageNum || 1

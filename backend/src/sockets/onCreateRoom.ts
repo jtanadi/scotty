@@ -3,13 +3,13 @@ import { Connection, CreateRoomData, Room, RoomData } from "./types"
 
 export default (connection: Connection, data: CreateRoomData): void => {
   const { io } = connection
-  const { hostID, roomID, pdfUrl, numPages } = data
+  const { hostID, roomID, pdfUrl, pages } = data
 
   const newRoom: Room = {
     users: [],
     pdfUrl,
     pageNum: 1,
-    numPages,
+    pages,
   }
 
   rooms[roomID] = newRoom

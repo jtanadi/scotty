@@ -15,7 +15,7 @@ export type Room = {
   users: User[]
   pdfUrl: string
   pageNum: number
-  numPages: number
+  pages: string[]
 }
 
 // Maps roomID to Room
@@ -39,8 +39,9 @@ export interface RoomData {
 export interface CreateRoomData extends RoomData {
   hostID: string
   pdfUrl: string
-  numPages: number
+  pages: string[]
 }
+
 export interface ChangePageData extends RoomData {
   pageNum: number
 }
@@ -55,9 +56,9 @@ export interface MouseMoveData extends RoomData {
 ////////////////////////////
 
 export type SyncDocData = {
-  pdfUrl: string
   userID: string
-  numPages: number
+  pdfUrl: string
+  pages: string[]
 }
 
 export type SyncPageData = {
