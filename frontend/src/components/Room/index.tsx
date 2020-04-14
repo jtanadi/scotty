@@ -16,16 +16,15 @@ import roundTo from "../../utils/roundTo"
 
 // Components
 import NavBar, { PageOption } from "./NavBar"
-import PDFView from "../PDFView"
+/* import PDFView from "../PDFView" */
 import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
+import DocumentView from "../DocumentView"
 
 import { RoomBackground } from "./styles"
 
-const S3URL = "https://beam-me-up-scotty.s3.amazonaws.com"
-
-const roundTo2 = roundTo(2)
+const roundTo3 = roundTo(3)
 enum ZOOMLIMIT {
   MIN = 1,
   MAX = 5,
@@ -41,10 +40,9 @@ const Room: React.FC<PropTypes> = ({
   filename,
   location,
 }): ReactElement => {
-  const [maxPage, setMaxPage] = useState(1)
-  const handleDocumentLoad = ({ numPages }): void => {
-    setMaxPage(numPages)
-  }
+  /* const handleDocumentLoad = ({ numPages }): void => { */
+  /*   setMaxPage(numPages) */
+  /* } */
 
   const [pageNum, setPageNum] = useState(1)
   const handleChangePage = (option: PageOption): void => {
@@ -57,7 +55,7 @@ const Room: React.FC<PropTypes> = ({
         newPageNum = goto
       }
 
-      if (newPageNum <= maxPage && newPageNum >= 1) {
+      if (newPageNum <= pages.length && newPageNum >= 1) {
         socket.emit("client change page", { roomID: id, pageNum: newPageNum })
         return newPageNum
       }
@@ -66,18 +64,19 @@ const Room: React.FC<PropTypes> = ({
     })
   }
 
-  const [scale, setScale] = useState(1)
+  /* const [scale, setScale] = useState(1) */
   const handleZoom = (offset: number): void => {
-    setScale(prev => {
-      return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX
-        ? prev
-        : prev + offset
-    })
+    console.log(offset, ZOOMLIMIT.MIN)
+    /* setScale(prev => { */
+    /*   return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX */
+    /*     ? prev */
+    /*     : prev + offset */
+    /* }) */
   }
 
   const handleMouseMove = (ev?: MouseEvent): void => {
-    const mouseX: number = ev ? roundTo2(ev.clientX / windowWidth) : null
-    const mouseY: number = ev ? roundTo2(ev.clientY / windowHeight) : null
+    const mouseX: number = ev ? roundTo3(ev.clientX / windowWidth) : null
+    const mouseY: number = ev ? roundTo3(ev.clientY / windowHeight) : null
 
     const mouseMoveData: MouseMoveData = {
       roomID: id,
@@ -95,9 +94,10 @@ const Room: React.FC<PropTypes> = ({
     setWindowHeight(window.innerHeight)
   }
 
+  const [pages, setPages] = useState([])
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
-  const [pdfFile, setPdfFile] = useState("")
+  const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
     const joinRoomData: RoomData = { roomID: id }
@@ -105,7 +105,8 @@ const Room: React.FC<PropTypes> = ({
 
     socket.on("sync document", (data: SyncDocData): void => {
       setUserID(data.userID)
-      setPdfFile(data.pdfUrl)
+      setPdfUrl(data.pdfUrl)
+      setPages(data.pages)
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
@@ -189,7 +190,7 @@ const Room: React.FC<PropTypes> = ({
         {renderPointers()}
         <NavBar
           pageNum={pageNum}
-          maxPage={maxPage}
+          maxPage={pages.length}
           filename={filename}
           users={users}
           showMouse={showMouse}
@@ -198,13 +199,8 @@ const Room: React.FC<PropTypes> = ({
           handleClose={handleClose}
           handlePointerToggle={handlePointerToggle}
         />
-        {pdfFile ? (
-          <PDFView
-            file={`${S3URL}/${pdfFile}`}
-            pageNumber={pageNum}
-            scale={scale}
-            handleLoadSuccess={handleDocumentLoad}
-          />
+        {pdfUrl ? (
+          <DocumentView src={`${pdfUrl}/${pages[pageNum - 1]}`} />
         ) : null}
       </RoomBackground>
     )

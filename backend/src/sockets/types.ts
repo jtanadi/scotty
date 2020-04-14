@@ -13,8 +13,10 @@ export type User = {
 
 export type Room = {
   users: User[]
+  s3Dir: string
   pdfUrl: string
   pageNum: number
+  pages: string[]
 }
 
 // Maps roomID to Room
@@ -27,17 +29,20 @@ export type UsersMap = {
   [userID: string]: string
 }
 
-///////////////////////////
-// Client -> Server types//
-///////////////////////////
+////////////////////////////
+// Client -> Server types //
+////////////////////////////
 
 export interface RoomData {
   roomID: string
 }
 
 export interface CreateRoomData extends RoomData {
-  pdfUrl: string
+  hostID: string
+  s3Dir: string
+  pages: string[]
 }
+
 export interface ChangePageData extends RoomData {
   pageNum: number
 }
@@ -47,13 +52,14 @@ export interface MouseMoveData extends RoomData {
   mouseY: number
 }
 
-///////////////////////////
-// Server -> Client types//
-///////////////////////////
+////////////////////////////
+// Server -> Client types //
+////////////////////////////
 
 export type SyncDocData = {
-  pdfUrl: string
   userID: string
+  pdfUrl: string
+  pages: string[]
 }
 
 export type SyncPageData = {
