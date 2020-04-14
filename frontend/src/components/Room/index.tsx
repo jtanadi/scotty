@@ -97,7 +97,7 @@ const Room: React.FC<PropTypes> = ({
   const [pages, setPages] = useState([])
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
-  const [pdfFile, setPdfFile] = useState("")
+  const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
     const joinRoomData: RoomData = { roomID: id }
@@ -105,7 +105,7 @@ const Room: React.FC<PropTypes> = ({
 
     socket.on("sync document", (data: SyncDocData): void => {
       setUserID(data.userID)
-      setPdfFile(data.pdfUrl)
+      setPdfUrl(data.pdfUrl)
       setPages(data.pages)
     })
 
@@ -199,8 +199,8 @@ const Room: React.FC<PropTypes> = ({
           handleClose={handleClose}
           handlePointerToggle={handlePointerToggle}
         />
-        {pdfFile ? (
-          <DocumentView pdfUrl={pdfFile} pages={pages} pageNum={pageNum} />
+        {pdfUrl ? (
+          <DocumentView src={`${pdfUrl}/${pages[pageNum - 1]}`} />
         ) : null}
       </RoomBackground>
     )
