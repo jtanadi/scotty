@@ -1,17 +1,19 @@
-import React, { FC, ReactElement } from "react"
+import React, { FC, ReactElement, MouseEvent } from "react"
 
-import { DocumentContainer, Image } from "./styles"
+import { DocumentContainer, Page } from "./styles"
 
 type PropTypes = {
-  pdfUrl: string
-  pageNum: number
-  pages: string[]
+  src: string
 }
 
-const View: FC<PropTypes> = ({ pdfUrl, pages, pageNum }): ReactElement => {
+const View: FC<PropTypes> = ({ src }): ReactElement => {
+  const handleContextMenu = (ev: MouseEvent): void => {
+    ev.preventDefault()
+  }
+
   return (
     <DocumentContainer>
-      <Image src={`${pdfUrl}/${pages[pageNum - 1]}`} />
+      <Page src={src} onContextMenu={handleContextMenu} />
     </DocumentContainer>
   )
 }

@@ -8,7 +8,7 @@ export const DocumentContainer = styled.div`
   display: flex;
 `
 
-export const Image = styled.img`
+export const Page = styled.img`
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
   margin: auto;
   max-width: 100%;
