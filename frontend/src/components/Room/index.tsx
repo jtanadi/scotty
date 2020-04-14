@@ -20,7 +20,7 @@ import NavBar, { PageOption } from "./NavBar"
 import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
-import View from "../View"
+import DocumentView from "../DocumentView"
 
 import { RoomBackground } from "./styles"
 
@@ -55,7 +55,7 @@ const Room: React.FC<PropTypes> = ({
         newPageNum = goto
       }
 
-      if (newPageNum <= maxPage && newPageNum >= 1) {
+      if (newPageNum <= pages.length && newPageNum >= 1) {
         socket.emit("client change page", { roomID: id, pageNum: newPageNum })
         return newPageNum
       }
@@ -94,7 +94,7 @@ const Room: React.FC<PropTypes> = ({
     setWindowHeight(window.innerHeight)
   }
 
-  const [maxPage, setMaxPage] = useState(1)
+  const [pages, setPages] = useState([])
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
   const [pdfFile, setPdfFile] = useState("")
@@ -106,7 +106,7 @@ const Room: React.FC<PropTypes> = ({
     socket.on("sync document", (data: SyncDocData): void => {
       setUserID(data.userID)
       setPdfFile(data.pdfUrl)
-      setMaxPage(data.numPages)
+      setPages(data.pages)
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
@@ -190,7 +190,7 @@ const Room: React.FC<PropTypes> = ({
         {renderPointers()}
         <NavBar
           pageNum={pageNum}
-          maxPage={maxPage}
+          maxPage={pages.length}
           filename={filename}
           users={users}
           showMouse={showMouse}
@@ -199,7 +199,9 @@ const Room: React.FC<PropTypes> = ({
           handleClose={handleClose}
           handlePointerToggle={handlePointerToggle}
         />
-        {pdfFile ? <View pdfUrl={pdfFile} pageNum={pageNum} /> : null}
+        {pdfFile ? (
+          <DocumentView pdfUrl={pdfFile} pages={pages} pageNum={pageNum} />
+        ) : null}
       </RoomBackground>
     )
   }
