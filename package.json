@@ -1,6 +1,6 @@
 {
   "name": "scotty",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "WebSocket-enabled PDF viewer",
   "main": "backend/index.js",
   "engines": {
