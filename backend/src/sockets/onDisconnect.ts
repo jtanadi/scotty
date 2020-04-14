@@ -17,12 +17,12 @@ export default (connection: Connection): void => {
   // When room is empty, delete object from S3 bucket
   // and clear the associated value in our cache
   if (!room.users.length) {
-    const { pdfUrl, pages } = rooms[roomID]
+    const { s3Dir, pages } = rooms[roomID]
 
     const params = {
       Bucket: process.env.S3_BUCKET,
       Delete: {
-        Objects: pages.map(page => ({ Key: `${pdfUrl}/${page}` })),
+        Objects: pages.map(page => ({ Key: `${s3Dir}/${page}` })),
       },
     }
 
