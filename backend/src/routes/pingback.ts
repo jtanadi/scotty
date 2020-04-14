@@ -3,14 +3,15 @@ import io from "socket.io-client"
 
 import { CreateRoomData } from "../sockets/types"
 
+const PORT = process.env.PORT || 3030
 const router = express.Router()
 
 let socket: SocketIOClient.Socket
 if (process.env.NODE_ENV === "production") {
-  socket = io()
+  socket = io(`https://raa-scotty.herokuapp.com:${PORT}`)
 } else {
   // Default back end port
-  socket = io(`http://localhost:3030`)
+  socket = io(`http://localhost:${PORT}`)
 }
 
 router.post("/", (req: Request, res: Response) => {
