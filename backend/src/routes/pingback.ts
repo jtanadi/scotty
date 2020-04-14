@@ -1,33 +1,32 @@
 import express, { Request, Response } from "express"
-import io from "socket.io-client"
+import { rooms } from "../sockets/cache"
+import { io } from "../sockets"
 
-import { CreateRoomData } from "../sockets/types"
+import { Room, RoomData } from "../sockets/types"
 
-const PORT = process.env.PORT || 3030
 const router = express.Router()
+const s3Url = "https://beam-me-up-scotty.s3.amazonaws.com"
 
-let socket: SocketIOClient.Socket
-if (process.env.NODE_ENV === "production") {
-  socket = io(`https://raa-scotty.herokuapp.com:${PORT}`)
-} else {
-  // Default back end port
-  socket = io(`http://localhost:${PORT}`)
-}
-
+// Send response back and create room
 router.post("/", (req: Request, res: Response) => {
   res.sendStatus(204)
 
   const { s3Dir, files, forwardData } = req.body
   const { hostID, roomID } = JSON.parse(forwardData)
 
-  const createRoomData: CreateRoomData = {
-    hostID,
-    roomID,
+  const newRoom: Room = {
+    users: [],
     s3Dir,
+    pdfUrl: `${s3Url}/${s3Dir}`,
+    pageNum: 1,
     pages: files,
   }
 
-  socket.emit("create room", createRoomData)
+  rooms[roomID] = newRoom
+
+  // Send private message back to room creator with roomID
+  const roomCreatedData: RoomData = { roomID }
+  io.to(hostID).emit("room created", roomCreatedData)
 })
 
 export default router

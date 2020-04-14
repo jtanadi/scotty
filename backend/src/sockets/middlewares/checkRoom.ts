@@ -9,13 +9,8 @@ export default (
   next: () => void
 ): void => {
   const { io, socket } = connection
-  const message: string = packet[0]
-
-  if (message === "create room") {
-    next()
-  }
-
   const data: RoomData = packet[1]
+
   const { roomID } = data
 
   const room = rooms[roomID]

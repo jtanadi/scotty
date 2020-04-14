@@ -1,25 +1,22 @@
 import { Server as HTTPserver } from "http"
 import { Server as HTTPSserver } from "https"
 
-import socket from "socket.io"
+import socket, { Server as SocketServer } from "socket.io"
 
 import checkRoom from "./middlewares/checkRoom"
 
 import onChangePage from "./onChangePage"
-import onCreateRoom from "./onCreateRoom"
 import onDisconnect from "./onDisconnect"
 import onJoinRoom from "./onJoinRoom"
 import onMouseMove from "./onMouseMove"
 
+export let io: SocketServer
+
 export default (server: HTTPserver | HTTPSserver): void => {
-  const io = socket(server)
+  io = socket(server)
 
   io.on("connection", socket => {
     socket.use((packet, next) => checkRoom({ io, socket }, packet, next))
-
-    socket.on("create room", data => {
-      onCreateRoom({ io, socket }, data)
-    })
 
     socket.on("join room", data => {
       onJoinRoom({ io, socket }, data)
