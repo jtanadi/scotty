@@ -13,8 +13,6 @@ if (process.env.NODE_ENV === "production") {
   socket = io(`http://localhost:3030`)
 }
 
-const s3Url = "https://beam-me-up-scotty.s3.amazonaws.com"
-
 router.post("/", (req: Request, res: Response) => {
   res.sendStatus(204)
 
@@ -24,7 +22,7 @@ router.post("/", (req: Request, res: Response) => {
   const createRoomData: CreateRoomData = {
     hostID,
     roomID,
-    pdfUrl: `${s3Url}/${s3Dir}`,
+    s3Dir,
     pages: files,
   }
 

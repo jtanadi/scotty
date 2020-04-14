@@ -1,13 +1,16 @@
 import { rooms } from "./cache"
 import { Connection, CreateRoomData, Room, RoomData } from "./types"
 
+const s3Url = "https://beam-me-up-scotty.s3.amazonaws.com"
+
 export default (connection: Connection, data: CreateRoomData): void => {
   const { io } = connection
-  const { hostID, roomID, pdfUrl, pages } = data
+  const { hostID, roomID, s3Dir, pages } = data
 
   const newRoom: Room = {
     users: [],
-    pdfUrl,
+    s3Dir,
+    pdfUrl: `${s3Url}/${s3Dir}`,
     pageNum: 1,
     pages,
   }

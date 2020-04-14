@@ -13,6 +13,7 @@ export type User = {
 
 export type Room = {
   users: User[]
+  s3Dir: string
   pdfUrl: string
   pageNum: number
   pages: string[]
@@ -38,7 +39,7 @@ export interface RoomData {
 
 export interface CreateRoomData extends RoomData {
   hostID: string
-  pdfUrl: string
+  s3Dir: string
   pages: string[]
 }
 
