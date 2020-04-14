@@ -24,7 +24,7 @@ import DocumentView from "../DocumentView"
 
 import { RoomBackground } from "./styles"
 
-const roundTo2 = roundTo(2)
+const roundTo3 = roundTo(3)
 enum ZOOMLIMIT {
   MIN = 1,
   MAX = 5,
@@ -75,8 +75,8 @@ const Room: React.FC<PropTypes> = ({
   }
 
   const handleMouseMove = (ev?: MouseEvent): void => {
-    const mouseX: number = ev ? roundTo2(ev.clientX / windowWidth) : null
-    const mouseY: number = ev ? roundTo2(ev.clientY / windowHeight) : null
+    const mouseX: number = ev ? roundTo3(ev.clientX / windowWidth) : null
+    const mouseY: number = ev ? roundTo3(ev.clientY / windowHeight) : null
 
     const mouseMoveData: MouseMoveData = {
       roomID: id,
