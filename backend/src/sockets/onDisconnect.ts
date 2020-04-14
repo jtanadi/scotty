@@ -26,13 +26,10 @@ export default (connection: Connection): void => {
       },
     }
 
-    s3.deleteObjects(params, (err, data) => {
-      if (err) {
-        console.error("ERROR", err)
-      } else {
-        console.log("DATA", data)
-      }
-    })
+    s3.deleteObjects(params)
+      .promise()
+      .then(data => console.log("DATA", data))
+      .catch(err => console.error(err, err.stack))
 
     rooms[roomID] = null
   }
