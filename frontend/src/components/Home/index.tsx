@@ -82,8 +82,19 @@ const Home: React.FC<{}> = (): ReactElement => {
       setRoomID(data.roomID)
     })
 
+    socket.on("conveyor update", (data: string) => {
+      console.log(data)
+    })
+
+    socket.on("conveyor error", (data: string) => {
+      console.error(data)
+      setLoading(false)
+    })
+
     return (): void => {
       socket.off("room created")
+      socket.off("conveyor update")
+      socket.off("conveyor error")
     }
   }, [])
 
