@@ -9,6 +9,7 @@ export type User = {
   id: string
   mouseX: number
   mouseY: number
+  pointerColor: string
 }
 
 export type Room = {
@@ -35,6 +36,10 @@ export type UsersMap = {
 
 export interface RoomData {
   roomID: string
+}
+
+export interface JoinRoomData extends RoomData {
+  pointerColor: string
 }
 
 export interface CreateRoomData extends RoomData {
