@@ -1,27 +1,28 @@
 import { usersMap, rooms } from "./cache"
 import {
   Connection,
-  RoomData,
+  JoinRoomData,
   SyncDocData,
   SyncPageData,
   User,
   UsersData,
 } from "./types"
 
-const createUser = (id: string): User => {
+const createUser = (id: string, pointerColor: string): User => {
   return {
     id,
     mouseX: 0,
     mouseY: 0,
+    pointerColor,
   }
 }
 
-export default (connection: Connection, data: RoomData): void => {
+export default (connection: Connection, data: JoinRoomData): void => {
   const { io, socket } = connection
-  const { roomID } = data
+  const { roomID, pointerColor } = data
   const room = rooms[roomID]
 
-  room.users.push(createUser(socket.id))
+  room.users.push(createUser(socket.id, pointerColor))
   usersMap[socket.id] = roomID
 
   socket.join(roomID)
