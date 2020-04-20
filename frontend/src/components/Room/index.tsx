@@ -64,14 +64,14 @@ const Room: React.FC<PropTypes> = ({
     })
   }
 
-  /* const [scale, setScale] = useState(1) */
+  const [scale, setScale] = useState(1)
   const handleZoom = (offset: number): void => {
     console.log(offset, ZOOMLIMIT.MIN)
-    /* setScale(prev => { */
-    /*   return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX */
-    /*     ? prev */
-    /*     : prev + offset */
-    /* }) */
+    setScale(prev => {
+      return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX
+        ? prev
+        : prev + offset
+    })
   }
 
   const handleMouseMove = (ev?: MouseEvent): void => {
@@ -200,7 +200,7 @@ const Room: React.FC<PropTypes> = ({
           handlePointerToggle={handlePointerToggle}
         />
         {pdfUrl ? (
-          <DocumentView src={`${pdfUrl}/${pages[pageNum - 1]}`} />
+          <DocumentView src={`${pdfUrl}/${pages[pageNum - 1]}`} scale={scale} />
         ) : null}
       </RoomBackground>
     )
