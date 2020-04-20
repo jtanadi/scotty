@@ -107,31 +107,30 @@ const Home: React.FC<{}> = (): ReactElement => {
   }
 
   const renderHome = (): ReactElement => {
-    if (loading && (conveyorMessage || conveyorError)) {
-      return (
-        <BeamingModal
-          message={conveyorMessage}
-          error={conveyorError}
-          handleTryAgain={handleTryAgain}
-        />
-      )
-    }
-
     return (
-      <Form>
-        <Input
-          type="file"
-          id="file-input"
-          accept="application/pdf"
-          onChange={handleFile}
-        />
-        <Label htmlFor="file-input">
-          {pdfFile ? pdfFile.name : "Select PDF to upload"}
-        </Label>
-        <UploadButton disabled={!pdfFile || loading} onClick={handleUpload}>
-          🖖️ Beam me up, Scotty! 🖖
-        </UploadButton>
-      </Form>
+      <>
+        <Form>
+          <Input
+            type="file"
+            id="file-input"
+            accept="application/pdf"
+            onChange={handleFile}
+          />
+          <Label htmlFor="file-input">
+            {pdfFile ? pdfFile.name : "Select PDF to upload"}
+          </Label>
+          <UploadButton disabled={!pdfFile || loading} onClick={handleUpload}>
+            🖖️ Beam me up, Scotty! 🖖
+          </UploadButton>
+        </Form>
+        {loading && (conveyorMessage || conveyorError) ? (
+          <BeamingModal
+            message={conveyorMessage}
+            error={conveyorError}
+            handleTryAgain={handleTryAgain}
+          />
+        ) : null}
+      </>
     )
   }
 
