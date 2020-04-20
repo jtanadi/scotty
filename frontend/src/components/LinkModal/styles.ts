@@ -1,20 +1,6 @@
 import styled from "styled-components"
 
-import { Cover, H2, H3, P, ButtonOK } from "../globalStyles"
-
-export const LinkModalCover = styled(Cover)`
-  z-index: 9998;
-`
-
-export const Island = styled.div`
-  width: 40%;
-  min-width: 500px;
-  margin: auto;
-  padding: 1.5rem 2.5rem 0.85rem 2.5rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
-`
+import { H2, H3, P, ButtonOK } from "../globalStyles"
 
 export const Input = styled.input`
   box-sizing: border-box;
@@ -34,6 +20,7 @@ export const ButtonsContainer = styled.div`
   display: flex;
   margin: 1rem 0 1.5rem 0;
 `
+
 export const OKButton = styled(ButtonOK)`
   flex: 1;
 `
