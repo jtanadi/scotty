@@ -21,13 +21,7 @@ const BeamingModal: FC<PropTypes> = ({
   handleTryAgain,
 }): ReactElement => {
   const renderModalContents = (): ReactElement => {
-    if (message) {
-      return (
-        <Body>
-          <Code>{message}</Code>
-        </Body>
-      )
-    } else if (error) {
+    if (error) {
       return (
         <>
           <ErrorMessage>{error}</ErrorMessage>
@@ -35,6 +29,12 @@ const BeamingModal: FC<PropTypes> = ({
             <ErrorButton onClick={handleTryAgain}>Try again</ErrorButton>
           </ButtonsContainer>
         </>
+      )
+    } else if (message) {
+      return (
+        <Body>
+          <Code>{message}</Code>
+        </Body>
       )
     }
   }
