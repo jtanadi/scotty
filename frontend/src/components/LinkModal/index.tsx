@@ -1,9 +1,7 @@
 import React, { ReactElement, FC, useRef, useEffect, useState } from "react"
 
-import { Code } from "../globalStyles"
+import { Code, Island, ModalCover } from "../globalStyles"
 import {
-  LinkModalCover,
-  Island,
   Input,
   ButtonsContainer,
   OKButton,
@@ -34,7 +32,7 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
 
   const renderModal = (): ReactElement => {
     return (
-      <LinkModalCover>
+      <ModalCover>
         <Island>
           <Title>You&rsquo;re all set!</Title>
           <Body>Copy and share the following link to invite others.</Body>
@@ -57,7 +55,7 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
             bucket with very limited read/write access.
           </Body>
         </Island>
-      </LinkModalCover>
+      </ModalCover>
     )
   }
 

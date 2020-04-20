@@ -20,6 +20,20 @@ export const Cover = styled.div`
   display: flex;
 `
 
+export const ModalCover = styled(Cover)`
+  z-index: 9998;
+`
+
+export const Island = styled.div`
+  width: 40%;
+  min-width: 500px;
+  margin: auto;
+  padding: 1.5rem 2.5rem 0.85rem 2.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
+`
+
 export const Button = styled.button`
   border: 0;
   border-radius: 0.5rem;

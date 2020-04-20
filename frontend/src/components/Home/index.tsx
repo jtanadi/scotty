@@ -13,6 +13,7 @@ import socket from "../../socket"
 import { RoomData } from "../../../../backend/src/sockets/types"
 import { conveyorAPI, pingbackAddress } from "../../utils/apis"
 
+import BeamingModal from "../BeamingModal"
 import { Background } from "../globalStyles"
 import { Form, Label, Input, UploadButton } from "./styles"
 
@@ -27,6 +28,7 @@ const Home: React.FC<{}> = (): ReactElement => {
     setPdfFile(e.target.files[0])
   }
 
+  const [roomID, setRoomID] = useState("")
   const [loading, setLoading] = useState(false)
   const handleUpload = async (
     e: MouseEvent<HTMLButtonElement>
@@ -64,7 +66,8 @@ const Home: React.FC<{}> = (): ReactElement => {
     }
   }
 
-  const [roomID, setRoomID] = useState("")
+  const [conveyorMessage, setConveyorMessage] = useState("")
+  const [conveyorError, setConveyorError] = useState("")
   useEffect(() => {
     const pingConveyor = async (): Promise<void> => {
       try {
@@ -83,12 +86,11 @@ const Home: React.FC<{}> = (): ReactElement => {
     })
 
     socket.on("conveyor update", (data: string) => {
-      console.log(data)
+      setConveyorMessage(data)
     })
 
     socket.on("conveyor error", (data: string) => {
-      console.error(data)
-      setLoading(false)
+      setConveyorError(data)
     })
 
     return (): void => {
@@ -98,22 +100,37 @@ const Home: React.FC<{}> = (): ReactElement => {
     }
   }, [])
 
-  const renderInput = (): ReactElement => {
+  const handleTryAgain = (): void => {
+    setLoading(false)
+    setConveyorMessage("")
+    setConveyorError("")
+  }
+
+  const renderHome = (): ReactElement => {
     return (
-      <Form>
-        <Input
-          type="file"
-          id="file-input"
-          accept="application/pdf"
-          onChange={handleFile}
-        />
-        <Label htmlFor="file-input">
-          {pdfFile ? pdfFile.name : "Select PDF to upload"}
-        </Label>
-        <UploadButton disabled={!pdfFile || loading} onClick={handleUpload}>
-          {loading ? "🛸️ Beaming.... 🛸️" : "🖖️ Beam me up, Scotty! 🖖"}
-        </UploadButton>
-      </Form>
+      <>
+        <Form>
+          <Input
+            type="file"
+            id="file-input"
+            accept="application/pdf"
+            onChange={handleFile}
+          />
+          <Label htmlFor="file-input">
+            {pdfFile ? pdfFile.name : "Select PDF to upload"}
+          </Label>
+          <UploadButton disabled={!pdfFile || loading} onClick={handleUpload}>
+            🖖️ Beam me up, Scotty! 🖖
+          </UploadButton>
+        </Form>
+        {loading && (conveyorMessage || conveyorError) ? (
+          <BeamingModal
+            message={conveyorMessage}
+            error={conveyorError}
+            handleTryAgain={handleTryAgain}
+          />
+        ) : null}
+      </>
     )
   }
 
@@ -128,7 +145,7 @@ const Home: React.FC<{}> = (): ReactElement => {
     )
   }
 
-  return <Background>{roomID ? redirectToRoom() : renderInput()}</Background>
+  return <Background>{roomID ? redirectToRoom() : renderHome()}</Background>
 }
 
 export default Home
