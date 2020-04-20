@@ -30,9 +30,6 @@ type PropTypes = {
   handlePointerToggle(): void
 }
 
-/* <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton> */
-/* <NavButton onClick={(): void => handleZoom(1)}>{"+"}</NavButton> */
-
 const NavBar: React.FC<PropTypes> = ({
   pageNum,
   maxPage,
@@ -42,6 +39,7 @@ const NavBar: React.FC<PropTypes> = ({
   handleChangePage,
   handleClose,
   handlePointerToggle,
+  handleZoom,
 }): ReactElement => {
   return (
     <NavBarContainer>
@@ -50,6 +48,8 @@ const NavBar: React.FC<PropTypes> = ({
         {` - ${users.length} ${users.length > 1 ? "users" : "user"}`}
       </InfoContainer>
       <ButtonsContainer>
+        <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton>
+        <NavButton onClick={(): void => handleZoom(1)}>{"+"}</NavButton>
         <NavButton onClick={(): void => handleChangePage({ goto: 1 })}>
           {"<<"}
         </NavButton>
