@@ -19,7 +19,7 @@ type PagePropType = {
 }
 
 export const Page = styled.img.attrs((props: PagePropType) => {
-  const height = `${props.scale * 100}%`
+  const transform = `scale(${props.scale})`
 
   let cursor = "default"
   if (props.scale > 1) {
@@ -28,13 +28,15 @@ export const Page = styled.img.attrs((props: PagePropType) => {
 
   return {
     style: {
-      height,
       cursor,
+      transform,
     },
   }
 })<PagePropType>`
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
   margin: auto;
+  max-height: 100%;
   object-fit: contain;
   background-color: white;
+  transform-origin: top;
 `
