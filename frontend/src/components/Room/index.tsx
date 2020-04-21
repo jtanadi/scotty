@@ -62,7 +62,6 @@ const Room: React.FC<PropTypes> = ({
 
   const [scale, setScale] = useState(1)
   const handleZoom = (offset: number): void => {
-    console.log(offset, ZOOMLIMIT.MIN)
     setScale(prev => {
       return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX
         ? prev
