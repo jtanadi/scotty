@@ -24,6 +24,7 @@ type PropTypes = {
   filename: string
   users: User[]
   showMouse: boolean
+  pointerColor: string
   handleChangePage(option: PageOption): void
   handleZoom(scaleOffset: number): void
   handleClose(): void
@@ -36,6 +37,7 @@ const NavBar: React.FC<PropTypes> = ({
   filename,
   users,
   showMouse,
+  pointerColor,
   handleChangePage,
   handleClose,
   handlePointerToggle,
@@ -65,7 +67,11 @@ const NavBar: React.FC<PropTypes> = ({
         <NavButton onClick={(): void => handleChangePage({ goto: maxPage })}>
           {">>"}
         </NavButton>
-        <PointerButton showMouse={showMouse} onClick={handlePointerToggle}>
+        <PointerButton
+          showMouse={showMouse}
+          color={pointerColor}
+          onClick={handlePointerToggle}
+        >
           🏹️
         </PointerButton>
       </ButtonsContainer>
