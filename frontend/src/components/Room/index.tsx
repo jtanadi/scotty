@@ -1,10 +1,11 @@
 import React, { useState, useEffect, ReactElement } from "react"
-import { RouteComponentProps } from "react-router-dom"
-import { useHistory, withRouter } from "react-router-dom"
+import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
+import randomColor from "randomcolor"
 
 // Utils, etc.
 import {
   RoomData,
+  JoinRoomData,
   MouseMoveData,
   SyncDocData,
   SyncPageData,
@@ -16,7 +17,6 @@ import roundTo from "../../utils/roundTo"
 
 // Components
 import NavBar, { PageOption } from "./NavBar"
-/* import PDFView from "../PDFView" */
 import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
@@ -40,10 +40,6 @@ const Room: React.FC<PropTypes> = ({
   filename,
   location,
 }): ReactElement => {
-  /* const handleDocumentLoad = ({ numPages }): void => { */
-  /*   setMaxPage(numPages) */
-  /* } */
-
   const [pageNum, setPageNum] = useState(1)
   const handleChangePage = (option: PageOption): void => {
     const { offset, goto } = option
@@ -94,13 +90,17 @@ const Room: React.FC<PropTypes> = ({
     setWindowHeight(window.innerHeight)
   }
 
+  const [pointerColor, setPointerColor] = useState("")
   const [pages, setPages] = useState([])
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
   const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    const joinRoomData: RoomData = { roomID: id }
+    const color = randomColor({ luminosity: "bright" })
+    setPointerColor(color)
+
+    const joinRoomData: JoinRoomData = { roomID: id, pointerColor: color }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
@@ -167,7 +167,7 @@ const Room: React.FC<PropTypes> = ({
                 key={user.id}
                 x={user.mouseX * windowWidth}
                 y={user.mouseY * windowHeight}
-                color="red"
+                color={user.pointerColor}
               />
             )
           }
@@ -194,6 +194,7 @@ const Room: React.FC<PropTypes> = ({
           filename={filename}
           users={users}
           showMouse={showMouse}
+          pointerColor={pointerColor}
           handleChangePage={handleChangePage}
           handleZoom={handleZoom}
           handleClose={handleClose}
