@@ -33,12 +33,13 @@ const NavButton = styled(Button)`
 `
 
 type PointerButtonProp = {
+  color: string
   showMouse: boolean
 }
 
 const PointerButton = styled(NavButton).attrs((p: PointerButtonProp) => {
   if (p.showMouse) {
-    return { style: { backgroundColor: "#67e678" } }
+    return { style: { backgroundColor: p.color } }
   }
 })<PointerButtonProp>``
 
