@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement } from "react"
+import React, { useState, useEffect, ReactElement, useRef } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
 import randomColor from "randomcolor"
 
@@ -40,6 +40,8 @@ const Room: React.FC<PropTypes> = ({
   filename,
   location,
 }): ReactElement => {
+  const pageRef = useRef(null)
+
   const [pageNum, setPageNum] = useState(1)
   const handleChangePage = (option: PageOption): void => {
     const { offset, goto } = option
@@ -70,8 +72,16 @@ const Room: React.FC<PropTypes> = ({
   }
 
   const handleMouseMove = (ev?: MouseEvent): void => {
-    const mouseX: number = ev ? roundTo3(ev.clientX / windowWidth) : null
-    const mouseY: number = ev ? roundTo3(ev.clientY / windowHeight) : null
+    if (!pageRef.current) return
+
+    const { offsetLeft, clientWidth, offsetTop, clientHeight } = pageRef.current
+
+    const mouseX: number = ev
+      ? roundTo3((ev.clientX - offsetLeft) / clientWidth)
+      : null
+    const mouseY: number = ev
+      ? roundTo3((ev.clientY - offsetTop) / clientHeight)
+      : null
 
     const mouseMoveData: MouseMoveData = {
       roomID: id,
@@ -80,13 +90,6 @@ const Room: React.FC<PropTypes> = ({
     }
 
     socket.emit("mousemove", mouseMoveData)
-  }
-
-  const [windowWidth, setWindowWidth] = useState(0)
-  const [windowHeight, setWindowHeight] = useState(0)
-  const handleWindowResize = (): void => {
-    setWindowWidth(window.innerWidth)
-    setWindowHeight(window.innerHeight)
   }
 
   const [pointerColor, setPointerColor] = useState("")
@@ -120,15 +123,11 @@ const Room: React.FC<PropTypes> = ({
       setError(data.message)
     })
 
-    handleWindowResize()
-    window.addEventListener("resize", handleWindowResize)
-
     return (): void => {
       socket.off("sync document")
       socket.off("sync page")
       socket.off("update users")
       socket.off("error")
-      window.removeEventListener("resize", handleWindowResize)
     }
   }, [])
 
@@ -161,11 +160,23 @@ const Room: React.FC<PropTypes> = ({
       <>
         {users.map(user => {
           if (user.id !== userID && user.mouseX && user.mouseY) {
+            if (!pageRef.current) return
+
+            const {
+              offsetLeft,
+              offsetTop,
+              clientWidth,
+              clientHeight,
+            } = pageRef.current
+
+            const mouseX = offsetLeft + user.mouseX * clientWidth
+            const mouseY = offsetTop + user.mouseY * clientHeight
+
             return (
               <Pointer
                 key={user.id}
-                x={user.mouseX * windowWidth}
-                y={user.mouseY * windowHeight}
+                x={mouseX}
+                y={mouseY}
                 color={user.pointerColor}
               />
             )
@@ -200,7 +211,11 @@ const Room: React.FC<PropTypes> = ({
           handlePointerToggle={handlePointerToggle}
         />
         {pdfUrl ? (
-          <DocumentView src={`${pdfUrl}/${pages[pageNum - 1]}`} scale={scale} />
+          <DocumentView
+            src={`${pdfUrl}/${pages[pageNum - 1]}`}
+            scale={scale}
+            pageRef={pageRef}
+          />
         ) : null}
       </RoomBackground>
     )
