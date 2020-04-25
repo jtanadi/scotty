@@ -1,13 +1,21 @@
-import React, { FC, ReactElement, MouseEvent, useState, useRef } from "react"
+import React, {
+  FC,
+  ReactElement,
+  MouseEvent,
+  useState,
+  RefObject,
+  useRef,
+} from "react"
 
 import { DocumentContainer, Page } from "./styles"
 
 type PropTypes = {
   src: string
   scale: number
+  pageRef: RefObject<HTMLImageElement>
 }
 
-const View: FC<PropTypes> = ({ src, scale }): ReactElement => {
+const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
   const containerRef = useRef(null)
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
@@ -51,6 +59,7 @@ const View: FC<PropTypes> = ({ src, scale }): ReactElement => {
   return (
     <DocumentContainer ref={containerRef} scale={scale}>
       <Page
+        ref={pageRef}
         src={src}
         scale={scale}
         mouseDown={mouseDown}
