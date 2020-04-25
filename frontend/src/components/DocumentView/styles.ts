@@ -6,7 +6,7 @@ type ContainerPropType = {
 
 export const DocumentContainer = styled.div<ContainerPropType>`
   margin: 2.5rem auto 0 auto;
-  padding: 2rem 0;
+  padding: 2rem;
   height: calc(100vh - 6.5rem);
   width: 100vw;
   display: flex;
@@ -35,8 +35,9 @@ export const Page = styled.img.attrs((props: PagePropType) => {
 })<PagePropType>`
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
   margin: auto;
+  max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   background-color: white;
-  transform-origin: top;
+  transform-origin: top left;
 `

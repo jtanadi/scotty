@@ -7,8 +7,8 @@ const SIZE = 8
 
 export const PointerDiv = styled.div.attrs((props: PropType) => ({
   style: {
-    top: props.y + "px",
-    left: props.x + "px",
+    top: `${props.y - SIZE / 2}px`,
+    left: `${props.x - SIZE / 2}px`,
     backgroundColor: props.color,
   },
 }))<PropType>`
