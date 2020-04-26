@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from "react"
 
-import { DocumentContainer, Page } from "./styles"
+import { DocumentContainer, PageContainer, Page } from "./styles"
 
 type PropTypes = {
   src: string
@@ -58,18 +58,21 @@ const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
 
   return (
     <DocumentContainer ref={containerRef} scale={scale}>
-      <Page
-        ref={pageRef}
-        src={src}
-        scale={scale}
-        mouseDown={mouseDown}
+      <PageContainer
         onContextMenu={handleContextMenu}
-        draggable={false}
         onMouseMove={handlePan}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseReset}
         onMouseLeave={handleMouseReset}
-      />
+      >
+        <Page
+          src={src}
+          ref={pageRef}
+          scale={scale}
+          mouseDown={mouseDown}
+          draggable={false}
+        />
+      </PageContainer>
     </DocumentContainer>
   )
 }
