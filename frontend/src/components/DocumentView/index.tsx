@@ -97,7 +97,7 @@ const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
   }, [scale])
 
   return (
-    <DocumentContainer ref={docRef} scale={scale}>
+    <DocumentContainer ref={docRef}>
       <PageContainer
         scale={scale}
         mouseDown={mouseDown}

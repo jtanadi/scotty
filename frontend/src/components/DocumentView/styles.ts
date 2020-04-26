@@ -1,10 +1,6 @@
 import styled from "styled-components"
 
-type ContainerProp = {
-  scale: number
-}
-
-export const DocumentContainer = styled.div<ContainerProp>`
+export const DocumentContainer = styled.div`
   margin: 3rem auto 0 auto;
   height: calc(100vh - 3rem);
   width: 100vw;
