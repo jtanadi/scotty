@@ -14,6 +14,8 @@ router.post("/", (req: Request, res: Response) => {
   const { status, message, forwardData } = req.body
   const { hostID, roomID } = JSON.parse(forwardData)
 
+  console.log(message)
+
   if (status === "error") {
     io.to(hostID).emit("conveyor error", message)
   } else if (status === "processing") {
