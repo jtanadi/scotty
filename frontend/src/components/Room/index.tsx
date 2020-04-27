@@ -74,13 +74,21 @@ const Room: React.FC<PropTypes> = ({
   const handleMouseMove = (ev?: MouseEvent): void => {
     if (!pageRef.current) return
 
-    const { offsetLeft, clientWidth, offsetTop, clientHeight } = pageRef.current
+    const {
+      offsetLeft,
+      clientWidth,
+      offsetTop,
+      clientHeight,
+      offsetParent,
+    } = pageRef.current
 
     const mouseX: number = ev
       ? roundTo3((ev.clientX - offsetLeft) / clientWidth)
       : null
     const mouseY: number = ev
-      ? roundTo3((ev.clientY - offsetTop) / clientHeight)
+      ? roundTo3(
+          (ev.clientY - offsetTop - offsetParent.offsetTop) / clientHeight
+        )
       : null
 
     const mouseMoveData: MouseMoveData = {
@@ -167,10 +175,12 @@ const Room: React.FC<PropTypes> = ({
               offsetTop,
               clientWidth,
               clientHeight,
+              offsetParent,
             } = pageRef.current
 
             const mouseX = offsetLeft + user.mouseX * clientWidth
-            const mouseY = offsetTop + user.mouseY * clientHeight
+            const mouseY =
+              offsetTop + offsetParent.offsetTop + user.mouseY * clientHeight
 
             return (
               <Pointer

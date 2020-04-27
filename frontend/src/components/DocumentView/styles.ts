@@ -1,24 +1,18 @@
 import styled from "styled-components"
 
-type ContainerPropType = {
-  scale: number
-}
-
-export const DocumentContainer = styled.div<ContainerPropType>`
-  margin: 2.5rem auto 0 auto;
-  padding: 2rem;
-  height: calc(100vh - 6.5rem);
+export const DocumentContainer = styled.div`
+  margin: 3rem auto 0 auto;
+  height: calc(100vh - 3rem);
   width: 100vw;
-  display: flex;
-  overflow: ${(props): string => (props.scale <= 1 ? "hidden" : "scroll")};
+  overflow: scroll;
 `
 
-type PagePropType = {
+type PageContainerProp = {
   scale: number
   mouseDown: boolean
 }
 
-export const Page = styled.img.attrs((props: PagePropType) => {
+export const PageContainer = styled.div.attrs((props: PageContainerProp) => {
   const transform = `scale(${props.scale})`
 
   let cursor = "default"
@@ -32,12 +26,20 @@ export const Page = styled.img.attrs((props: PagePropType) => {
       transform,
     },
   }
-})<PagePropType>`
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+})<PageContainerProp>`
+  box-sizing: border-box;
+  margin: auto;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  transform-origin: top left;
+`
+
+export const Page = styled.img`
   margin: auto;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   background-color: white;
-  transform-origin: top left;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
 `

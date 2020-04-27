@@ -5,9 +5,10 @@ import React, {
   useState,
   RefObject,
   useRef,
+  useEffect,
 } from "react"
 
-import { DocumentContainer, Page } from "./styles"
+import { DocumentContainer, PageContainer, Page } from "./styles"
 
 type PropTypes = {
   src: string
@@ -16,7 +17,7 @@ type PropTypes = {
 }
 
 const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
-  const containerRef = useRef(null)
+  const docRef = useRef(null)
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
   }
@@ -39,10 +40,13 @@ const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
     }
   }
 
+  // default is center (0.5 of width and height)
+  const [scrollLeftRatio, setScrollLeftRatio] = useState(0.5)
+  const [scrollTopRatio, setScrollTopRatio] = useState(0.5)
   const handlePan = (ev: MouseEvent): void => {
     if (!mouseDown || scale <= 1) return
 
-    const containerElmt = containerRef.current
+    const containerElmt = docRef.current
 
     let deltaX = startX - ev.clientX
     let deltaY = startY - ev.clientY
@@ -54,22 +58,57 @@ const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
 
     setStartX(ev.clientX)
     setStartY(ev.clientY)
+
+    if (docRef.current) {
+      const {
+        scrollLeft,
+        scrollWidth,
+        clientWidth,
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+      } = docRef.current
+
+      const scrollLeftMax = scrollWidth - clientWidth
+      const scrollTopMax = scrollHeight - clientHeight
+
+      setScrollLeftRatio(scrollLeft / scrollLeftMax)
+      setScrollTopRatio(scrollTop / scrollTopMax)
+    }
   }
 
+  useEffect(() => {
+    if (scale === 1) {
+      setScrollLeftRatio(0.5)
+      setScrollTopRatio(0.5)
+    }
+
+    const {
+      scrollWidth,
+      clientWidth,
+      scrollHeight,
+      clientHeight,
+    } = docRef.current
+    const scrollLeftMax = scrollWidth - clientWidth
+    const scrollTopMax = scrollHeight - clientHeight
+
+    docRef.current.scrollLeft = scrollLeftMax * scrollLeftRatio
+    docRef.current.scrollTop = scrollTopMax * scrollTopRatio
+  }, [scale])
+
   return (
-    <DocumentContainer ref={containerRef} scale={scale}>
-      <Page
-        ref={pageRef}
-        src={src}
+    <DocumentContainer ref={docRef}>
+      <PageContainer
         scale={scale}
         mouseDown={mouseDown}
         onContextMenu={handleContextMenu}
-        draggable={false}
         onMouseMove={handlePan}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseReset}
         onMouseLeave={handleMouseReset}
-      />
+      >
+        <Page src={src} ref={pageRef} draggable={false} />
+      </PageContainer>
     </DocumentContainer>
   )
 }
