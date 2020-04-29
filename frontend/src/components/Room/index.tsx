@@ -6,29 +6,22 @@ import randomColor from "randomcolor"
 import {
   RoomData,
   JoinRoomData,
-  MouseMoveData,
   SyncDocData,
   SyncPageData,
   User,
   UsersData,
 } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
-import roundTo from "../../utils/roundTo"
 
 // Components
-import NavBar, { PageOption } from "./NavBar"
+import NavBar from "./NavBar"
 import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
 
 import { RoomBackground } from "./styles"
-
-const roundTo3 = roundTo(3)
-enum ZOOMLIMIT {
-  MIN = 1,
-  MAX = 5,
-}
+import { usePointer, usePageNum, useZoom } from "./hooks"
 
 interface PropTypes extends RouteComponentProps {
   id: string
@@ -42,66 +35,12 @@ const Room: React.FC<PropTypes> = ({
 }): ReactElement => {
   const pageRef = useRef(null)
 
-  const [pageNum, setPageNum] = useState(1)
-  const handleChangePage = (option: PageOption): void => {
-    const { offset, goto } = option
-    setPageNum(current => {
-      let newPageNum: number
-      if (offset) {
-        newPageNum = current + offset
-      } else if (goto) {
-        newPageNum = goto
-      }
-
-      if (newPageNum <= pages.length && newPageNum >= 1) {
-        socket.emit("client change page", { roomID: id, pageNum: newPageNum })
-        return newPageNum
-      }
-
-      return current
-    })
-  }
-
-  const [scale, setScale] = useState(1)
-  const handleZoom = (offset: number): void => {
-    setScale(prev => {
-      return prev + offset < ZOOMLIMIT.MIN || prev + offset > ZOOMLIMIT.MAX
-        ? prev
-        : prev + offset
-    })
-  }
-
-  const handleMouseMove = (ev?: MouseEvent): void => {
-    if (!pageRef.current) return
-
-    const {
-      offsetLeft,
-      clientWidth,
-      offsetTop,
-      clientHeight,
-      offsetParent,
-    } = pageRef.current
-
-    const mouseX: number = ev
-      ? roundTo3((ev.clientX - offsetLeft) / clientWidth)
-      : null
-    const mouseY: number = ev
-      ? roundTo3(
-          (ev.clientY - offsetTop - offsetParent.offsetTop) / clientHeight
-        )
-      : null
-
-    const mouseMoveData: MouseMoveData = {
-      roomID: id,
-      mouseX,
-      mouseY,
-    }
-
-    socket.emit("mousemove", mouseMoveData)
-  }
+  const [pages, setPages] = useState([])
+  const [showMouse, handlePointerToggle] = usePointer(id, pageRef)
+  const [pageNum, setPageNum, handleChangePage] = usePageNum(id, pages)
+  const [scale, handleZoom] = useZoom()
 
   const [pointerColor, setPointerColor] = useState("")
-  const [pages, setPages] = useState([])
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
   const [pdfUrl, setPdfUrl] = useState("")
@@ -138,23 +77,6 @@ const Room: React.FC<PropTypes> = ({
       socket.off("error")
     }
   }, [])
-
-  const [showMouse, setShowMouse] = useState(false)
-  useEffect(() => {
-    if (showMouse) {
-      document.addEventListener("mousemove", handleMouseMove)
-    } else {
-      handleMouseMove()
-    }
-
-    return (): void => {
-      document.removeEventListener("mousemove", handleMouseMove)
-    }
-  }, [showMouse])
-
-  const handlePointerToggle = (): void => {
-    setShowMouse(prev => !prev)
-  }
 
   const history = useHistory()
   const handleClose = (): void => {
