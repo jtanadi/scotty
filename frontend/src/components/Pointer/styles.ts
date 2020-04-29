@@ -16,5 +16,5 @@ export const PointerDiv = styled.div.attrs((props: PropType) => ({
   height: ${SIZE}px;
   border-radius: ${SIZE / 2}px;
   position: fixed;
-  z-index: 9999;
+  z-index: 999;
 `
