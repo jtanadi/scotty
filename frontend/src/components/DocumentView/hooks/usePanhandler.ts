@@ -1,8 +1,8 @@
 import { useState, useEffect, MouseEvent, RefObject } from "react"
 
 type HandledMouseEvents = {
-  handleContextMenu: (ev: MouseEvent) => void
   mouseDown: boolean
+  handleContextMenu: (ev: MouseEvent) => void
   handleMouseDown: (ev: MouseEvent) => void
   handleMouseReset: () => void
   handlePan: (ev: MouseEvent) => void
