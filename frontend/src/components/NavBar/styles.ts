@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Button, ButtonNotOK } from "../../globalStyles"
+import { Button, ButtonNotOK } from "../globalStyles"
 
 const NavBarContainer = styled.div`
   width: 100%;

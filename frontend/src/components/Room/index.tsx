@@ -6,7 +6,7 @@ import { RoomData } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
 
 // Components
-import NavBar from "./NavBar"
+import NavBar from "../NavBar"
 import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
@@ -77,7 +77,7 @@ const Room: React.FC<PropTypes> = ({
     )
   }
 
-  const renderModal = (): ReactElement => {
+  const renderHostModal = (): ReactElement => {
     if (!location?.state) return null
     return (location.state as LocationState).host ? (
       <LinkModal link={window.location.toString()} />
@@ -87,7 +87,7 @@ const Room: React.FC<PropTypes> = ({
   const renderRoom = (): ReactElement => {
     return (
       <RoomBackground>
-        {renderModal()}
+        {renderHostModal()}
         {renderPointers()}
         <NavBar
           pageNum={pageNum}

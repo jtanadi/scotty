@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react"
 
-import { User } from "../../../../../backend/src/sockets/types"
+import { User } from "../../../../backend/src/sockets/types"
 
 import {
   ButtonsContainer,
