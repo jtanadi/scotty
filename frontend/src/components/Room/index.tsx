@@ -36,9 +36,9 @@ const Room: React.FC<PropTypes> = ({
   const pageRef = useRef(null)
 
   const [pages, setPages] = useState([])
-  const [showMouse, handlePointerToggle] = usePointer(id, pageRef)
-  const [pageNum, setPageNum, handleChangePage] = usePageNum(id, pages)
-  const [scale, handleZoom] = useZoom()
+  const { showMouse, handlePointerToggle } = usePointer(id, pageRef)
+  const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
+  const { scale, handleZoom } = useZoom()
 
   const [pointerColor, setPointerColor] = useState("")
   const [userID, setUserID] = useState("")

@@ -6,7 +6,10 @@ import socket from "../../../socket"
 
 const roundTo3 = roundTo(3)
 
-type UsePointerReturn = [boolean, () => void]
+type UsePointerReturn = {
+  showMouse: boolean
+  handlePointerToggle: () => void
+}
 
 export default (
   roomID: string,
@@ -56,5 +59,5 @@ export default (
     setShowMouse(prev => !prev)
   }
 
-  return [showMouse, handlePointerToggle]
+  return { showMouse, handlePointerToggle }
 }

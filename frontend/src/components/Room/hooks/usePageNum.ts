@@ -3,11 +3,11 @@ import { useState, Dispatch, SetStateAction } from "react"
 import { PageOption } from "../NavBar"
 import socket from "../../../socket"
 
-type UsePageNumReturn = [
-  number,
-  Dispatch<SetStateAction<number>>,
-  (option: PageOption) => void
-]
+type UsePageNumReturn = {
+  pageNum: number
+  setPageNum: Dispatch<SetStateAction<number>>
+  handleChangePage: (option: PageOption) => void
+}
 
 export default (roomID: string, pages: string[]): UsePageNumReturn => {
   const [pageNum, setPageNum] = useState(1)
@@ -30,5 +30,5 @@ export default (roomID: string, pages: string[]): UsePageNumReturn => {
     })
   }
 
-  return [pageNum, setPageNum, handleChangePage]
+  return { pageNum, setPageNum, handleChangePage }
 }

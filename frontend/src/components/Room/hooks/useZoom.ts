@@ -5,7 +5,10 @@ enum ZOOMLIMIT {
   MAX = 5,
 }
 
-type UseZoomReturn = [number, (offset: number) => void]
+type UseZoomReturn = {
+  scale: number
+  handleZoom: (offset: number) => void
+}
 
 export default (): UseZoomReturn => {
   const [scale, setScale] = useState(1)
@@ -17,5 +20,5 @@ export default (): UseZoomReturn => {
     })
   }
 
-  return [scale, handleZoom]
+  return { scale, handleZoom }
 }
