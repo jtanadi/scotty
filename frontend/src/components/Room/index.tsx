@@ -1,16 +1,8 @@
-import React, { useState, useEffect, ReactElement, useRef } from "react"
+import React, { useState, ReactElement, useRef } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
-import randomColor from "randomcolor"
 
 // Utils, etc.
-import {
-  RoomData,
-  JoinRoomData,
-  SyncDocData,
-  SyncPageData,
-  User,
-  UsersData,
-} from "../../../../backend/src/sockets/types"
+import { RoomData } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
 
 // Components
@@ -21,7 +13,7 @@ import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
 
 import { RoomBackground } from "./styles"
-import { usePointer, usePageNum, useZoom } from "./hooks"
+import { usePointer, usePageNum, useSocket, useZoom } from "./hooks"
 
 interface PropTypes extends RouteComponentProps {
   id: string
@@ -35,48 +27,15 @@ const Room: React.FC<PropTypes> = ({
 }): ReactElement => {
   const pageRef = useRef(null)
 
-  const [pages, setPages] = useState([])
+  const [pages, setPages] = useState<string[]>([])
   const { showMouse, handlePointerToggle } = usePointer(id, pageRef)
   const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
   const { scale, handleZoom } = useZoom()
-
-  const [pointerColor, setPointerColor] = useState("")
-  const [userID, setUserID] = useState("")
-  const [users, setUsers] = useState<User[]>([])
-  const [pdfUrl, setPdfUrl] = useState("")
-  const [error, setError] = useState("")
-  useEffect(() => {
-    const color = randomColor({ luminosity: "bright" })
-    setPointerColor(color)
-
-    const joinRoomData: JoinRoomData = { roomID: id, pointerColor: color }
-    socket.emit("join room", joinRoomData)
-
-    socket.on("sync document", (data: SyncDocData): void => {
-      setUserID(data.userID)
-      setPdfUrl(data.pdfUrl)
-      setPages(data.pages)
-    })
-
-    socket.on("sync page", (data: SyncPageData): void => {
-      setPageNum(data.pageNum)
-    })
-
-    socket.on("update users", (data: UsersData): void => {
-      setUsers(data.users)
-    })
-
-    socket.on("error", (data: Error): void => {
-      setError(data.message)
-    })
-
-    return (): void => {
-      socket.off("sync document")
-      socket.off("sync page")
-      socket.off("update users")
-      socket.off("error")
-    }
-  }, [])
+  const { pointerColor, userID, users, pdfUrl, error } = useSocket(
+    id,
+    setPages,
+    setPageNum
+  )
 
   const history = useHistory()
   const handleClose = (): void => {
