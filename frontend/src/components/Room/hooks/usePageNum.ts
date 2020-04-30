@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react"
 
-import { PageOption } from "../NavBar"
+import { PageOption } from "../../NavBar"
 import socket from "../../../socket"
 
 type UsePageNumReturn = {
