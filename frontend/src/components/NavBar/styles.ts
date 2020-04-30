@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Button, ButtonNotOK } from "../../globalStyles"
+import { Button, ButtonNotOK } from "../globalStyles"
 
 const NavBarContainer = styled.div`
   width: 100%;
@@ -8,7 +8,7 @@ const NavBarContainer = styled.div`
   display: flex;
   box-shadow: 0rem 0rem 0.5rem rgba(0, 0, 0, 0.25);
   position: fixed;
-  z-index: 99;
+  z-index: 1000;
 `
 
 const InfoContainer = styled.div`
