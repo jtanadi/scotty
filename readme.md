@@ -3,12 +3,12 @@
     <h1>🛸️ scotty 🛸️</h1>
 </div>
 
-`scotty` is a WebSocket-enabled PDF viewer, allowing multiple clients to look at and browse through a document together in real time.
+`scotty` is a WebSocket-enabled PDF viewer, allowing multiple clients to look at and browse through a document together in real time. ([*Who's Scotty?*](https://en.wikipedia.org/wiki/Beam_me_up,_Scotty))
 
-[*Who's Scotty?*](https://en.wikipedia.org/wiki/Beam_me_up,_Scotty)
 
 <div align="center">
     <strong><a href="https://raa-scotty.herokuapp.com/">The app is available here.</a></strong>
+    <a href="https://www.figma.com/file/nB8XWWZCOI7kFJGivVbsWh/scotty?node-id=0%3A1">View v1.0 designs here.</a>
 </div>
 
 ## Basic Functionality
@@ -23,12 +23,9 @@
 1. Navigate to link provided by host
 
 ## Additional Functionality
-`scotty` is an early-stage work-in-progress. This means that while clients can upload and view PDFs, the app's UI/UX is fairly limited. For instance, there is only limited support for page navigation and no support for other behaviors, such as panning when zoomed in.
+`scotty` is an early-stage work-in-progress. This means that while clients can upload and view PDFs, the app's UI/UX is fairly limited. A redesign is currently in the works and can be viewed [here](https://www.figma.com/file/nB8XWWZCOI7kFJGivVbsWh/scotty?node-id=0%3A1).
 
-Some additional functionality that may be added as the project matures (full list in [issues](https://github.com/raa-tools/scotty/issues)):
-- Non-latin language support
-- Allow clients to add annotations and comments
-- Drag-and-drop file to upload (similar to WeTransfer)
+A list of additional functionalities (and bugs) can be viewed on the project's [issues page](https://github.com/raa-tools/scotty/issues).
 
 ## Technical Information
 Because internal documents contain confidential information, they are treated with caution. That said, there is still room for improvement, such as adding authentication, making S3 permissions more restrictive, etc.
