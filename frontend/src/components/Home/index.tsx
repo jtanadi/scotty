@@ -46,7 +46,7 @@ const Home: React.FC<{}> = (): ReactElement => {
 
     try {
       const { message } = (
-        await axios.post(`${conveyorAPI}/convert/pdf?out=png`, pdfFile, {
+        await axios.post(`${conveyorAPI}/convert/pdf?out=jpg`, pdfFile, {
           headers: {
             "Content-Type": type,
             "x-Pingback": pingbackAddress,
