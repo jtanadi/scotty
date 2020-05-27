@@ -1,5 +1,23 @@
 import styled from "styled-components"
 
+export enum COLORS {
+  GREEN = "#5FCA44",
+  MID_GREEN = "#41AE26",
+  DARK_GREEN = "#23860A",
+  MUSTARD = "#DDB437",
+  MID_MUSTARD = "#C5A030",
+  DARK_MUSTARD = "#AA861A",
+  RED = "#E34D39",
+  MID_RED = "#BC3725",
+  DARK_RED = "#99311A",
+  LIGHT_GRAY = "#F2F2F2",
+  MID_GRAY = "#DEDEDE",
+  DARK_GRAY = "#797979",
+  DOCUMENT_VIEW_BG = "#CBCBCB",
+  WHITE = "#ffffff",
+  BLACK = "#000000",
+}
+
 export const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -37,25 +55,43 @@ export const Island = styled.div`
 export const Button = styled.button`
   border: 0;
   border-radius: 0.5rem;
-  padding: 1rem;
   margin: 0 auto;
-  cursor: pointer;
-  background-color: lightgray;
+  background-color: ${COLORS.LIGHT_GRAY};
   font-family: sans-serif;
+  cursor: pointer;
 
   &:hover {
-    background-color: darkgray;
+    background-color: ${COLORS.MID_GRAY};
   }
 
   &:active {
     color: white;
-    background-color: gray;
+    background-color: ${COLORS.DARK_GRAY};
   }
 
   &:disabled {
-    color: gray;
-    background-color: lightgray;
+    color: ${COLORS.LIGHT_GRAY};
+    background-color: ${COLORS.MID_GRAY};
     cursor: not-allowed;
+  }
+`
+
+export const ButtonRound = styled(Button)`
+  width: 4rem;
+  height: 4rem;
+  border-radius: 2rem;
+`
+
+export const ButtonSelectFile = styled(ButtonRound)`
+  color: white;
+  background-color: ${COLORS.MUSTARD};
+
+  &:hover {
+    background-color: ${COLORS.MID_MUSTARD};
+  }
+
+  &:active {
+    background-color: ${COLORS.DARK_MUSTARD};
   }
 `
 
@@ -96,10 +132,14 @@ export const H1 = styled.h1`
 `
 
 export const H2 = styled.h2`
+  font-size: 1.875rem;
   font-family: sans-serif;
+  font-weight: bold;
 `
 
 export const H3 = styled.h3`
+  font-size: 1.1875rem;
+  font-weight: bold;
   font-family: sans-serif;
 `
 
