@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { H3, Code, ButtonNotOK, Island } from "../globalStyles"
+import { H3, Code, ButtonNotOK, Island, COLORS } from "../globalStyles"
 
 export const BeamingIsland = styled(Island)`
   width: 20%;
@@ -30,9 +30,10 @@ export const Message = styled(Code)`
 `
 
 export const ErrorMessage = styled(Code)`
-  color: red;
+  color: ${COLORS.RED};
   text-align: center;
   margin: 2.75rem auto;
+  font-weight: 500;
 `
 export const LoadingIcon = styled.img`
   width: 4rem;

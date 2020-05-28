@@ -121,15 +121,15 @@ export const ButtonOK = styled(Button)`
 `
 
 export const ButtonNotOK = styled(Button)`
-  background-color: #ff6347;
+  background-color: ${COLORS.RED};
   color: white;
 
   &:hover {
-    background-color: #d64a31;
+    background-color: ${COLORS.MID_RED};
   }
 
   &:active {
-    background-color: #b53721;
+    background-color: ${COLORS.DARK_RED};
   }
 `
 
@@ -160,6 +160,7 @@ export const P = styled.p`
 export const Code = styled.p`
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.8125rem;
+  font-weight: 400;
   text-transform: uppercase;
 `
 
