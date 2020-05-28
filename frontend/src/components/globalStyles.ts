@@ -47,22 +47,24 @@ export const ModalCover = styled(Cover)`
 `
 
 export const Island = styled.div`
-  width: 40%;
+  width: 25%;
   min-width: 500px;
   margin: auto;
-  padding: 1.5rem 2.5rem 0.85rem 2.5rem;
+  padding: 1.5rem 2.5rem;
   background-color: white;
-  border-radius: 0.5rem;
   box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
 `
 
 export const Button = styled.button`
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem;
   border: 0;
-  border-radius: 0.5rem;
+  border-radius: 2.5rem;
   margin: 0 auto;
   background-color: ${COLORS.LIGHT_GRAY};
-  font-family: sans-serif;
   cursor: pointer;
+  height: 2.5rem;
 
   &:hover {
     background-color: ${COLORS.MID_GRAY};
@@ -132,26 +134,36 @@ export const ButtonNotOK = styled(Button)`
 `
 
 export const H1 = styled.h1`
-  font-family: sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 300;
+  font-size: 3rem;
 `
 
 export const H2 = styled.h2`
+  font-family: "IBM Plex Sans", sans-serif;
   font-size: 1.875rem;
-  font-family: sans-serif;
-  font-weight: bold;
+  font-weight: 600;
 `
 
 export const H3 = styled.h3`
+  font-family: "IBM Plex Sans", sans-serif;
   font-size: 1.1875rem;
-  font-weight: bold;
-  font-family: sans-serif;
+  font-weight: 400;
 `
 
 export const P = styled.p`
-  font-family: sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
 `
 
-export const Code = styled.span`
-  font-family: monospace;
-  background-color: #dedede;
+export const Code = styled.p`
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+`
+
+export const Bold = styled.strong`
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
 `
