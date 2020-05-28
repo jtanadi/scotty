@@ -16,7 +16,7 @@ import { conveyorAPI, pingbackAddress } from "../../utils/apis"
 import BeamingModal from "../BeamingModal"
 import SelectPDF from "./SelectPDF"
 import UploadPDF from "./UploadPDF"
-import { Background } from "../globalStyles"
+import { Background, COLORS } from "../globalStyles"
 import { Form, ResetText } from "./styles"
 
 export type LocationState = {
@@ -158,7 +158,11 @@ const Home: React.FC<{}> = (): ReactElement => {
     )
   }
 
-  return <Background>{roomID ? redirectToRoom() : renderHome()}</Background>
+  return (
+    <Background color={COLORS.LIGHT_GRAY}>
+      {roomID ? redirectToRoom() : renderHome()}
+    </Background>
+  )
 }
 
 export default Home
