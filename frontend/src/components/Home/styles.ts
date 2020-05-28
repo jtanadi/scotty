@@ -1,9 +1,9 @@
 import styled from "styled-components"
 
-import { COLORS } from "../globalStyles"
+import { COLORS, P } from "../globalStyles"
 
 export const Form = styled.form`
-  width: 25%;
+  width: 22.5%;
   min-width: 250px;
   margin: auto;
   display: flex;
@@ -15,11 +15,12 @@ type ResetTextProps = {
   show: boolean
 }
 
-export const ResetText = styled.p<ResetTextProps>`
+export const ResetText = styled(P)<ResetTextProps>`
   opacity: ${(props): number => (props.show ? 1 : 0)};
   text-align: center;
   color: ${COLORS.DARK_GRAY};
   cursor: ${(props): string => (props.show ? "pointer" : "auto")};
+  margin-top: 1.5rem;
   text-decoration: underline;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

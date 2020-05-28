@@ -16,6 +16,8 @@ import { conveyorAPI, pingbackAddress } from "../../utils/apis"
 import BeamingModal from "../BeamingModal"
 import SelectPDF from "./SelectPDF"
 import UploadPDF from "./UploadPDF"
+import Filename from "./Filename"
+
 import { Background, COLORS } from "../globalStyles"
 import { Form, ResetText } from "./styles"
 
@@ -123,6 +125,7 @@ const Home: React.FC<{}> = (): ReactElement => {
     return (
       <>
         <Form>
+          <Filename show={!inResetMode} filename={pdfFile?.name} />
           {!pdfFile ? (
             <SelectPDF pdfFile={pdfFile} handleFile={handleFile} />
           ) : (
@@ -138,6 +141,7 @@ const Home: React.FC<{}> = (): ReactElement => {
         </Form>
         {loading && (conveyorMessage || conveyorError) ? (
           <BeamingModal
+            filename={pdfFile.name}
             message={conveyorMessage}
             error={conveyorError}
             handleTryAgain={handleTryAgain}
