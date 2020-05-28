@@ -1,8 +1,15 @@
 import styled from "styled-components"
 
-import { H2, P, ButtonNotOK } from "../globalStyles"
+import { H3, Code, ButtonNotOK, Island } from "../globalStyles"
 
-export const Title = styled(H2)`
+export const BeamingIsland = styled(Island)`
+  width: 20%;
+  min-width: 200px;
+  max-width: 300px;
+  padding-bottom: 2rem;
+`
+
+export const Filename = styled(H3)`
   margin: 0;
   text-align: center;
 `
@@ -14,14 +21,22 @@ export const ErrorButton = styled(ButtonNotOK)`
 export const ButtonsContainer = styled.div`
   width: 100%;
   display: flex;
-  margin: 1rem 0 1.5rem 0;
+  flex: 1;
 `
 
-export const Body = styled(P)`
-  margin: 2rem 0;
+export const Message = styled(Code)`
   text-align: center;
+  margin: 0;
 `
 
-export const ErrorMessage = styled(Body)`
+export const ErrorMessage = styled(Code)`
   color: red;
+  text-align: center;
+  margin: 2.75rem auto;
+`
+export const LoadingIcon = styled.img`
+  width: 4rem;
+  height: 4rem;
+  display: block;
+  margin: 2rem auto;
 `

@@ -1,21 +1,25 @@
 import React, { FC, ReactElement } from "react"
 
-import { Code, Island, ModalCover } from "../globalStyles"
+import { ModalCover, Bold } from "../globalStyles"
 import {
-  Title,
+  BeamingIsland,
+  Filename,
   ErrorButton,
   ButtonsContainer,
-  Body,
+  LoadingIcon,
+  Message,
   ErrorMessage,
 } from "./styles"
 
 type PropTypes = {
+  filename: string
   error?: string
   message?: string
   handleTryAgain: () => void
 }
 
 const BeamingModal: FC<PropTypes> = ({
+  filename,
   error,
   message,
   handleTryAgain,
@@ -32,19 +36,22 @@ const BeamingModal: FC<PropTypes> = ({
       )
     } else if (message) {
       return (
-        <Body>
-          <Code>{message}</Code>
-        </Body>
+        <>
+          <LoadingIcon src="/static/spinner.svg" alt="Loading..." />
+          <Message>{message}</Message>
+        </>
       )
     }
   }
 
   return (
     <ModalCover>
-      <Island>
-        <Title>🛸️ Beaming.... 🛸️ </Title>
+      <BeamingIsland>
+        <Filename>
+          Beaming <Bold>{filename}</Bold>
+        </Filename>
         {renderModalContents()}
-      </Island>
+      </BeamingIsland>
     </ModalCover>
   )
 }
