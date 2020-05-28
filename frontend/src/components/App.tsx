@@ -4,6 +4,7 @@ import { hot } from "react-hot-loader/root"
 
 import Home from "./Home"
 import Room from "./Room"
+import TestRoutes from "./TestRoutes"
 
 const App: React.FC<{}> = (): ReactElement => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC<{}> = (): ReactElement => {
           <Room id={match.params.id} filename={match.params.filename} />
         )}
       />
+      {window.location.hostname === "localhost" ? <TestRoutes /> : null}
     </Router>
   )
 }
