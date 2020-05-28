@@ -12,7 +12,7 @@ import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
 
-import { RoomBackground } from "./styles"
+import { Background, COLORS } from "../globalStyles"
 import { usePointer, usePageNum, useSocket, useZoom } from "./hooks"
 
 interface PropTypes extends RouteComponentProps {
@@ -86,7 +86,7 @@ const Room: React.FC<PropTypes> = ({
 
   const renderRoom = (): ReactElement => {
     return (
-      <RoomBackground>
+      <Background color={COLORS.DOCUMENT_VIEW_BG}>
         {renderHostModal()}
         {renderPointers()}
         <NavBar
@@ -108,7 +108,7 @@ const Room: React.FC<PropTypes> = ({
             pageRef={pageRef}
           />
         ) : null}
-      </RoomBackground>
+      </Background>
     )
   }
 
