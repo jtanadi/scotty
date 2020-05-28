@@ -18,12 +18,16 @@ export enum COLORS {
   BLACK = "#000000",
 }
 
-export const Background = styled.div`
+type BackgroundProps = {
+  color: string
+}
+
+export const Background = styled.div<BackgroundProps>`
   width: 100%;
   height: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: white;
+  background-color: ${(props): string => props.color};
   display: flex;
 `
 
