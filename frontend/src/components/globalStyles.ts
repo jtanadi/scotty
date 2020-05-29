@@ -48,10 +48,11 @@ export const ModalCover = styled(Cover)`
 `
 
 export const Island = styled.div`
-  width: 25%;
-  min-width: 500px;
+  width: 20%;
+  min-width: 250px;
+  max-width: 325px;
   margin: auto;
-  padding: 1.5rem 2.5rem;
+  padding: 1.5rem 2.5rem 2rem 2.5rem;
   background-color: white;
   box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
 `
@@ -63,18 +64,18 @@ export const Button = styled.button`
   border: 0;
   border-radius: 2.5rem;
   margin: 0 auto;
-  background-color: ${COLORS.LIGHT_GRAY};
+  color: ${COLORS.WHITE};
+  background-color: ${COLORS.SPACE_GRAY};
   cursor: pointer;
   height: 2.5rem;
   transition: all 0.25s ease;
 
   &:hover {
-    background-color: ${COLORS.MID_GRAY};
+    box-shadow: 0 0 0.5rem ${COLORS.SPACE_GRAY};
   }
 
   &:active {
-    color: white;
-    background-color: ${COLORS.DARK_GRAY};
+    color: ${COLORS.MID_GRAY};
   }
 
   &:disabled {
