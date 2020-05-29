@@ -46,14 +46,12 @@ export const Icon = styled.div`
   width: 3rem;
   height: 3rem;
   margin-top: 1px;
-  background: url(/static/icons/folder.svg);
+  background-image: url(/static/icons/folder.svg);
   background-repeat: no-repeat;
   background-position: center;
 
   &:active {
-    background: url(/static/icons/folderDark.svg);
-    background-repeat: no-repeat;
-    background-position: center;
+    background-image: url(/static/icons/folderDark.svg);
   }
 `
 
