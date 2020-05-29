@@ -1,8 +1,7 @@
 import React, { FC, ReactElement } from "react"
 
-import { ModalCover, Bold } from "../globalStyles"
+import { Island, ModalCover, Bold } from "../globalStyles"
 import {
-  BeamingIsland,
   Filename,
   ErrorButton,
   ButtonsContainer,
@@ -46,12 +45,12 @@ const BeamingModal: FC<PropTypes> = ({
 
   return (
     <ModalCover>
-      <BeamingIsland>
+      <Island>
         <Filename>
           Beaming <Bold>{filename}</Bold>
         </Filename>
         {renderModalContents()}
-      </BeamingIsland>
+      </Island>
     </ModalCover>
   )
 }

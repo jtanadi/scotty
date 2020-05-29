@@ -1,13 +1,6 @@
 import styled from "styled-components"
 
-import { H3, Code, ButtonNotOK, Island, COLORS } from "../globalStyles"
-
-export const BeamingIsland = styled(Island)`
-  width: 20%;
-  min-width: 200px;
-  max-width: 300px;
-  padding-bottom: 2rem;
-`
+import { H3, Code, ButtonNotOK, COLORS } from "../globalStyles"
 
 export const Filename = styled(H3)`
   margin: 0;
