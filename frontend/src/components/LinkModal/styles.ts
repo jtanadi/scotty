@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { H2, P, Button, COLORS } from "../globalStyles"
+import { H2, P, Button, COLORS, ANIMATION_DURATION } from "../globalStyles"
 
 export const InputContainer = styled.div`
   width: 100%;
@@ -40,6 +40,7 @@ export const CopyButton = styled.button`
   background-repeat: no-repeat;
   background-size: 100% 100%;
   bacground-position: center;
+  transition: all ${ANIMATION_DURATION} ease-in-out;
 
   &:hover {
     background-color: ${COLORS.MID_GRAY};
