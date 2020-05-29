@@ -19,6 +19,8 @@ export enum COLORS {
   BLACK = "#000000",
 }
 
+export const ANIMATION_DURATION = "0.2s"
+
 type BackgroundProps = {
   color: string
 }
@@ -68,7 +70,7 @@ export const Button = styled.button`
   background-color: ${COLORS.SPACE_GRAY};
   cursor: pointer;
   height: 2.5rem;
-  transition: all 0.25s ease;
+  transition: all ${ANIMATION_DURATION} ease-in-out;
 
   &:hover {
     box-shadow: 0 0 0.5rem ${COLORS.SPACE_GRAY};

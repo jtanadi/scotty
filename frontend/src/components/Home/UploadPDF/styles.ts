@@ -1,12 +1,6 @@
 import styled from "styled-components"
-import { ButtonRound, COLORS } from "../../globalStyles"
-import {
-  animationDuration,
-  buttonExpand,
-  textAppear,
-  buttonReset,
-  textReset,
-} from "./keyframes"
+import { ButtonRound, COLORS, ANIMATION_DURATION } from "../../globalStyles"
+import { buttonExpand, textAppear, buttonReset, textReset } from "./keyframes"
 
 type UploadProps = {
   reset: boolean
@@ -14,7 +8,7 @@ type UploadProps = {
 
 export const UploadButton = styled(ButtonRound)<UploadProps>`
   animation: ${(props): any => (props.reset ? buttonReset : buttonExpand)}
-    ${animationDuration} ease-in-out forwards;
+    ${ANIMATION_DURATION} ease-in-out forwards;
   border: 4px solid ${COLORS.WHITE};
 
   &:hover {
@@ -36,6 +30,6 @@ export const UploadButton = styled(ButtonRound)<UploadProps>`
 
 export const UploadButtonText = styled.span<UploadProps>`
   animation: ${(props): any => (props.reset ? textReset : textAppear)}
-    ${animationDuration} ease-in-out forwards;
+    ${ANIMATION_DURATION} ease-in-out forwards;
   opacity: 0;
 `

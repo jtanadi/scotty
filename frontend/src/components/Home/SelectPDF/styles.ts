@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { COLORS } from "../../globalStyles"
+import { COLORS, ANIMATION_DURATION } from "../../globalStyles"
 
 // Effectively hiding input
 export const Input = styled.input`
@@ -34,7 +34,7 @@ export const Label = styled.label`
   -ms-user-select: none;
   user-select: none;
   display: flex;
-  transition: box-shadow 0.25s ease;
+  transition: box-shadow ${ANIMATION_DURATION} ease;
   border: 4px solid ${COLORS.MUSTARD};
 
   &:hover {

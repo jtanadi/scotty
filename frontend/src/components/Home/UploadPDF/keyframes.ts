@@ -1,8 +1,6 @@
 import { keyframes } from "styled-components"
 import { COLORS } from "../../globalStyles"
 
-export const animationDuration = "0.25s"
-
 export const buttonExpand = keyframes`
   0% {
     width: 4rem;
