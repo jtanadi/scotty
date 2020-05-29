@@ -13,17 +13,21 @@ type UploadProps = {
 }
 
 export const UploadButton = styled(ButtonRound)<UploadProps>`
-  color: white;
+  color: ${COLORS.WHITE};
   animation: ${(props): any => (props.reset ? buttonReset : buttonExpand)}
     ${animationDuration} ease-in-out forwards;
-  background-color: ${COLORS.GREEN};
+  background-color: ${COLORS.SPACE_GRAY};
+  border: 4px solid ${COLORS.WHITE};
 
   &:hover {
-    background-color: ${COLORS.MID_GREEN};
+    background-color: ${COLORS.SPACE_GRAY};
+    box-shadow: 0 0 0.5rem ${COLORS.WHITE};
   }
 
   &:active {
-    background-color: ${COLORS.DARK_GREEN};
+    color: ${COLORS.MID_GRAY};
+    border-color: ${COLORS.MID_GRAY};
+    background-color: ${COLORS.SPACE_GRAY};
   }
 
   &:disabled {

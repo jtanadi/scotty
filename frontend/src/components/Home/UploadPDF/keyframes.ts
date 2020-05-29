@@ -6,11 +6,11 @@ export const animationDuration = "0.25s"
 export const buttonExpand = keyframes`
   0% {
     width: 4rem;
-    background-color: ${COLORS.MUSTARD};
+    border-color: ${COLORS.MUSTARD};
   }
 
   50% {
-    background-color: ${COLORS.GREEN};
+    border-color: ${COLORS.WHITE};
   }
 
   100% {
@@ -38,11 +38,11 @@ export const buttonReset = keyframes`
   }
 
   50% {
-    background-color: ${COLORS.GREEN}
+    border-color: ${COLORS.WHITE};
   }
   
   100% {
-    background-color: ${COLORS.MUSTARD}
+    border-color: ${COLORS.MUSTARD};
   }
 `
 

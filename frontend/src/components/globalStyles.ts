@@ -11,8 +11,9 @@ export enum COLORS {
   MID_RED = "#972819",
   DARK_RED = "#7E2613",
   LIGHT_GRAY = "#F2F2F2",
-  MID_GRAY = "#DEDEDE",
+  MID_GRAY = "#C7C7C7",
   DARK_GRAY = "#6E6E6E",
+  SPACE_GRAY = "#14161B",
   DOCUMENT_VIEW_BG = "#CBCBCB",
   WHITE = "#ffffff",
   BLACK = "#000000",
@@ -65,6 +66,7 @@ export const Button = styled.button`
   background-color: ${COLORS.LIGHT_GRAY};
   cursor: pointer;
   height: 2.5rem;
+  transition: all 0.25s ease;
 
   &:hover {
     background-color: ${COLORS.MID_GRAY};

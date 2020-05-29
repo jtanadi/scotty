@@ -163,7 +163,7 @@ const Home: React.FC<{}> = (): ReactElement => {
   }
 
   return (
-    <Background color={COLORS.LIGHT_GRAY}>
+    <Background color={COLORS.SPACE_GRAY}>
       {roomID ? redirectToRoom() : renderHome()}
     </Background>
   )

@@ -15,13 +15,14 @@ export const Input = styled.input`
   }
 
   &:active + label {
-    background-color: ${COLORS.DARK_MUSTARD};
+    border: 4px solid ${COLORS.MID_MUSTARD};
   }
 `
 
 export const Label = styled.label`
+  box-sizing: border-box;
   margin: auto;
-  background-color: ${COLORS.MUSTARD};
+  background-color: ${COLORS.SPACE_GRAY};
   width: 4rem;
   height: 4rem;
   border-radius: 4rem;
@@ -33,13 +34,11 @@ export const Label = styled.label`
   -ms-user-select: none;
   user-select: none;
   display: flex;
+  transition: box-shadow 0.25s ease;
+  border: 4px solid ${COLORS.MUSTARD};
 
   &:hover {
-    background-color: ${COLORS.MID_MUSTARD};
-  }
-
-  &:active {
-    background-color: ${COLORS.DARK_MUSTARD};
+    box-shadow: 0 0 0.5rem ${COLORS.MUSTARD};
   }
 `
 

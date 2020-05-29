@@ -18,7 +18,7 @@ type ResetTextProps = {
 export const ResetText = styled(P)<ResetTextProps>`
   opacity: ${(props): number => (props.show ? 1 : 0)};
   text-align: center;
-  color: ${COLORS.DARK_GRAY};
+  color: ${COLORS.MID_GRAY};
   cursor: ${(props): string => (props.show ? "pointer" : "auto")};
   margin-top: 1.5rem;
   text-decoration: underline;
@@ -28,4 +28,9 @@ export const ResetText = styled(P)<ResetTextProps>`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  transition: colors 0.25s ease;
+
+  &:hover {
+    color: ${COLORS.WHITE};
+  }
 `
