@@ -1,15 +1,13 @@
 import React, { ReactElement, FC, useRef, useEffect, useState } from "react"
 
-import { Code, Island, ModalCover } from "../globalStyles"
+import { Island, ModalCover } from "../globalStyles"
 import {
   Input,
-  ButtonsContainer,
+  InputContainer,
   OKButton,
-  HR,
   Title,
-  Subtitle,
   Body,
-  QuoteAttr,
+  CopyButton,
 } from "./styles"
 
 type PropTypes = {
@@ -26,34 +24,34 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
-      inputRef.current.select()
     }
   }, [])
+
+  const handleFocus = (): void => {
+    inputRef.current.select()
+  }
+
+  const handleCopy = (): void => {
+    inputRef.current.select()
+    document.execCommand("copy")
+  }
 
   const renderModal = (): ReactElement => {
     return (
       <ModalCover>
         <Island>
-          <Title>You&rsquo;re all set!</Title>
-          <Body>Copy and share the following link to invite others.</Body>
-
-          <Input ref={inputRef} readOnly value={link} />
-
-          <ButtonsContainer>
-            <OKButton onClick={handleOK}>OK</OKButton>
-          </ButtonsContainer>
-
-          <HR />
-
-          <Subtitle>
-            &ldquo;You suspect some danger?&rdquo;
-            <QuoteAttr>—Captain Kirk</QuoteAttr>
-          </Subtitle>
+          <Title>Greetings Earthling</Title>
           <Body>
-            <Code>scotty</Code> is encrypted end-to-end. PDFs are only available
-            for the duration of the session and are stored in a restricted S3
-            bucket with very limited read/write access.
+            You’re all set! Copy and share the following link to invite others
+            to view this document.
           </Body>
+
+          <InputContainer>
+            <Input ref={inputRef} readOnly value={link} onFocus={handleFocus} />
+            <CopyButton onClick={handleCopy} />
+          </InputContainer>
+
+          <OKButton onClick={handleOK}>OK</OKButton>
         </Island>
       </ModalCover>
     )
