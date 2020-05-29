@@ -36,7 +36,10 @@ export const CopyButton = styled.button`
   position: absolute;
   top: 0;
   right: 0;
-  background-image: url(/static/icons/copyPasteboard.svg);
+  background: url(/static/icons/copyPasteboard.svg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  bacground-position: center;
 
   &:hover {
     background-color: ${COLORS.MID_GRAY};
