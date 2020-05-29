@@ -3,13 +3,14 @@ import { Route } from "react-router-dom"
 
 import BeamingModal from "./BeamingModal"
 import Loading from "./Loading"
+import LinkModal from "./LinkModal"
 
 const TestRoutes = (): ReactElement => {
   return (
     <>
       <Route path="/test/loading" component={Loading} />
       <Route
-        path="/test/beaming"
+        path="/test/BeamingModal"
         render={(): ReactElement => (
           <BeamingModal
             filename="filename.pdf"
@@ -20,7 +21,7 @@ const TestRoutes = (): ReactElement => {
       />
 
       <Route
-        path="/test/beaming-error"
+        path="/test/BeamingModal-error"
         render={(): ReactElement => (
           <BeamingModal
             filename="filename.pdf"
@@ -28,6 +29,11 @@ const TestRoutes = (): ReactElement => {
             handleTryAgain={(): void => {}}
           />
         )}
+      />
+
+      <Route
+        path="/test/LinkModal"
+        render={(): ReactElement => <LinkModal link="http://testlink.com" />}
       />
     </>
   )
