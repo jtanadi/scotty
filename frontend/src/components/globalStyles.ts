@@ -59,6 +59,15 @@ export const Island = styled.div`
   box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
 `
 
+export const VerticalButtonsContainer = styled.div`
+  width: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+  position: fixed;
+  bottom: 2rem;
+`
+
 export const Button = styled.button`
   font-family: "IBM Plex Sans", sans-serif;
   font-weight: 600;
