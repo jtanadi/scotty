@@ -5,6 +5,8 @@ import BeamingModal from "./BeamingModal"
 import Loading from "./Loading"
 import LinkModal from "./LinkModal"
 import NavBar from "./NavBar"
+import ToolBar from "./ToolBar"
+import ZoomBar from "./ZoomBar"
 
 const TestRoutes = (): ReactElement => {
   return (
@@ -52,6 +54,9 @@ const TestRoutes = (): ReactElement => {
           />
         )}
       />
+
+      <Route path="/test/ZoomBar" render={(): ReactElement => <ZoomBar />} />
+      <Route path="/test/ToolBar" render={(): ReactElement => <ToolBar />} />
     </>
   )
 }
