@@ -2,7 +2,7 @@ import React, { ReactElement, FC, useRef, useEffect, useState } from "react"
 
 import { Island, ModalCover } from "../globalStyles"
 import {
-  Input,
+  LinkInput,
   InputContainer,
   OKButton,
   Title,
@@ -47,8 +47,20 @@ const LinkModal: FC<PropTypes> = ({ link }): ReactElement => {
           </Body>
 
           <InputContainer>
-            <Input ref={inputRef} readOnly value={link} onFocus={handleFocus} />
-            <CopyButton onClick={handleCopy} />
+            <LinkInput
+              ref={inputRef}
+              readOnly
+              value={link}
+              onFocus={handleFocus}
+            />
+            <CopyButton
+              width="2.25rem"
+              height="2.25rem"
+              image="/static/icons/copyPasteboard.svg"
+              imageHover="/static/icons/copyPasteboardLight.svg"
+              imageActive="/static/icons/copyPasteboardLight.svg"
+              onClick={handleCopy}
+            />
           </InputContainer>
 
           <OKButton onClick={handleOK}>OK</OKButton>
