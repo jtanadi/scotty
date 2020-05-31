@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 export enum COLORS {
   GREEN = "#308613",
@@ -93,49 +93,49 @@ export const ButtonRound = styled(Button)`
   border-radius: 2rem;
 `
 
-export const ButtonSelectFile = styled(ButtonRound)`
-  color: white;
-  background-color: ${COLORS.MUSTARD};
+type ToolButtonProps = {
+  width: string
+  height: string
+  image: string
+  imageHover?: string
+  imageActive?: string
+}
+
+export const ToolButton = styled.button<ToolButtonProps>`
+  width: ${(props): string => props.width};
+  height: ${(props): string => props.height};
+  border: 0;
+  padding: 0;
+  background-color: ${COLORS.LIGHT_GRAY};
+  background-image: url(${(props): string => props.image});
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  bacground-position: center;
+  transition: all ${ANIMATION_DURATION} ease-in-out;
 
   &:hover {
-    background-color: ${COLORS.MID_MUSTARD};
+    background-color: ${COLORS.DARK_GRAY};
   }
 
   &:active {
-    background-color: ${COLORS.DARK_MUSTARD};
-  }
-`
-
-export const ButtonOK = styled(Button)`
-  background-color: #67e678;
-
-  &:hover {
-    background-color: #54c463;
+    background-color: ${COLORS.SPACE_GRAY};
   }
 
-  &:active {
-    color: black;
-    background-color: #40a84e;
-  }
+  ${(props): any =>
+    props.imageHover &&
+    css`
+      &:hover {
+        background-image: url(${props.imageHover});
+      }
+    `}
 
-  &:disabled {
-    color: gray;
-    background-color: lightgray;
-    cursor: not-allowed;
-  }
-`
-
-export const ButtonNotOK = styled(Button)`
-  background-color: ${COLORS.RED};
-  color: white;
-
-  &:hover {
-    background-color: ${COLORS.MID_RED};
-  }
-
-  &:active {
-    background-color: ${COLORS.DARK_RED};
-  }
+  ${(props): any =>
+    props.imageActive &&
+    css`
+      &:active {
+        background-image: url(${props.imageActive});
+      }
+    `}
 `
 
 export const H1 = styled.h1`
@@ -156,6 +156,12 @@ export const H3 = styled.h3`
   font-weight: 400;
 `
 
+export const H4 = styled.h4`
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+`
+
 export const P = styled.p`
   font-family: "IBM Plex Sans", sans-serif;
   font-size: 1rem;
@@ -172,4 +178,17 @@ export const Code = styled.p`
 export const Bold = styled.strong`
   font-family: "IBM Plex Sans", sans-serif;
   font-weight: 600;
+`
+
+export const Input = styled.input`
+  box-sizing: border-box;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 1rem;
+  background-color: ${COLORS.WHITE};
+  border: 1px solid ${COLORS.MID_GRAY};
+  padding: 0 0.35rem;
+
+  &:focus {
+    border: 2px solid ${COLORS.SPACE_GRAY};
+  }
 `
