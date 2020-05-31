@@ -13,10 +13,12 @@ export const ErrorButton = styled(Button)`
 
   &:hover {
     background-color: ${COLORS.MID_RED};
+    box-shadow: 0 0 0.5rem ${COLORS.MID_RED};
   }
 
   &:active {
     background-color: ${COLORS.DARK_RED};
+    box-shadow: 0 0 0.5rem ${COLORS.DARK_RED};
   }
 `
 
