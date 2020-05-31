@@ -12,7 +12,9 @@ export const buttonExpand = keyframes`
   }
 
   100% {
-    width: 100%;
+    width: 22.5%;
+    min-width: 225px;
+    max-width: 325px;
   }
 `
 
@@ -32,7 +34,9 @@ export const textAppear = keyframes`
 
 export const buttonReset = keyframes`
   0% {
-    width: 100%;
+    width: 22.5%;
+    min-width: 225px;
+    max-width: 325px;
   }
 
   50% {

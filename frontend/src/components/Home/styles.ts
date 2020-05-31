@@ -3,8 +3,8 @@ import styled from "styled-components"
 import { COLORS, P } from "../globalStyles"
 
 export const Form = styled.form`
-  width: 22.5%;
-  min-width: 250px;
+  width: 100%;
+  min-width: 500px;
   margin: auto;
   display: flex;
   flex-direction: column;
