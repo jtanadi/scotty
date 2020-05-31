@@ -1,14 +1,23 @@
 import styled from "styled-components"
 
-import { H3, Code, ButtonNotOK, COLORS } from "../globalStyles"
+import { H3, Code, Button, COLORS } from "../globalStyles"
 
 export const Filename = styled(H3)`
   margin: 0;
   text-align: center;
 `
 
-export const ErrorButton = styled(ButtonNotOK)`
+export const ErrorButton = styled(Button)`
+  background-color: ${COLORS.RED};
   flex: 1;
+
+  &:hover {
+    background-color: ${COLORS.MID_RED};
+  }
+
+  &:active {
+    background-color: ${COLORS.DARK_RED};
+  }
 `
 
 export const ButtonsContainer = styled.div`
