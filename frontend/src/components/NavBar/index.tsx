@@ -1,15 +1,17 @@
-import React, { ReactElement } from "react"
+import React, { useState, useEffect, ReactElement, FormEvent } from "react"
 
 import { User } from "../../../../backend/src/sockets/types"
 
+import { ToolButton } from "../globalStyles"
 import {
-  ButtonsContainer,
   NavBarContainer,
-  NavButton,
-  PointerButton,
-  PageInfo,
-  Filename,
-  InfoContainer,
+  NavChild,
+  InfoText,
+  PageNumContainer,
+  PageNumForm,
+  PageNumInput,
+  MaxPageNum,
+  ReverseToolButton,
   CloseButton,
 } from "./styles"
 
@@ -26,9 +28,7 @@ type PropTypes = {
   showMouse: boolean
   pointerColor: string
   handleChangePage(option: PageOption): void
-  handleZoom(scaleOffset: number): void
   handleClose(): void
-  handlePointerToggle(): void
 }
 
 const NavBar: React.FC<PropTypes> = ({
@@ -36,48 +36,103 @@ const NavBar: React.FC<PropTypes> = ({
   maxPage,
   filename,
   users,
-  showMouse,
-  pointerColor,
   handleChangePage,
   handleClose,
-  handlePointerToggle,
-  handleZoom,
 }): ReactElement => {
+  const [currentPageNum, setCurrentPageNum] = useState(pageNum || "")
+
+  const handleInputSubmit = (ev: FormEvent): void => {
+    ev.preventDefault()
+    if (!currentPageNum) return
+    handleChangePage({ goto: currentPageNum as number })
+  }
+
+  const handleInputChange = (ev: FormEvent<HTMLInputElement>): void => {
+    if (!ev.currentTarget.value) {
+      setCurrentPageNum("")
+      return
+    }
+
+    const parsedPageNum = parseInt(ev.currentTarget.value, 10)
+    if (
+      !isNaN(parsedPageNum) &&
+      parsedPageNum > 0 &&
+      parsedPageNum <= maxPage
+    ) {
+      setCurrentPageNum(parsedPageNum)
+    }
+  }
+
+  useEffect(() => {
+    setCurrentPageNum(pageNum)
+  }, [pageNum])
+
   return (
     <NavBarContainer>
-      <InfoContainer>
-        <Filename>{filename}</Filename>
-        {` - ${users.length} ${users.length > 1 ? "users" : "user"}`}
-      </InfoContainer>
-      <ButtonsContainer>
-        <NavButton onClick={(): void => handleZoom(-1)}>{"-"}</NavButton>
-        <NavButton onClick={(): void => handleZoom(1)}>{"+"}</NavButton>
-        <NavButton onClick={(): void => handleChangePage({ goto: 1 })}>
-          {"<<"}
-        </NavButton>
-        <NavButton onClick={(): void => handleChangePage({ offset: -1 })}>
-          {"<"}
-        </NavButton>
-        <PageInfo>
-          Page {pageNum} / {maxPage}
-        </PageInfo>
-        <NavButton onClick={(): void => handleChangePage({ offset: 1 })}>
-          {">"}
-        </NavButton>
-        <NavButton onClick={(): void => handleChangePage({ goto: maxPage })}>
-          {">>"}
-        </NavButton>
-        <PointerButton
-          showMouse={showMouse}
-          color={pointerColor}
-          onClick={handlePointerToggle}
-        >
-          🏹️
-        </PointerButton>
-      </ButtonsContainer>
-      <InfoContainer>
-        <CloseButton onClick={handleClose}>Close</CloseButton>
-      </InfoContainer>
+      <NavChild flex="1">
+        <InfoText>{filename}</InfoText>
+      </NavChild>
+
+      <NavChild>
+        <ToolButton
+          width="3rem"
+          height="3rem"
+          image="/static/icons/firstLastPage.svg"
+          imageHover="/static/icons/firstLastPageLight.svg"
+          imageActive="/static/icons/firstLastPageLight.svg"
+          onClick={(): void => handleChangePage({ goto: 1 })}
+        />
+        <ToolButton
+          width="3rem"
+          height="3rem"
+          image="/static/icons/prevNextPage.svg"
+          imageHover="/static/icons/prevNextPageLight.svg"
+          imageActive="/static/icons/prevNextPageLight.svg"
+          onClick={(): void => handleChangePage({ offset: -1 })}
+        />
+
+        <PageNumContainer>
+          <PageNumForm onSubmit={handleInputSubmit}>
+            <PageNumInput
+              value={currentPageNum}
+              onSubmit={handleInputSubmit}
+              onChange={handleInputChange}
+            />
+          </PageNumForm>
+          <MaxPageNum>/ {maxPage}</MaxPageNum>
+        </PageNumContainer>
+
+        <ReverseToolButton
+          width="3rem"
+          height="3rem"
+          image="/static/icons/prevNextPage.svg"
+          imageHover="/static/icons/prevNextPageLight.svg"
+          imageActive="/static/icons/prevNextPageLight.svg"
+          onClick={(): void => handleChangePage({ offset: 1 })}
+        />
+        <ReverseToolButton
+          width="3rem"
+          height="3rem"
+          image="/static/icons/firstLastPage.svg"
+          imageHover="/static/icons/firstLastPageLight.svg"
+          imageActive="/static/icons/firstLastPageLight.svg"
+          onClick={(): void => handleChangePage({ goto: maxPage })}
+        />
+      </NavChild>
+
+      <NavChild flex="1">
+        <InfoText>
+          {`${users.length} ${users.length > 1 ? "users" : "user"}`}
+        </InfoText>
+        <CloseButton
+          width="3rem"
+          height="3rem"
+          image="/static/icons/close.svg"
+          imageHover="/static/icons/closeLight.svg"
+          imageActive="/static/icons/closeLight.svg"
+          onClick={handleClose}
+        />
+      </NavChild>
     </NavBarContainer>
   )
 }
