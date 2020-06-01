@@ -119,7 +119,7 @@ export const ToolButton = styled.button<ToolButtonProps>`
   background-image: url(${(props): string => props.image});
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  bacground-position: center;
+  background-position: center;
   transition: all ${ANIMATION_DURATION} ease-in-out;
 
   &:hover {
