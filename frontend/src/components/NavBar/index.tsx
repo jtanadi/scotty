@@ -25,8 +25,6 @@ type PropTypes = {
   maxPage: number
   filename: string
   users: User[]
-  showMouse: boolean
-  pointerColor: string
   handleChangePage(option: PageOption): void
   handleClose(): void
 }

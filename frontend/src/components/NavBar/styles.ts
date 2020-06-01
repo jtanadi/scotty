@@ -6,7 +6,7 @@ export const NavBarContainer = styled.div`
   height: 3rem;
   background-color: ${COLORS.LIGHT_GRAY};
   display: flex;
-  box-shadow: 0rem 0rem 0.625rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0rem 0rem 0.5rem rgba(0, 0, 0, 0.25);
   position: fixed;
   z-index: 1000;
 `
@@ -65,14 +65,3 @@ export const CloseButton = styled(ToolButton)`
     background-color: ${COLORS.MID_RED};
   }
 `
-
-/* type PointerButtonProp = { */
-/*   color: string */
-/*   showMouse: boolean */
-/* } */
-
-/* export const PointerButton = styled(NavButton).attrs((p: PointerButtonProp) => { */
-/*   if (p.showMouse) { */
-/*     return { style: { backgroundColor: p.color } } */
-/*   } */
-/* })<PointerButtonProp>`` */
