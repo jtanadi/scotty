@@ -12,7 +12,7 @@ import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
 import ZoomBar from "../ZoomBar"
-import ToolBar from "../ToolBar"
+import ToolBar, { TOOLS } from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, usePageNum, useSocket, useZoom } from "./hooks"
@@ -38,6 +38,14 @@ const Room: React.FC<PropTypes> = ({
     setPages,
     setPageNum
   )
+
+  const handleToolBarButton = (tool: TOOLS): void => {
+    switch (tool) {
+      case TOOLS.POINTER:
+        handlePointerToggle()
+        break
+    }
+  }
 
   const history = useHistory()
   const handleClose = (): void => {
@@ -110,7 +118,7 @@ const Room: React.FC<PropTypes> = ({
         <ToolBar
           pointerColor={pointerColor}
           showMouse={showMouse}
-          handlePointerToggle={handlePointerToggle}
+          handleToolBarButton={handleToolBarButton}
         />
       </Background>
     )
