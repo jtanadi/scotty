@@ -1,14 +1,8 @@
 import { keyframes } from "styled-components"
-import { COLORS } from "../../globalStyles"
 
 export const buttonExpand = keyframes`
   0% {
     width: 4rem;
-    border-color: ${COLORS.MUSTARD};
-  }
-
-  50% {
-    border-color: ${COLORS.WHITE};
   }
 
   100% {
@@ -37,14 +31,6 @@ export const buttonReset = keyframes`
     width: 22.5%;
     min-width: 225px;
     max-width: 325px;
-  }
-
-  50% {
-    border-color: ${COLORS.WHITE};
-  }
-  
-  100% {
-    border-color: ${COLORS.MUSTARD};
   }
 `
 

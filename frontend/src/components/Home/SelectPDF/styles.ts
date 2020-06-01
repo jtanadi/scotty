@@ -15,7 +15,7 @@ export const Input = styled.input`
   }
 
   &:active + label {
-    border: 4px solid ${COLORS.MID_MUSTARD};
+    border: 4px solid ${COLORS.MID_GRAY};
   }
 `
 
@@ -35,10 +35,10 @@ export const Label = styled.label`
   user-select: none;
   display: flex;
   transition: box-shadow ${ANIMATION_DURATION} ease;
-  border: 4px solid ${COLORS.MUSTARD};
+  border: 4px solid ${COLORS.WHITE};
 
   &:hover {
-    box-shadow: 0 0 0.5rem ${COLORS.MUSTARD};
+    box-shadow: 0 0 0.5rem ${COLORS.WHITE};
   }
 `
 
