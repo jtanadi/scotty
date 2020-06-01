@@ -23,6 +23,7 @@ export const UploadButton = styled(ButtonRound)<UploadProps>`
   }
 
   &:disabled {
+    border: 0;
     color: ${COLORS.DARK_GRAY};
     background-color: ${COLORS.MID_GRAY};
   }

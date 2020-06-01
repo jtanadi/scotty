@@ -89,6 +89,7 @@ export const Button = styled.button`
   }
 
   &:disabled {
+    border: 0;
     color: ${COLORS.LIGHT_GRAY};
     background-color: ${COLORS.MID_GRAY};
     cursor: not-allowed;
