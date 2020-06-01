@@ -11,7 +11,8 @@ import ZoomBar from "./ZoomBar"
 const TestRoutes = (): ReactElement => {
   return (
     <>
-      <Route path="/test/loading" component={Loading} />
+      <Route path="/test/Loading" component={Loading} />
+
       <Route
         path="/test/BeamingModal"
         render={(): ReactElement => (
