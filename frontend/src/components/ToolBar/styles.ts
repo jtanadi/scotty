@@ -6,8 +6,13 @@ export const ButtonsContainer = styled(VerticalButtonsContainer)`
   box-shadow: none;
 `
 
-export const ButtonsInnerContainer = styled.div`
+type InnerContainerProps = {
+  count: number
+}
+
+export const ButtonsInnerContainer = styled.div<InnerContainerProps>`
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
+  height: ${(props): string => `${props.count * 2.25}rem`};
 `
 
 type ToolBarButtonProps = {

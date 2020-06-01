@@ -38,7 +38,7 @@ const ToolBar: FC<PropTypes> = ({
   return (
     <ButtonsContainer>
       <ColorIndicator color={pointerColor} />
-      <ButtonsInnerContainer>
+      <ButtonsInnerContainer count={1}>
         <ToolBarButton
           id={TOOLS.POINTER}
           width="2.25rem"
