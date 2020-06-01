@@ -14,8 +14,12 @@ import { RoomData } from "../../../../backend/src/sockets/types"
 import { conveyorAPI, pingbackAddress } from "../../utils/apis"
 
 import BeamingModal from "../BeamingModal"
-import { Background } from "../globalStyles"
-import { Form, Label, Input, UploadButton } from "./styles"
+import SelectPDF from "./SelectPDF"
+import UploadPDF from "./UploadPDF"
+import Filename from "./Filename"
+
+import { Background, COLORS } from "../globalStyles"
+import { Form, ResetText } from "./styles"
 
 export type LocationState = {
   host: boolean
@@ -24,8 +28,19 @@ export type LocationState = {
 
 const Home: React.FC<{}> = (): ReactElement => {
   const [pdfFile, setPdfFile] = useState(null)
+  const [inResetMode, setInResetMode] = useState(true)
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     setPdfFile(e.target.files[0])
+    setInResetMode(false)
+  }
+
+  const handleFormReset = (): void => {
+    setInResetMode(true)
+
+    // Wait until CSS animaiton is under way
+    setTimeout(() => {
+      setPdfFile(null)
+    }, 250)
   }
 
   const [roomID, setRoomID] = useState("")
@@ -110,21 +125,23 @@ const Home: React.FC<{}> = (): ReactElement => {
     return (
       <>
         <Form>
-          <Input
-            type="file"
-            id="file-input"
-            accept="application/pdf"
-            onChange={handleFile}
-          />
-          <Label htmlFor="file-input">
-            {pdfFile ? pdfFile.name : "Select PDF to upload"}
-          </Label>
-          <UploadButton disabled={!pdfFile || loading} onClick={handleUpload}>
-            🖖️ Beam me up, Scotty! 🖖
-          </UploadButton>
+          <Filename show={!inResetMode} filename={pdfFile?.name} />
+          {!pdfFile ? (
+            <SelectPDF pdfFile={pdfFile} handleFile={handleFile} />
+          ) : (
+            <UploadPDF
+              disabled={!pdfFile || loading}
+              handleUpload={handleUpload}
+              reset={inResetMode}
+            />
+          )}
+          <ResetText show={!inResetMode} onClick={handleFormReset}>
+            Select a different file
+          </ResetText>
         </Form>
         {loading && (conveyorMessage || conveyorError) ? (
           <BeamingModal
+            filename={pdfFile.name}
             message={conveyorMessage}
             error={conveyorError}
             handleTryAgain={handleTryAgain}
@@ -145,7 +162,11 @@ const Home: React.FC<{}> = (): ReactElement => {
     )
   }
 
-  return <Background>{roomID ? redirectToRoom() : renderHome()}</Background>
+  return (
+    <Background color={COLORS.SPACE_GRAY}>
+      {roomID ? redirectToRoom() : renderHome()}
+    </Background>
+  )
 }
 
 export default Home

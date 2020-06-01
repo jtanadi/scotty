@@ -1,58 +1,36 @@
 import styled from "styled-components"
 
-import { ButtonOK } from "../globalStyles"
+import { COLORS, P } from "../globalStyles"
 
 export const Form = styled.form`
-  width: 25%;
-  min-width: 250px;
+  width: 100%;
+  min-width: 500px;
   margin: auto;
   display: flex;
-  padding: 1.75rem 2rem;
   flex-direction: column;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.25);
   font-family: sans-serif;
 `
 
-// Effectively hiding input
-export const Input = styled.input`
-  width: 0.01px;
-  height: 0.01px;
-  opacity: 0;
-  position: absolute;
-  z-index: -999;
+type ResetTextProps = {
+  show: boolean
+}
 
-  &:focus + label {
-    outline: 1px dotted black;
-    outline: -webkit-focus-ring-color auto 5px;
-  }
-
-  &:active + label {
-    background-color: #56aab8;
-  }
-`
-
-export const Label = styled.label`
-  margin: auto;
-  margin-bottom: 1.75rem;
-  background-color: #8ad7e6;
-  border-radius: 0.5rem;
-  width: calc(100% - 2rem);
-  padding: 1rem;
+export const ResetText = styled(P)<ResetTextProps>`
+  opacity: ${(props): number => (props.show ? 1 : 0)};
   text-align: center;
-  cursor: pointer;
+  color: ${COLORS.MID_GRAY};
+  cursor: ${(props): string => (props.show ? "pointer" : "auto")};
+  margin-top: 1.5rem;
+  text-decoration: underline;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  transition: colors 0.25s ease;
 
   &:hover {
-    background-color: #6cbecc;
+    color: ${COLORS.WHITE};
   }
-`
-
-export const UploadButton = styled(ButtonOK)`
-  width: 100%;
 `

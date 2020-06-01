@@ -5,7 +5,7 @@ import { LoadingCover, LoadingIcon } from "./styles"
 const Loading: FC<{}> = (): ReactElement => {
   return (
     <LoadingCover>
-      <LoadingIcon src="/static/Spinner-1s-200px.svg" alt="Loading..." />
+      <LoadingIcon src="/static/spinner.svg" alt="Loading..." />
     </LoadingCover>
   )
 }

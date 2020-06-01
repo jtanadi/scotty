@@ -1,48 +1,41 @@
 import styled from "styled-components"
 
-import { H2, H3, P, ButtonOK } from "../globalStyles"
+import { H2, P, Button, ToolButton, Input, COLORS } from "../globalStyles"
 
-export const Input = styled.input`
-  box-sizing: border-box;
+export const InputContainer = styled.div`
   width: 100%;
+  margin: 1.25rem 0.5rem 1.75rem 0;
+  position: relative;
   height: 2rem;
-  margin: 0.5rem 0;
-  font-family: sans-serif;
-  font-size: 0.85rem;
-
-  &:focus {
-    border: 2px solid #56aab8;
-  }
 `
 
-export const ButtonsContainer = styled.div`
+export const LinkInput = styled(Input)`
+  width: calc(100% - 2.25rem - 0.5rem);
+  height: 2.25rem;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
+
+export const CopyButton = styled(ToolButton)`
+  box-sizing: border-box;
+  border: 1px solid ${COLORS.MID_GRAY};
+  position: absolute;
+  top: 0;
+  right: 0;
+`
+
+export const OKButton = styled(Button)`
   width: 100%;
-  display: flex;
-  margin: 1rem 0 1.5rem 0;
-`
-
-export const OKButton = styled(ButtonOK)`
-  flex: 1;
-`
-
-export const HR = styled.hr`
-  margin: 2rem 0 1rem 0;
-  border: 1px solid lightgray;
 `
 
 export const Title = styled(H2)`
   margin: 0;
-`
-
-export const Subtitle = styled(H3)`
-  margin: 0;
+  text-align: center;
 `
 
 export const Body = styled(P)`
-  margin-top: 0.5rem;
-`
-
-export const QuoteAttr = styled.span`
-  font-size: 0.75rem;
-  font-weight: normal;
+  margin: 1.125rem 0 0 0;
 `
