@@ -47,16 +47,27 @@ const TestRoutes = (): ReactElement => {
             maxPage={2}
             filename="test"
             users={[]}
-            showMouse={false}
-            pointerColor="#ffffff"
             handleChangePage={(): void => {}}
             handleClose={(): void => {}}
           />
         )}
       />
 
-      <Route path="/test/ZoomBar" render={(): ReactElement => <ZoomBar />} />
-      <Route path="/test/ToolBar" render={(): ReactElement => <ToolBar />} />
+      <Route
+        path="/test/ZoomBar"
+        render={(): ReactElement => <ZoomBar handleZoom={(): void => {}} />}
+      />
+
+      <Route
+        path="/test/ToolBar"
+        render={(): ReactElement => (
+          <ToolBar
+            showMouse={false}
+            pointerColor="#ffffff"
+            handlePointerToggle={(): void => {}}
+          />
+        )}
+      />
     </>
   )
 }

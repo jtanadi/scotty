@@ -3,7 +3,11 @@ import React, { FC, ReactElement } from "react"
 import { ToolButton } from "../globalStyles"
 import { ButtonsContainer } from "./styles"
 
-const ZoomBar: FC<{}> = (): ReactElement => {
+type PropTypes = {
+  handleZoom(offset: number): void
+}
+
+const ZoomBar: FC<PropTypes> = ({ handleZoom }): ReactElement => {
   return (
     <ButtonsContainer>
       <ToolButton
@@ -12,6 +16,7 @@ const ZoomBar: FC<{}> = (): ReactElement => {
         image="/static/icons/zoomIn.svg"
         imageHover="/static/icons/zoomInLight.svg"
         imageActive="/static/icons/zoomInLight.svg"
+        onClick={(): void => handleZoom(1)}
       />
       <ToolButton
         width="2.25rem"
@@ -19,6 +24,7 @@ const ZoomBar: FC<{}> = (): ReactElement => {
         image="/static/icons/zoomOut.svg"
         imageHover="/static/icons/zoomOutLight.svg"
         imageActive="/static/icons/zoomOutLight.svg"
+        onClick={(): void => handleZoom(-1)}
       />
     </ButtonsContainer>
   )

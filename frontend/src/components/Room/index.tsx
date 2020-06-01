@@ -11,6 +11,8 @@ import Pointer from "../Pointer"
 import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
+import ZoomBar from "../ZoomBar"
+import ToolBar from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, usePageNum, useSocket, useZoom } from "./hooks"
@@ -94,12 +96,8 @@ const Room: React.FC<PropTypes> = ({
           maxPage={pages.length}
           filename={filename}
           users={users}
-          showMouse={showMouse}
-          pointerColor={pointerColor}
           handleChangePage={handleChangePage}
-          handleZoom={handleZoom}
           handleClose={handleClose}
-          handlePointerToggle={handlePointerToggle}
         />
         {pdfUrl ? (
           <DocumentView
@@ -108,6 +106,12 @@ const Room: React.FC<PropTypes> = ({
             pageRef={pageRef}
           />
         ) : null}
+        <ZoomBar handleZoom={handleZoom} />
+        <ToolBar
+          pointerColor={pointerColor}
+          showMouse={showMouse}
+          handlePointerToggle={handlePointerToggle}
+        />
       </Background>
     )
   }
