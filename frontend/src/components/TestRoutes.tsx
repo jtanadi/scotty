@@ -7,6 +7,7 @@ import LinkModal from "./LinkModal"
 import NavBar from "./NavBar"
 import ToolBar from "./ToolBar"
 import ZoomBar from "./ZoomBar"
+import Room from "./Room"
 
 const TestRoutes = (): ReactElement => {
   return (
@@ -68,6 +69,11 @@ const TestRoutes = (): ReactElement => {
             handleToolBarButton={(): void => {}}
           />
         )}
+      />
+
+      <Route
+        path="/test/Room"
+        render={(): ReactElement => <Room id="room-test" filename="file.pdf" />}
       />
     </>
   )

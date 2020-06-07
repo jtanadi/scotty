@@ -124,7 +124,9 @@ const Room: React.FC<PropTypes> = ({
     )
   }
 
-  return <div>{error ? `ERROR: ${error}` : renderRoom()}</div>
+  return (
+    <div>{error && id !== "room-test" ? `ERROR: ${error}` : renderRoom()}</div>
+  )
 }
 
 export default withRouter(Room) as any
