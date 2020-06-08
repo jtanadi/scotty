@@ -12,7 +12,7 @@ type PropTypes = {
   pointerColor: string
   showMouse: boolean
   handleToolBarButton(tool: TOOLS | string): void
-  handleChangeColor(color: string): void
+  handlePointerColor(color: string): void
 }
 
 export enum TOOLS {
@@ -25,7 +25,7 @@ export enum TOOLS {
 const ToolBar: FC<PropTypes> = ({
   pointerColor,
   handleToolBarButton,
-  handleChangeColor,
+  handlePointerColor,
 }): ReactElement => {
   const [paletteColors, setPaletteColors] = useState([])
   useEffect(() => {
@@ -68,7 +68,7 @@ const ToolBar: FC<PropTypes> = ({
         colors={paletteColors}
         currentColor={pointerColor}
         handleShow={handlePalette}
-        handleChangeColor={handleChangeColor}
+        handleChangeColor={handlePointerColor}
       />
       <ButtonsInnerContainer count={1}>
         <ToolBarButton
