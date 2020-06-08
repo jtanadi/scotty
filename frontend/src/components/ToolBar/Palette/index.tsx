@@ -1,4 +1,10 @@
-import React, { FC, ReactElement, ChangeEvent } from "react"
+import React, {
+  useState,
+  useEffect,
+  FC,
+  ReactElement,
+  ChangeEvent,
+} from "react"
 
 import {
   Container,
@@ -27,10 +33,20 @@ const Palette: FC<PropTypes> = ({
   handleShow,
   handleChangeColor,
 }): ReactElement => {
-  const handleInputChange = (ev: ChangeEvent<HTMLInputElement>): void => {
-    // validate color here
+  const [presetColorUsed, setPresetColorUsed] = useState(true)
+  useEffect(() => {
+    const usingPresetColor = !!colors.find(color => color === currentColor)
+    setPresetColorUsed(usingPresetColor)
+  }, [currentColor])
 
-    handleChangeColor(`#${ev.target.value}`)
+  const handleInputChange = (ev: ChangeEvent<HTMLInputElement>): void => {
+    // Basic validation: only accept up to 6 characters
+    // and only accept valid hex values (a-f, 0-9)
+    const hex = ev.target.value
+    const hexRegex = /^[a-f0-9]+$/gi
+    if (hex.length > 6 || (hex && !hexRegex.test(hex))) return
+
+    handleChangeColor(`#${hex}`)
   }
 
   const renderPalette = (): ReactElement => {
@@ -51,8 +67,9 @@ const Palette: FC<PropTypes> = ({
                 <Hash>#</Hash>
               </HashDiv>
               <ColorInput
-                value={currentColor.replace("#", "")}
+                value={currentColor.replace(/^#/, "").toLowerCase()}
                 onChange={handleInputChange}
+                presetColorUsed={presetColorUsed}
               />
             </InputDiv>
           </InnerContainer>
