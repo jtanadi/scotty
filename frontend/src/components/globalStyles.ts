@@ -198,7 +198,7 @@ export const Input = styled.input`
   font-size: 1rem;
   background-color: ${COLORS.WHITE};
   border: 1px solid ${COLORS.MID_GRAY};
-  padding: 0 0.35rem;
+  padding: 0 0.25rem;
 
   &:focus {
     border: 2px solid ${COLORS.SPACE_GRAY};
