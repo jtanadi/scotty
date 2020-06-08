@@ -1,5 +1,6 @@
-import React, { useState, FC, ReactElement } from "react"
+import React, { useState, useEffect, FC, ReactElement, MouseEvent } from "react"
 
+import Palette from "./Palette"
 import {
   ButtonsContainer,
   ButtonsInnerContainer,
@@ -10,7 +11,8 @@ import {
 type PropTypes = {
   pointerColor: string
   showMouse: boolean
-  handleToolBarButton(tool: TOOLS): void
+  handleToolBarButton(tool: TOOLS | string): void
+  handleChangeColor(color: string): void
 }
 
 export enum TOOLS {
@@ -23,21 +25,51 @@ export enum TOOLS {
 const ToolBar: FC<PropTypes> = ({
   pointerColor,
   handleToolBarButton,
+  handleChangeColor,
 }): ReactElement => {
+  const [paletteColors, setPaletteColors] = useState([])
+  useEffect(() => {
+    if (!pointerColor || paletteColors.length) return
+
+    setPaletteColors([
+      pointerColor,
+      "#F2994A",
+      "#F2C94C",
+      "#219653",
+      "#6FCF97",
+      "#2F80ED",
+      "#2D9CDB",
+    ])
+  }, [pointerColor])
+
   const [activeTool, setActiveTool] = useState("")
-  const handleClick = (ev): void => {
-    if (activeTool === ev.target.id) {
+  const handleClick = (ev: MouseEvent): void => {
+    const target = ev.target as HTMLElement
+
+    if (activeTool === target.id) {
       setActiveTool("")
     } else {
-      setActiveTool(ev.target.id)
+      setActiveTool(target.id)
     }
 
-    handleToolBarButton(ev.target.id)
+    handleToolBarButton(target.id)
+  }
+
+  const [showPalette, setShowPalette] = useState(false)
+  const handlePalette = (): void => {
+    setShowPalette(prev => !prev)
   }
 
   return (
     <ButtonsContainer>
-      <ColorIndicator color={pointerColor} />
+      <ColorIndicator color={pointerColor} onClick={handlePalette} />
+      <Palette
+        show={showPalette}
+        colors={paletteColors}
+        currentColor={pointerColor}
+        handleShow={handlePalette}
+        handleChangeColor={handleChangeColor}
+      />
       <ButtonsInnerContainer count={1}>
         <ToolBarButton
           id={TOOLS.POINTER}
