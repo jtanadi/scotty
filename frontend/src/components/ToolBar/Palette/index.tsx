@@ -35,6 +35,8 @@ const Palette: FC<PropTypes> = ({
 }): ReactElement => {
   const [presetColorUsed, setPresetColorUsed] = useState(true)
   useEffect(() => {
+    if (!colors.length) return
+
     const usingPresetColor = !!colors.find(color => color === currentColor)
     setPresetColorUsed(usingPresetColor)
   }, [currentColor])

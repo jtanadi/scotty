@@ -30,7 +30,10 @@ const Room: React.FC<PropTypes> = ({
   const pageRef = useRef(null)
 
   const [pages, setPages] = useState<string[]>([])
-  const { showMouse, handlePointerToggle } = usePointer(id, pageRef)
+  const { showMouse, handlePointerToggle, ownMouseX, ownMouseY } = usePointer(
+    id,
+    pageRef
+  )
   const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
   const { scale, handleZoom } = useZoom()
   const {
@@ -90,6 +93,12 @@ const Room: React.FC<PropTypes> = ({
     )
   }
 
+  const renderOwnPointer = (): ReactElement => {
+    return showMouse ? (
+      <Pointer x={ownMouseX} y={ownMouseY} color={pointerColor} />
+    ) : null
+  }
+
   const renderHostModal = (): ReactElement => {
     if (!location?.state) return null
     return (location.state as LocationState).host ? (
@@ -102,6 +111,7 @@ const Room: React.FC<PropTypes> = ({
       <Background color={COLORS.DOCUMENT_VIEW_BG}>
         {renderHostModal()}
         {renderPointers()}
+        {renderOwnPointer()}
         <NavBar
           pageNum={pageNum}
           maxPage={pages.length}

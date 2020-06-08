@@ -9,12 +9,17 @@ const roundTo3 = roundTo(3)
 type UsePointerReturn = {
   showMouse: boolean
   handlePointerToggle: () => void
+  ownMouseX: number
+  ownMouseY: number
 }
 
 export default (
   roomID: string,
   pageRef: RefObject<HTMLImageElement>
 ): UsePointerReturn => {
+  const [ownMouseX, setOwnMouseX] = useState(0)
+  const [ownMouseY, setOwnMouseY] = useState(0)
+
   const handleMouseMove = (ev?: MouseEvent): void => {
     if (!pageRef.current) return
 
@@ -40,8 +45,11 @@ export default (
       mouseY,
     }
 
+    setOwnMouseX(ev ? roundTo3(ev.clientX) : 0)
+    setOwnMouseY(ev ? roundTo3(ev.clientY) : 0)
     socket.emit("mousemove", mouseMoveData)
   }
+
   const [showMouse, setShowMouse] = useState(false)
   useEffect(() => {
     if (showMouse) {
@@ -59,5 +67,5 @@ export default (
     setShowMouse(prev => !prev)
   }
 
-  return { showMouse, handlePointerToggle }
+  return { showMouse, handlePointerToggle, ownMouseX, ownMouseY }
 }

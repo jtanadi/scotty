@@ -55,8 +55,7 @@ export const Color = styled.button<ColorProps>`
     margin-right: 0;
   }
 
-  &:hover,
-  &:focus {
+  &:hover {
     box-shadow: 0 0 0.35rem ${(props): string => props.color};
   }
 
