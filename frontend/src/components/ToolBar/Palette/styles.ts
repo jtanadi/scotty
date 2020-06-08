@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components"
+import styled, { css, FlattenSimpleInterpolation } from "styled-components"
 
 import { Cover, P, Input, COLORS } from "../../globalStyles"
 
@@ -60,7 +60,7 @@ export const Color = styled.button<ColorProps>`
     box-shadow: 0 0 0.35rem ${(props): string => props.color};
   }
 
-  ${(props): any =>
+  ${(props): FlattenSimpleInterpolation =>
     props.selected &&
     css`
       border: 2px solid ${COLORS.SPACE_GRAY};
@@ -90,8 +90,20 @@ export const Hash = styled(P)`
   -moz-user-select: none;
   -ms-user-select: none;
 `
-export const ColorInput = styled(Input)`
+
+type ColorInputProps = {
+  presetColorUsed: boolean
+}
+
+export const ColorInput = styled(Input)<ColorInputProps>`
   width: calc(100% - 1rem);
+
+  ${(props): FlattenSimpleInterpolation =>
+    !props.presetColorUsed &&
+    css`
+      font-weight: 600;
+      border: 2px solid ${COLORS.SPACE_GRAY};
+    `}
 `
 
 export const PaletteCover = styled(Cover)`
