@@ -57,6 +57,10 @@ export interface MouseMoveData extends RoomData {
   mouseY: number
 }
 
+export interface PointerChangeData extends RoomData {
+  color: string
+}
+
 ////////////////////////////
 // Server -> Client types //
 ////////////////////////////
