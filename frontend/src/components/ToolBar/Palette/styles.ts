@@ -3,7 +3,7 @@ import styled, { css } from "styled-components"
 import { Cover, P, Input, COLORS } from "../../globalStyles"
 
 export const Container = styled.div`
-  width: calc(11rem + 1.2rem);
+  width: calc(11rem + 1.25rem);
   height: 5.25rem;
   position: absolute;
   top: calc(-5.25rem / 2 + 2.25rem / 2);
@@ -25,14 +25,14 @@ export const Triangle = styled.div`
 
 export const InnerContainer = styled.div`
   box-sizing: border-box;
-  width: 11rem;
+  width: 11.25rem;
   height: 100%;
   padding: 0.75rem;
   background-color: ${COLORS.LIGHT_GRAY};
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-content: space-between;
 `
 
@@ -48,6 +48,7 @@ export const Color = styled.div<ColorProps>`
   margin-right: 0.5rem;
   background-color: ${(props): string => props.color};
   border-radius: 1.25rem;
+  flex: 1 1 1.5rem;
 
   &:nth-child(5) {
     margin-right: 0;
@@ -61,9 +62,9 @@ export const Color = styled.div<ColorProps>`
 `
 
 export const InputDiv = styled.div`
-  width: calc(3 * 1.5rem + 2 * 0.5rem);
-  height: 1.375rem;
+  height: 1.5rem;
   display: flex;
+  flex: 3 3 calc(3 * 1.5rem + 2 * 0.5rem);
 `
 
 export const HashDiv = styled.div`
@@ -84,7 +85,7 @@ export const Hash = styled(P)`
   -ms-user-select: none;
 `
 export const ColorInput = styled(Input)`
-  width: calc(3 * 1.5rem + 2 * 0.5rem - 1rem);
+  width: calc(100% - 1rem);
 `
 
 export const PaletteCover = styled(Cover)`
