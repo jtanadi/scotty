@@ -65,6 +65,7 @@ export const VerticalButtonsContainer = styled.div`
   flex-direction: column;
   position: fixed;
   bottom: 2rem;
+  z-index: 9999;
 `
 
 export const Button = styled.button`
@@ -80,8 +81,7 @@ export const Button = styled.button`
   height: 2.5rem;
   transition: all ${ANIMATION_DURATION} ease-in-out;
 
-  &:hover,
-  &:focus {
+  &:hover {
     box-shadow: 0 0 0.5rem ${COLORS.SPACE_GRAY};
   }
 
@@ -123,8 +123,7 @@ export const ToolButton = styled.button<ToolButtonProps>`
   background-position: center;
   transition: all ${ANIMATION_DURATION} ease-in-out;
 
-  &:hover,
-  &:focus {
+  &:hover {
     background-color: ${COLORS.DARK_GRAY};
   }
 
@@ -135,8 +134,7 @@ export const ToolButton = styled.button<ToolButtonProps>`
   ${(props): any =>
     props.imageHover &&
     css`
-      &:hover,
-      &:focus {
+      &:hover {
         background-image: url(${props.imageHover});
       }
     `}
