@@ -16,10 +16,10 @@ export const Triangle = styled.div`
   width: 0;
   height: 0;
   border-left: 1.25rem solid ${COLORS.LIGHT_GRAY};
-  border-top: 0.6rem solid transparent;
-  border-bottom: 0.6rem solid transparent;
+  border-top: 0.8125rem solid transparent;
+  border-bottom: 0.8125rem solid transparent;
   position: absolute;
-  top: calc(5.25rem / 2 - 0.6rem);
+  top: calc(5.25rem / 2 - 0.8125rem);
   right: 0;
 `
 
