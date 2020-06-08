@@ -36,7 +36,12 @@ export const ToolBarButton = styled(ToolButton)<ToolBarButtonProps>`
       }
     `}
 `
-export const ColorIndicator = styled.button`
+
+type ColorIndicatorProps = {
+  color: string
+}
+
+export const ColorIndicator = styled.button<ColorIndicatorProps>`
   box-sizing: border-box;
   width: 2.25rem;
   height: 2.25rem;
@@ -49,6 +54,6 @@ export const ColorIndicator = styled.button`
 
   &:hover,
   &:focus {
-    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0.65rem rgba(0, 0, 0, 0.5);
   }
 `
