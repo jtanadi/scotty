@@ -7,11 +7,13 @@ import {
   SyncPageData,
   User,
   UsersData,
+  PointerChangeData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
 type UseSocketReturn = {
   pointerColor: string
+  handlePointerColor(color: string): void
   userID: string
   users: User[]
   pdfUrl: string
@@ -61,5 +63,12 @@ export default (
     }
   }, [])
 
-  return { pointerColor, userID, users, pdfUrl, error }
+  const handlePointerColor = (color: string): void => {
+    setPointerColor(color)
+
+    const pointerChangeData: PointerChangeData = { roomID, color }
+    socket.emit("change pointer color", pointerChangeData)
+  }
+
+  return { pointerColor, handlePointerColor, userID, users, pdfUrl, error }
 }
