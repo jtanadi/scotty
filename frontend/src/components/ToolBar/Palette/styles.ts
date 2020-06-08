@@ -41,17 +41,23 @@ type ColorProps = {
   selected: boolean
 }
 
-export const Color = styled.div<ColorProps>`
+export const Color = styled.button<ColorProps>`
   box-sizing: border-box;
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.5rem;
   background-color: ${(props): string => props.color};
+  border: 0;
   border-radius: 1.25rem;
   flex: 1 1 1.5rem;
 
   &:nth-child(5) {
     margin-right: 0;
+  }
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 0.35rem ${(props): string => props.color};
   }
 
   ${(props): any =>
