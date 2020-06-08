@@ -33,11 +33,14 @@ const Room: React.FC<PropTypes> = ({
   const { showMouse, handlePointerToggle } = usePointer(id, pageRef)
   const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
   const { scale, handleZoom } = useZoom()
-  const { pointerColor, userID, users, pdfUrl, error } = useSocket(
-    id,
-    setPages,
-    setPageNum
-  )
+  const {
+    pointerColor,
+    handlePointerColor,
+    userID,
+    users,
+    pdfUrl,
+    error,
+  } = useSocket(id, setPages, setPageNum)
 
   const handleToolBarButton = (tool: TOOLS): void => {
     switch (tool) {
@@ -117,6 +120,7 @@ const Room: React.FC<PropTypes> = ({
         <ZoomBar handleZoom={handleZoom} />
         <ToolBar
           pointerColor={pointerColor}
+          handlePointerColor={handlePointerColor}
           showMouse={showMouse}
           handleToolBarButton={handleToolBarButton}
         />
