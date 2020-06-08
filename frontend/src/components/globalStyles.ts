@@ -80,7 +80,8 @@ export const Button = styled.button`
   height: 2.5rem;
   transition: all ${ANIMATION_DURATION} ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:focus {
     box-shadow: 0 0 0.5rem ${COLORS.SPACE_GRAY};
   }
 
@@ -122,7 +123,8 @@ export const ToolButton = styled.button<ToolButtonProps>`
   background-position: center;
   transition: all ${ANIMATION_DURATION} ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${COLORS.DARK_GRAY};
   }
 
@@ -133,7 +135,8 @@ export const ToolButton = styled.button<ToolButtonProps>`
   ${(props): any =>
     props.imageHover &&
     css`
-      &:hover {
+      &:hover,
+      &:focus {
         background-image: url(${props.imageHover});
       }
     `}
@@ -195,7 +198,7 @@ export const Input = styled.input`
   font-size: 1rem;
   background-color: ${COLORS.WHITE};
   border: 1px solid ${COLORS.MID_GRAY};
-  padding: 0 0.35rem;
+  padding: 0 0.25rem;
 
   &:focus {
     border: 2px solid ${COLORS.SPACE_GRAY};

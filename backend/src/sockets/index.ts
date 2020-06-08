@@ -9,6 +9,7 @@ import onChangePage from "./onChangePage"
 import onDisconnect from "./onDisconnect"
 import onJoinRoom from "./onJoinRoom"
 import onMouseMove from "./onMouseMove"
+import onPointerChange from "./onPointerChange"
 
 export let io: SocketServer
 
@@ -36,6 +37,10 @@ export default (server: HTTPserver | HTTPSserver): void => {
 
     socket.on("mousemove", data => {
       onMouseMove({ io, socket }, data)
+    })
+
+    socket.on("change pointer color", data => {
+      onPointerChange({ io, socket }, data)
     })
   })
 }
