@@ -3,18 +3,24 @@ import { UploadButton, UploadButtonText } from "./styles"
 
 type PropTypes = {
   disabled: boolean
-  reset: boolean
+  inUploadMode: boolean
   handleUpload(e: MouseEvent): Promise<void>
 }
 
 const UploadPDF: FC<PropTypes> = ({
   disabled,
   handleUpload,
-  reset,
+  inUploadMode,
 }): ReactElement => {
   return (
-    <UploadButton disabled={disabled} onClick={handleUpload} reset={reset}>
-      <UploadButtonText reset={reset}>Beam me up, Scotty!</UploadButtonText>
+    <UploadButton
+      disabled={disabled}
+      onClick={handleUpload}
+      inUploadMode={inUploadMode}
+    >
+      <UploadButtonText inUploadMode={inUploadMode}>
+        Beam me up, Scotty!
+      </UploadButtonText>
     </UploadButton>
   )
 }
