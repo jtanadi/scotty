@@ -1,13 +1,14 @@
-import styled from "styled-components"
+import styled, { Keyframes } from "styled-components"
 import { ButtonRound, COLORS, ANIMATION_DURATION } from "../../globalStyles"
 import { buttonExpand, textAppear, buttonReset, textReset } from "./keyframes"
 
 type UploadProps = {
-  reset: boolean
+  inUploadMode: boolean
 }
 
 export const UploadButton = styled(ButtonRound)<UploadProps>`
-  animation: ${(props): any => (props.reset ? buttonReset : buttonExpand)}
+  animation: ${(props): Keyframes =>
+      props.inUploadMode ? buttonExpand : buttonReset}
     ${ANIMATION_DURATION} ease-in-out forwards;
   border: 4px solid ${COLORS.WHITE};
 
@@ -30,7 +31,8 @@ export const UploadButton = styled(ButtonRound)<UploadProps>`
 `
 
 export const UploadButtonText = styled.span<UploadProps>`
-  animation: ${(props): any => (props.reset ? textReset : textAppear)}
+  animation: ${(props): Keyframes =>
+      props.inUploadMode ? textAppear : textReset}
     ${ANIMATION_DURATION} ease-in-out forwards;
   opacity: 0;
 `

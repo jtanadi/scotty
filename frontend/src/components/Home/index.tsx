@@ -16,7 +16,7 @@ import { conveyorAPI, pingbackAddress } from "../../utils/apis"
 import BeamingModal from "../BeamingModal"
 import SelectPDF from "./SelectPDF"
 import UploadPDF from "./UploadPDF"
-import Filename from "./Filename"
+import Prompt from "./Prompt"
 
 import { Background, COLORS } from "../globalStyles"
 import { Form, ResetText } from "./styles"
@@ -28,14 +28,14 @@ export type LocationState = {
 
 const Home: React.FC<{}> = (): ReactElement => {
   const [pdfFile, setPdfFile] = useState(null)
-  const [inResetMode, setInResetMode] = useState(true)
+  const [mode, setMode] = useState("select")
   const handleFile = (e: ChangeEvent<HTMLInputElement>): void => {
     setPdfFile(e.target.files[0])
-    setInResetMode(false)
+    setMode("upload")
   }
 
   const handleFormReset = (): void => {
-    setInResetMode(true)
+    setMode("select")
 
     // Wait until CSS animaiton is under way
     setTimeout(() => {
@@ -125,17 +125,17 @@ const Home: React.FC<{}> = (): ReactElement => {
     return (
       <>
         <Form>
-          <Filename show={!inResetMode} filename={pdfFile?.name} />
+          <Prompt mode={mode} filename={pdfFile?.name} />
           {!pdfFile ? (
             <SelectPDF pdfFile={pdfFile} handleFile={handleFile} />
           ) : (
             <UploadPDF
               disabled={!pdfFile || loading}
               handleUpload={handleUpload}
-              reset={inResetMode}
+              inUploadMode={mode === "upload"}
             />
           )}
-          <ResetText show={!inResetMode} onClick={handleFormReset}>
+          <ResetText show={mode === "upload"} onClick={handleFormReset}>
             Select a different file
           </ResetText>
         </Form>
