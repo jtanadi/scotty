@@ -65,7 +65,7 @@ export const VerticalButtonsContainer = styled.div`
   flex-direction: column;
   position: fixed;
   bottom: 2rem;
-  z-index: 9999;
+  z-index: 1000;
 `
 
 export const Button = styled.button`
