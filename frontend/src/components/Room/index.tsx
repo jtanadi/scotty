@@ -15,7 +15,7 @@ import ZoomBar from "../ZoomBar"
 import ToolBar, { TOOLS } from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
-import { usePointer, usePageNum, useSocket, useZoom } from "./hooks"
+import { usePointer, usePageNum, useSocket } from "./hooks"
 
 interface PropTypes extends RouteComponentProps {
   id: string
@@ -35,7 +35,6 @@ const Room: React.FC<PropTypes> = ({
     pageRef
   )
   const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
-  const { scale, handleZoom } = useZoom()
   const {
     pointerColor,
     handlePointerColor,
@@ -123,11 +122,10 @@ const Room: React.FC<PropTypes> = ({
         {pdfUrl ? (
           <DocumentView
             src={`${pdfUrl}/${pages[pageNum - 1]}`}
-            scale={scale}
             pageRef={pageRef}
           />
         ) : null}
-        <ZoomBar handleZoom={handleZoom} />
+        <ZoomBar />
         <ToolBar
           pointerColor={pointerColor}
           handlePointerColor={handlePointerColor}

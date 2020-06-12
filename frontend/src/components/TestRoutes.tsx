@@ -55,10 +55,7 @@ const TestRoutes = (): ReactElement => {
         )}
       />
 
-      <Route
-        path="/test/ZoomBar"
-        render={(): ReactElement => <ZoomBar handleZoom={(): void => {}} />}
-      />
+      <Route path="/test/ZoomBar" render={(): ReactElement => <ZoomBar />} />
 
       <Route
         path="/test/ToolBar"

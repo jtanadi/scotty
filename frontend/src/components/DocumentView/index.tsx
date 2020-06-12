@@ -1,4 +1,5 @@
 import React, { FC, ReactElement, RefObject, useRef } from "react"
+import { connect } from "react-redux"
 
 import { DocumentContainer, PageContainer, Page } from "./styles"
 
@@ -6,11 +7,14 @@ import usePanhandler from "./hooks/usePanhandler"
 
 type PropTypes = {
   src: string
-  scale: number
   pageRef: RefObject<HTMLImageElement>
 }
 
-const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
+type Store = {
+  zoom: number
+}
+
+const View: FC<PropTypes & Store> = ({ src, pageRef, zoom }): ReactElement => {
   const docRef = useRef(null)
   const {
     mouseDown,
@@ -18,12 +22,12 @@ const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
     handleMouseDown,
     handleMouseReset,
     handlePan,
-  } = usePanhandler(docRef, scale)
+  } = usePanhandler(docRef, zoom)
 
   return (
     <DocumentContainer ref={docRef}>
       <PageContainer
-        scale={scale}
+        scale={zoom}
         mouseDown={mouseDown}
         onContextMenu={handleContextMenu}
         onMouseMove={handlePan}
@@ -37,4 +41,6 @@ const View: FC<PropTypes> = ({ src, scale, pageRef }): ReactElement => {
   )
 }
 
-export default View
+const mapStateToProps = ({ zoom }): Store => ({ zoom })
+
+export default connect(mapStateToProps)(View)
