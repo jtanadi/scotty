@@ -1,7 +1,13 @@
 import { combineReducers } from "redux"
-import { ZOOM_IN, ZOOM_OUT, ZOOM_RESET } from "./constants"
 
-import { ZoomAction } from "./actions"
+import {
+  ZOOM_IN,
+  ZOOM_OUT,
+  ZOOM_RESET,
+  GO_TO_PAGE,
+  SET_MAX_PAGE,
+} from "./constants"
+import { ZoomAction, PagesAction } from "./actions"
 
 enum ZOOM_LIMIT {
   MIN = 1,
@@ -29,6 +35,31 @@ const zoomReducer = (state = 1, action: ZoomAction): number => {
   }
 }
 
+export type PageState = {
+  currentPage: number
+  maxPage: number
+}
+
+const initialPageState: PageState = {
+  currentPage: 1,
+  maxPage: 1,
+}
+
+const pagesReducer = (
+  state = initialPageState,
+  action: PagesAction
+): PageState => {
+  switch (action.type) {
+    case SET_MAX_PAGE:
+      return { ...state, maxPage: action.maxPage }
+    case GO_TO_PAGE:
+      return { ...state, currentPage: action.pageNum }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   zoom: zoomReducer,
+  pages: pagesReducer,
 })
