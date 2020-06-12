@@ -12,7 +12,7 @@ type DispatchProps = {
   zoomOut(scale: number): void
 }
 
-const ZoomBar: FC<DispatchProps> = ({ zoomIn, zoomOut }): ReactElement => {
+const ZoomBar: FC<{} & DispatchProps> = ({ zoomIn, zoomOut }): ReactElement => {
   return (
     <ButtonsContainer>
       <ToolButton
@@ -44,4 +44,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 })
 
-export default connect<{}, DispatchProps>(null, mapDispatchToProps)(ZoomBar)
+export default connect(null, mapDispatchToProps)(ZoomBar)
