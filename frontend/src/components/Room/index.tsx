@@ -1,5 +1,7 @@
 import React, { useState, ReactElement, useRef } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
 
 // Utils, etc.
 import { RoomData } from "../../../../backend/src/sockets/types"
@@ -15,17 +17,30 @@ import ZoomBar from "../ZoomBar"
 import ToolBar, { TOOLS } from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
-import { usePointer, usePageNum, useSocket } from "./hooks"
+import { usePointer, useSocket } from "./hooks"
+import { setMaxPage, goToPage } from "../../store/actions"
 
 interface PropTypes extends RouteComponentProps {
   id: string
   filename: string
 }
 
-const Room: React.FC<PropTypes> = ({
+type StateProps = {
+  pageNum: number
+}
+
+type DispatchProps = {
+  setMaxPage(pageNum: number): void
+  goToPage(pageNum: number): void
+}
+
+const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   id,
   filename,
   location,
+  pageNum,
+  setMaxPage,
+  goToPage,
 }): ReactElement => {
   const pageRef = useRef(null)
 
@@ -34,7 +49,6 @@ const Room: React.FC<PropTypes> = ({
     id,
     pageRef
   )
-  const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
   const {
     pointerColor,
     handlePointerColor,
@@ -42,7 +56,7 @@ const Room: React.FC<PropTypes> = ({
     users,
     pdfUrl,
     error,
-  } = useSocket(id, setPages, setPageNum)
+  } = useSocket(id, setPages, setMaxPage, goToPage)
 
   const handleToolBarButton = (tool: TOOLS): void => {
     switch (tool) {
@@ -112,11 +126,9 @@ const Room: React.FC<PropTypes> = ({
         {renderPointers()}
         {renderOwnPointer()}
         <NavBar
-          pageNum={pageNum}
-          maxPage={pages.length}
+          roomID={id}
           filename={filename}
           users={users}
-          handleChangePage={handleChangePage}
           handleClose={handleClose}
         />
         {pdfUrl ? (
@@ -141,4 +153,18 @@ const Room: React.FC<PropTypes> = ({
   )
 }
 
-export default withRouter(Room) as any
+const mapStateToProps = ({ pages }): StateProps => ({
+  pageNum: pages.currentPage,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  setMaxPage(maxPage): void {
+    dispatch(setMaxPage(maxPage))
+  },
+  goToPage(pageNum): void {
+    dispatch(goToPage(pageNum))
+  },
+})
+
+const ConnectedRoom = connect(mapStateToProps, mapDispatchToProps)(Room)
+export default withRouter(ConnectedRoom) as any

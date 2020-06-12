@@ -45,11 +45,9 @@ const TestRoutes = (): ReactElement => {
         path="/test/NavBar"
         render={(): ReactElement => (
           <NavBar
-            pageNum={1}
-            maxPage={2}
+            roomID="1234"
             filename="test"
             users={[]}
-            handleChangePage={(): void => {}}
             handleClose={(): void => {}}
           />
         )}

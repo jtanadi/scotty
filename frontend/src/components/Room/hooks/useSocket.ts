@@ -23,7 +23,8 @@ type UseSocketReturn = {
 export default (
   roomID: string,
   setPages: Dispatch<SetStateAction<string[]>>,
-  setPageNum: Dispatch<SetStateAction<number>>
+  setMaxPage: (pageNum: number) => void,
+  goToPage: (pageNum: number) => void
 ): UseSocketReturn => {
   const [pointerColor, setPointerColor] = useState("")
   const [userID, setUserID] = useState("")
@@ -41,10 +42,11 @@ export default (
       setUserID(data.userID)
       setPdfUrl(data.pdfUrl)
       setPages(data.pages)
+      setMaxPage(data.pages.length)
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
-      setPageNum(data.pageNum)
+      goToPage(data.pageNum)
     })
 
     socket.on("update users", (data: UsersData): void => {
