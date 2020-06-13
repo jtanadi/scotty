@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef } from "react"
+import React, { ReactElement, useRef, useEffect } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
@@ -6,6 +6,7 @@ import { Dispatch } from "redux"
 // Utils, etc.
 import { RoomData } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
+import { Tool } from "../../utils/tools"
 
 // Components
 import NavBar from "../NavBar"
@@ -14,7 +15,7 @@ import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
 import ZoomBar from "../ZoomBar"
-import ToolBar, { TOOLS } from "../ToolBar"
+import ToolBar from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, useSocket } from "./hooks"
@@ -25,16 +26,6 @@ interface PropTypes extends RouteComponentProps {
   filename: string
 }
 
-type StateProps = {
-  pageNum: number
-  pages: string[]
-}
-
-type DispatchProps = {
-  goToPage(pageNum: number): void
-  setPages(pages: string[]): void
-}
-
 const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   id,
   filename,
@@ -43,13 +34,15 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   goToPage,
   pages,
   setPages,
+  selectedTool,
 }): ReactElement => {
   const pageRef = useRef(null)
 
-  const { showMouse, handlePointerToggle, ownMouseX, ownMouseY } = usePointer(
+  const { showMouse, setShowMouse, ownMouseX, ownMouseY } = usePointer(
     id,
     pageRef
   )
+
   const {
     pointerColor,
     handlePointerColor,
@@ -59,13 +52,20 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     error,
   } = useSocket(id, setPages, goToPage)
 
-  const handleToolBarButton = (tool: TOOLS): void => {
-    switch (tool) {
-      case TOOLS.POINTER:
-        handlePointerToggle()
+  useEffect(() => {
+    if (!selectedTool) {
+      if (showMouse) {
+        setShowMouse(false)
+      }
+      return
+    }
+
+    switch (selectedTool.name) {
+      case "pointer":
+        setShowMouse(true)
         break
     }
-  }
+  }, [selectedTool])
 
   const history = useHistory()
   const handleClose = (): void => {
@@ -141,9 +141,8 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
         <ZoomBar />
         <ToolBar
           pointerColor={pointerColor}
-          handlePointerColor={handlePointerColor}
           showMouse={showMouse}
-          handleToolBarButton={handleToolBarButton}
+          handlePointerColor={handlePointerColor}
         />
       </Background>
     )
@@ -154,10 +153,22 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   )
 }
 
-const mapStateToProps = ({ pages }): StateProps => ({
+type StateProps = {
+  pageNum: number
+  pages: string[]
+  selectedTool: Tool
+}
+
+const mapStateToProps = ({ pages, tools }): StateProps => ({
   pageNum: pages.currentPage,
   pages: pages.pages,
+  selectedTool: tools.tools[tools.selectedIdx],
 })
+
+type DispatchProps = {
+  goToPage(pageNum: number): void
+  setPages(pages: string[]): void
+}
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   goToPage(pageNum): void {

@@ -1,4 +1,6 @@
-import React, { useState, useEffect, FC, ReactElement, MouseEvent } from "react"
+import React, { useState, useEffect, FC, ReactElement } from "react"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
 
 import Palette from "./Palette"
 import {
@@ -7,25 +9,28 @@ import {
   ToolBarButton,
   ColorIndicator,
 } from "./styles"
+import tools from "../../utils/tools"
+import { selectTool } from "../../store/actions"
 
 type PropTypes = {
   pointerColor: string
   showMouse: boolean
-  handleToolBarButton(tool: TOOLS | string): void
   handlePointerColor(color: string): void
 }
 
-export enum TOOLS {
+export enum TOOL {
   POINTER = "pointer",
   DRAW = "draw",
   ERASE = "erase",
   COMMENT = "comment",
 }
 
-const ToolBar: FC<PropTypes> = ({
+const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
   pointerColor,
-  handleToolBarButton,
   handlePointerColor,
+  numOfTools,
+  selectedToolIdx,
+  selectTool,
 }): ReactElement => {
   const [paletteColors, setPaletteColors] = useState([])
   useEffect(() => {
@@ -42,22 +47,14 @@ const ToolBar: FC<PropTypes> = ({
     ])
   }, [pointerColor])
 
-  const [activeTool, setActiveTool] = useState("")
-  const handleClick = (ev: MouseEvent): void => {
-    const target = ev.target as HTMLElement
-
-    if (activeTool === target.id) {
-      setActiveTool("")
-    } else {
-      setActiveTool(target.id)
-    }
-
-    handleToolBarButton(target.id)
-  }
-
   const [showPalette, setShowPalette] = useState(false)
   const handlePalette = (): void => {
     setShowPalette(prev => !prev)
+  }
+
+  const handleToolClick = (clickedIdx: number): void => {
+    const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
+    selectTool(toolIdx)
   }
 
   return (
@@ -70,20 +67,42 @@ const ToolBar: FC<PropTypes> = ({
         handleShow={handlePalette}
         handleChangeColor={handlePointerColor}
       />
-      <ButtonsInnerContainer count={1}>
-        <ToolBarButton
-          id={TOOLS.POINTER}
-          width="2.25rem"
-          height="2.25rem"
-          image="/static/icons/pointer.svg"
-          imageHover="/static/icons/pointerLight.svg"
-          imageActive="/static/icons/pointerLight.svg"
-          onClick={handleClick}
-          active={activeTool === TOOLS.POINTER}
-        />
+      <ButtonsInnerContainer count={numOfTools}>
+        {tools.map((tool, i) => (
+          <ToolBarButton
+            key={`tool-${i}`}
+            width="2.25rem"
+            height="2.25rem"
+            image={tool.image}
+            imageHover={tool.hover || tool.image}
+            imageActive={tool.active || tool.hover || tool.image}
+            onClick={(): void => handleToolClick(i)}
+            active={selectedToolIdx === i}
+          />
+        ))}
       </ButtonsInnerContainer>
     </ButtonsContainer>
   )
 }
 
-export default ToolBar
+type StateProps = {
+  numOfTools: number
+  selectedToolIdx: number
+}
+
+const mapStateToProps = ({ tools }): StateProps => ({
+  numOfTools: tools.length,
+  selectedToolIdx: tools.selectedIdx,
+})
+
+type DispatchProps = {
+  selectTool(idx: number): void
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  selectTool(idx: number): void {
+    dispatch(selectTool(idx))
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToolBar)
