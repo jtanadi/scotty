@@ -3,8 +3,8 @@ import {
   ZOOM_OUT,
   ZOOM_RESET,
   GO_TO_PAGE,
-  SET_MAX_PAGE,
   SET_PAGES,
+  SELECT_TOOL,
 } from "./constants"
 
 /////////////////////
@@ -41,21 +41,26 @@ export type PagesAction = {
   pages?: string[]
 }
 
-export const setPages = (pages: string[]): PagesAction => {
-  return {
-    type: SET_PAGES,
-    pages,
-  }
+export const setPages = (pages: string[]): PagesAction => ({
+  type: SET_PAGES,
+  pages,
+})
+
+export const goToPage = (pageNum: number): PagesAction => ({
+  type: GO_TO_PAGE,
+  pageNum,
+})
+
+/////////////////////
+//      Tools      //
+/////////////////////
+
+export type ToolAction = {
+  type: string
+  idx: number
 }
 
-export const goToPage = (pageNum: number): PagesAction => {
-  return {
-    type: GO_TO_PAGE,
-    pageNum,
-  }
-}
-
-export const setMaxPage = (maxPage: number): PagesAction => ({
-  type: SET_MAX_PAGE,
-  maxPage,
+export const selectTool = (idx: number): ToolAction => ({
+  type: SELECT_TOOL,
+  idx,
 })

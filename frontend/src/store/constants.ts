@@ -6,4 +6,6 @@ export const ZOOM_RESET = "ZOOM_RESET"
 // Page navigation
 export const GO_TO_PAGE = "GO_TO_PAGE"
 export const SET_PAGES = "SET_PAGES"
-export const SET_MAX_PAGE = "SET_MAX_PAGE"
+
+// Tools
+export const SELECT_TOOL = "SELECT_TOOL"

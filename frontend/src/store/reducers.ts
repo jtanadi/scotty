@@ -6,8 +6,10 @@ import {
   ZOOM_RESET,
   GO_TO_PAGE,
   SET_PAGES,
+  SELECT_TOOL,
 } from "./constants"
-import { ZoomAction, PagesAction } from "./actions"
+import { ZoomAction, PagesAction, ToolAction } from "./actions"
+import tools, { Tool } from "../utils/tools"
 
 enum ZOOM_LIMIT {
   MIN = 1,
@@ -59,7 +61,30 @@ const pagesReducer = (
   }
 }
 
+export type ToolState = {
+  tools: Tool[]
+  selectedIdx: number
+}
+
+const initialToolState: ToolState = {
+  tools,
+  selectedIdx: null,
+}
+
+const toolReducer = (
+  state = initialToolState,
+  action: ToolAction
+): ToolState => {
+  switch (action.type) {
+    case SELECT_TOOL:
+      return { ...state, selectedIdx: action.idx }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   zoom: zoomReducer,
   pages: pagesReducer,
+  tools: toolReducer,
 })
