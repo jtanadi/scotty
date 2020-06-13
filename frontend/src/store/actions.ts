@@ -5,6 +5,7 @@ import {
   GO_TO_PAGE,
   SET_PAGES,
   SELECT_TOOL,
+  SET_TOOL_COLOR,
 } from "./constants"
 
 /////////////////////
@@ -57,10 +58,16 @@ export const goToPage = (pageNum: number): PagesAction => ({
 
 export type ToolAction = {
   type: string
-  idx: number
+  idx?: number
+  color?: string
 }
 
 export const selectTool = (idx: number): ToolAction => ({
   type: SELECT_TOOL,
   idx,
+})
+
+export const setToolColor = (hex: string): ToolAction => ({
+  type: SET_TOOL_COLOR,
+  color: hex,
 })

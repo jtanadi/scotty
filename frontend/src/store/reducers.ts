@@ -7,6 +7,7 @@ import {
   GO_TO_PAGE,
   SET_PAGES,
   SELECT_TOOL,
+  SET_TOOL_COLOR,
 } from "./constants"
 import { ZoomAction, PagesAction, ToolAction } from "./actions"
 import tools, { Tool } from "../utils/tools"
@@ -64,11 +65,13 @@ const pagesReducer = (
 export type ToolState = {
   tools: Tool[]
   selectedIdx: number
+  color: string
 }
 
 const initialToolState: ToolState = {
   tools,
   selectedIdx: null,
+  color: "",
 }
 
 const toolReducer = (
@@ -78,6 +81,8 @@ const toolReducer = (
   switch (action.type) {
     case SELECT_TOOL:
       return { ...state, selectedIdx: action.idx }
+    case SET_TOOL_COLOR:
+      return { ...state, color: action.color }
     default:
       return state
   }

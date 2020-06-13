@@ -9,3 +9,4 @@ export const SET_PAGES = "SET_PAGES"
 
 // Tools
 export const SELECT_TOOL = "SELECT_TOOL"
+export const SET_TOOL_COLOR = "SET_TOOL_COLOR"
