@@ -103,7 +103,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
                 key={user.id}
                 x={mouseX}
                 y={mouseY}
-                color={user.pointerColor}
+                color={user.toolColor}
               />
             )
           }

@@ -6,7 +6,7 @@ import {
   SyncPageData,
   User,
   UsersData,
-  PointerChangeData,
+  ToolColorChangeData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
@@ -28,7 +28,7 @@ export default (
   const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    const joinRoomData: JoinRoomData = { roomID, pointerColor: toolColor }
+    const joinRoomData: JoinRoomData = { roomID, toolColor }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
@@ -59,8 +59,8 @@ export default (
 
   useEffect(() => {
     if (toolColor) {
-      const pointerChangeData: PointerChangeData = { roomID, color: toolColor }
-      socket.emit("change pointer color", pointerChangeData)
+      const data: ToolColorChangeData = { roomID, toolColor }
+      socket.emit("change tool color", data)
     }
   }, [toolColor])
 
