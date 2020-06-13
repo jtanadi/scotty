@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, ReactElement } from "react"
+import React, { useState, FC, ReactElement } from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 
@@ -13,40 +13,15 @@ import tools from "../../utils/tools"
 import { selectTool } from "../../store/actions"
 
 type PropTypes = {
-  pointerColor: string
   showMouse: boolean
-  handlePointerColor(color: string): void
-}
-
-export enum TOOL {
-  POINTER = "pointer",
-  DRAW = "draw",
-  ERASE = "erase",
-  COMMENT = "comment",
 }
 
 const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
-  pointerColor,
-  handlePointerColor,
+  toolColor,
   numOfTools,
   selectedToolIdx,
   selectTool,
 }): ReactElement => {
-  const [paletteColors, setPaletteColors] = useState([])
-  useEffect(() => {
-    if (!pointerColor || paletteColors.length) return
-
-    setPaletteColors([
-      pointerColor,
-      "#F2994A",
-      "#F2C94C",
-      "#219653",
-      "#6FCF97",
-      "#2F80ED",
-      "#2D9CDB",
-    ])
-  }, [pointerColor])
-
   const [showPalette, setShowPalette] = useState(false)
   const handlePalette = (): void => {
     setShowPalette(prev => !prev)
@@ -59,14 +34,8 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
 
   return (
     <ButtonsContainer>
-      <ColorIndicator color={pointerColor} onClick={handlePalette} />
-      <Palette
-        show={showPalette}
-        colors={paletteColors}
-        currentColor={pointerColor}
-        handleShow={handlePalette}
-        handleChangeColor={handlePointerColor}
-      />
+      <ColorIndicator color={toolColor} onClick={handlePalette} />
+      <Palette show={showPalette} handleShow={handlePalette} />
       <ButtonsInnerContainer count={numOfTools}>
         {tools.map((tool, i) => (
           <ToolBarButton
@@ -88,11 +57,13 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
 type StateProps = {
   numOfTools: number
   selectedToolIdx: number
+  toolColor: string
 }
 
 const mapStateToProps = ({ tools }): StateProps => ({
   numOfTools: tools.length,
   selectedToolIdx: tools.selectedIdx,
+  toolColor: tools.color,
 })
 
 type DispatchProps = {
@@ -100,7 +71,7 @@ type DispatchProps = {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  selectTool(idx: number): void {
+  selectTool(idx): void {
     dispatch(selectTool(idx))
   },
 })
