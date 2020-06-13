@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import randomColor from "randomcolor"
 
 import {
   JoinRoomData,
@@ -12,8 +11,6 @@ import {
 import socket from "../../../socket"
 
 type UseSocketReturn = {
-  pointerColor: string
-  handlePointerColor(color: string): void
   userID: string
   users: User[]
   pdfUrl: string
@@ -22,19 +19,16 @@ type UseSocketReturn = {
 
 export default (
   roomID: string,
+  toolColor: string,
   setPages: (pages: string[]) => void,
   goToPage: (pageNum: number) => void
 ): UseSocketReturn => {
-  const [pointerColor, setPointerColor] = useState("")
   const [userID, setUserID] = useState("")
   const [users, setUsers] = useState<User[]>([])
   const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    const color = randomColor({ luminosity: "bright" })
-    setPointerColor(color)
-
-    const joinRoomData: JoinRoomData = { roomID, pointerColor: color }
+    const joinRoomData: JoinRoomData = { roomID, pointerColor: toolColor }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
@@ -63,12 +57,12 @@ export default (
     }
   }, [])
 
-  const handlePointerColor = (color: string): void => {
-    setPointerColor(color)
+  useEffect(() => {
+    if (toolColor) {
+      const pointerChangeData: PointerChangeData = { roomID, color: toolColor }
+      socket.emit("change pointer color", pointerChangeData)
+    }
+  }, [toolColor])
 
-    const pointerChangeData: PointerChangeData = { roomID, color }
-    socket.emit("change pointer color", pointerChangeData)
-  }
-
-  return { pointerColor, handlePointerColor, userID, users, pdfUrl, error }
+  return { userID, users, pdfUrl, error }
 }

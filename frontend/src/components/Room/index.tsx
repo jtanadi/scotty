@@ -2,6 +2,7 @@ import React, { ReactElement, useRef, useEffect } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
+import randomColor from "randomcolor"
 
 // Utils, etc.
 import { RoomData } from "../../../../backend/src/sockets/types"
@@ -19,7 +20,7 @@ import ToolBar from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, useSocket } from "./hooks"
-import { goToPage, setPages } from "../../store/actions"
+import { goToPage, setPages, setToolColor } from "../../store/actions"
 
 interface PropTypes extends RouteComponentProps {
   id: string
@@ -35,22 +36,26 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   pages,
   setPages,
   selectedTool,
+  toolColor,
+  setToolColor,
 }): ReactElement => {
   const pageRef = useRef(null)
+
+  useEffect(() => {
+    setToolColor(randomColor({ luminosity: "bright" }))
+  }, [])
 
   const { showMouse, setShowMouse, ownMouseX, ownMouseY } = usePointer(
     id,
     pageRef
   )
 
-  const {
-    pointerColor,
-    handlePointerColor,
-    userID,
-    users,
-    pdfUrl,
-    error,
-  } = useSocket(id, setPages, goToPage)
+  const { userID, users, pdfUrl, error } = useSocket(
+    id,
+    toolColor,
+    setPages,
+    goToPage
+  )
 
   useEffect(() => {
     if (!selectedTool) {
@@ -109,7 +114,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
 
   const renderOwnPointer = (): ReactElement => {
     return showMouse ? (
-      <Pointer x={ownMouseX} y={ownMouseY} color={pointerColor} />
+      <Pointer x={ownMouseX} y={ownMouseY} color={toolColor} />
     ) : null
   }
 
@@ -139,11 +144,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
           />
         ) : null}
         <ZoomBar />
-        <ToolBar
-          pointerColor={pointerColor}
-          showMouse={showMouse}
-          handlePointerColor={handlePointerColor}
-        />
+        <ToolBar showMouse={showMouse} />
       </Background>
     )
   }
@@ -157,17 +158,20 @@ type StateProps = {
   pageNum: number
   pages: string[]
   selectedTool: Tool
+  toolColor: string
 }
 
 const mapStateToProps = ({ pages, tools }): StateProps => ({
   pageNum: pages.currentPage,
   pages: pages.pages,
   selectedTool: tools.tools[tools.selectedIdx],
+  toolColor: tools.color,
 })
 
 type DispatchProps = {
   goToPage(pageNum: number): void
   setPages(pages: string[]): void
+  setToolColor(hex: string): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
@@ -176,6 +180,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
   setPages(pages): void {
     dispatch(setPages(pages))
+  },
+  setToolColor(hex): void {
+    dispatch(setToolColor(hex))
   },
 })
 
