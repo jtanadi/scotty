@@ -1,4 +1,4 @@
-import React, { useState, ReactElement, useRef } from "react"
+import React, { ReactElement, useRef } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
@@ -18,7 +18,7 @@ import ToolBar, { TOOLS } from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, useSocket } from "./hooks"
-import { setMaxPage, goToPage } from "../../store/actions"
+import { goToPage, setPages } from "../../store/actions"
 
 interface PropTypes extends RouteComponentProps {
   id: string
@@ -27,11 +27,12 @@ interface PropTypes extends RouteComponentProps {
 
 type StateProps = {
   pageNum: number
+  pages: string[]
 }
 
 type DispatchProps = {
-  setMaxPage(pageNum: number): void
   goToPage(pageNum: number): void
+  setPages(pages: string[]): void
 }
 
 const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
@@ -39,12 +40,12 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   filename,
   location,
   pageNum,
-  setMaxPage,
   goToPage,
+  pages,
+  setPages,
 }): ReactElement => {
   const pageRef = useRef(null)
 
-  const [pages, setPages] = useState<string[]>([])
   const { showMouse, handlePointerToggle, ownMouseX, ownMouseY } = usePointer(
     id,
     pageRef
@@ -56,7 +57,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     users,
     pdfUrl,
     error,
-  } = useSocket(id, setPages, setMaxPage, goToPage)
+  } = useSocket(id, setPages, goToPage)
 
   const handleToolBarButton = (tool: TOOLS): void => {
     switch (tool) {
@@ -155,14 +156,15 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
 
 const mapStateToProps = ({ pages }): StateProps => ({
   pageNum: pages.currentPage,
+  pages: pages.pages,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  setMaxPage(maxPage): void {
-    dispatch(setMaxPage(maxPage))
-  },
   goToPage(pageNum): void {
     dispatch(goToPage(pageNum))
+  },
+  setPages(pages): void {
+    dispatch(setPages(pages))
   },
 })
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react"
+import { useState, useEffect } from "react"
 import randomColor from "randomcolor"
 
 import {
@@ -22,8 +22,7 @@ type UseSocketReturn = {
 
 export default (
   roomID: string,
-  setPages: Dispatch<SetStateAction<string[]>>,
-  setMaxPage: (pageNum: number) => void,
+  setPages: (pages: string[]) => void,
   goToPage: (pageNum: number) => void
 ): UseSocketReturn => {
   const [pointerColor, setPointerColor] = useState("")
@@ -42,7 +41,6 @@ export default (
       setUserID(data.userID)
       setPdfUrl(data.pdfUrl)
       setPages(data.pages)
-      setMaxPage(data.pages.length)
     })
 
     socket.on("sync page", (data: SyncPageData): void => {

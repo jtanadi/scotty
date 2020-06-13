@@ -17,7 +17,6 @@ import {
   ReverseToolButton,
   CloseButton,
 } from "./styles"
-import { PageState } from "../../store/reducers"
 import { goToPage } from "../../store/actions"
 
 type PropTypes = {
@@ -27,11 +26,7 @@ type PropTypes = {
   handleClose(): void
 }
 
-type DispatchProps = {
-  goToPage(roomID: string, pageNum: number): void
-}
-
-const NavBar: React.FC<PropTypes & PageState & DispatchProps> = ({
+const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
   roomID,
   currentPage,
   maxPage,
@@ -156,8 +151,17 @@ const NavBar: React.FC<PropTypes & PageState & DispatchProps> = ({
   )
 }
 
-const mapStateToProps = ({ pages }): PageState => ({
-  maxPage: pages.maxPage,
+type StateProps = {
+  maxPage: number
+  currentPage: number
+}
+
+type DispatchProps = {
+  goToPage(roomID: string, pageNum: number): void
+}
+
+const mapStateToProps = ({ pages }): StateProps => ({
+  maxPage: pages.pages.length,
   currentPage: pages.currentPage,
 })
 

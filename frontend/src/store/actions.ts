@@ -4,28 +4,17 @@ import {
   ZOOM_RESET,
   GO_TO_PAGE,
   SET_MAX_PAGE,
+  SET_PAGES,
 } from "./constants"
 
 /////////////////////
-//      Types      //
+//      Zooms      //
 /////////////////////
 
 export type ZoomAction = {
   type: string
   scale?: number
 }
-
-export type PagesAction = {
-  type: string
-  maxPage?: number
-  pageNum?: number
-}
-
-/////////////////////
-// Action creators //
-/////////////////////
-
-// Zooms
 
 export const zoomIn = (scale: number): ZoomAction => ({
   type: ZOOM_IN,
@@ -41,7 +30,23 @@ export const zoomReset = (): ZoomAction => ({
   type: ZOOM_RESET,
 })
 
-// Page navigation
+/////////////////////
+//      Pages      //
+/////////////////////
+
+export type PagesAction = {
+  type: string
+  maxPage?: number
+  pageNum?: number
+  pages?: string[]
+}
+
+export const setPages = (pages: string[]): PagesAction => {
+  return {
+    type: SET_PAGES,
+    pages,
+  }
+}
 
 export const goToPage = (pageNum: number): PagesAction => {
   return {

@@ -5,7 +5,7 @@ import {
   ZOOM_OUT,
   ZOOM_RESET,
   GO_TO_PAGE,
-  SET_MAX_PAGE,
+  SET_PAGES,
 } from "./constants"
 import { ZoomAction, PagesAction } from "./actions"
 
@@ -37,12 +37,12 @@ const zoomReducer = (state = 1, action: ZoomAction): number => {
 
 export type PageState = {
   currentPage: number
-  maxPage: number
+  pages: string[]
 }
 
 const initialPageState: PageState = {
   currentPage: 1,
-  maxPage: 1,
+  pages: [],
 }
 
 const pagesReducer = (
@@ -50,8 +50,8 @@ const pagesReducer = (
   action: PagesAction
 ): PageState => {
   switch (action.type) {
-    case SET_MAX_PAGE:
-      return { ...state, maxPage: action.maxPage }
+    case SET_PAGES:
+      return { ...state, pages: action.pages }
     case GO_TO_PAGE:
       return { ...state, currentPage: action.pageNum }
     default:
