@@ -61,7 +61,6 @@ const TestRoutes = (): ReactElement => {
           <ToolBar
             showMouse={false}
             pointerColor="#ffffff"
-            handleToolBarButton={(): void => {}}
             handlePointerColor={(): void => {}}
           />
         )}
