@@ -6,15 +6,16 @@ import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
 
 type PropTypes = {
-  src: string
+  pdfUrl: string
   pageRef: RefObject<HTMLImageElement>
 }
 
-type Store = {
-  zoom: number
-}
-
-const View: FC<PropTypes & Store> = ({ src, pageRef, zoom }): ReactElement => {
+const View: FC<PropTypes & StateProps> = ({
+  pdfUrl,
+  pageRef,
+  zoom,
+  pageUrl,
+}): ReactElement => {
   const docRef = useRef(null)
   const {
     mouseDown,
@@ -35,12 +36,20 @@ const View: FC<PropTypes & Store> = ({ src, pageRef, zoom }): ReactElement => {
         onMouseUp={handleMouseReset}
         onMouseLeave={handleMouseReset}
       >
-        <Page src={src} ref={pageRef} draggable={false} />
+        <Page src={`${pdfUrl}/${pageUrl}`} ref={pageRef} draggable={false} />
       </PageContainer>
     </DocumentContainer>
   )
 }
 
-const mapStateToProps = ({ zoom }): Store => ({ zoom })
+type StateProps = {
+  zoom: number
+  pageUrl: string
+}
+
+const mapStateToProps = ({ zoom, pages }): StateProps => ({
+  zoom,
+  pageUrl: pages.pages[pages.currentPage - 1],
+})
 
 export default connect(mapStateToProps)(View)

@@ -31,9 +31,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   id,
   filename,
   location,
-  pageNum,
   goToPage,
-  pages,
   setPages,
   selectedTool,
   toolColor,
@@ -137,12 +135,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
           users={users}
           handleClose={handleClose}
         />
-        {pdfUrl ? (
-          <DocumentView
-            src={`${pdfUrl}/${pages[pageNum - 1]}`}
-            pageRef={pageRef}
-          />
-        ) : null}
+        {pdfUrl ? <DocumentView pdfUrl={pdfUrl} pageRef={pageRef} /> : null}
         <ZoomBar />
         <ToolBar showMouse={showMouse} />
       </Background>
@@ -155,15 +148,11 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
 }
 
 type StateProps = {
-  pageNum: number
-  pages: string[]
   selectedTool: Tool
   toolColor: string
 }
 
-const mapStateToProps = ({ pages, tools }): StateProps => ({
-  pageNum: pages.currentPage,
-  pages: pages.pages,
+const mapStateToProps = ({ tools }): StateProps => ({
   selectedTool: tools.tools[tools.selectedIdx],
   toolColor: tools.color,
 })
