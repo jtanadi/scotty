@@ -57,13 +57,7 @@ const TestRoutes = (): ReactElement => {
 
       <Route
         path="/test/ToolBar"
-        render={(): ReactElement => (
-          <ToolBar
-            showMouse={false}
-            pointerColor="#ffffff"
-            handlePointerColor={(): void => {}}
-          />
-        )}
+        render={(): ReactElement => <ToolBar showMouse={false} />}
       />
 
       <Route
