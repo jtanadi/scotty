@@ -14,7 +14,7 @@ import onPointerChange from "./onPointerChange"
 export let io: SocketServer
 
 export default (server: HTTPserver | HTTPSserver): void => {
-  io = socket(server)
+  io = socket(server, { cookie: false })
 
   io.on("connection", socket => {
     socket.use((packet, next) => checkRoom({ io, socket }, packet, next))
