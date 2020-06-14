@@ -26,6 +26,16 @@ type PropTypes = {
   handleShow(): void
 }
 
+const createColors = (firstColor: string): string[] => [
+  firstColor,
+  "#F2994A",
+  "#F2C94C",
+  "#219653",
+  "#6FCF97",
+  "#2F80ED",
+  "#2D9CDB",
+]
+
 const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
   show,
   handleShow,
@@ -40,21 +50,13 @@ const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
       const usingPresetColor = !!colors.find(color => color === toolColor)
       setPresetColorUsed(usingPresetColor)
     } else {
-      setColors([
-        toolColor,
-        "#F2994A",
-        "#F2C94C",
-        "#219653",
-        "#6FCF97",
-        "#2F80ED",
-        "#2D9CDB",
-      ])
+      setColors(createColors(toolColor))
     }
   }, [toolColor])
 
   const handleInputChange = (ev: ChangeEvent<HTMLInputElement>): void => {
     // Basic validation: only accept up to 6 characters
-    // and only accept valid hex values (a-f, 0-9)
+    // valid hex values (a-f, 0-9)
     const hex = ev.target.value
     const hexRegex = /^[a-f0-9]+$/gi
     if (hex.length > 6 || (hex && !hexRegex.test(hex))) return
