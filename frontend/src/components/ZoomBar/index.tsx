@@ -7,11 +7,6 @@ import { ButtonsContainer } from "./styles"
 
 import { zoomIn, zoomOut } from "../../store/actions"
 
-type DispatchProps = {
-  zoomIn(scale: number): void
-  zoomOut(scale: number): void
-}
-
 const ZoomBar: FC<{} & DispatchProps> = ({ zoomIn, zoomOut }): ReactElement => {
   return (
     <ButtonsContainer>
@@ -21,7 +16,7 @@ const ZoomBar: FC<{} & DispatchProps> = ({ zoomIn, zoomOut }): ReactElement => {
         image="/static/icons/zoomIn.svg"
         imageHover="/static/icons/zoomInLight.svg"
         imageActive="/static/icons/zoomInLight.svg"
-        onClick={(): void => zoomIn(1)}
+        onClick={(): void => zoomIn()}
       />
       <ToolButton
         width="2.25rem"
@@ -29,18 +24,23 @@ const ZoomBar: FC<{} & DispatchProps> = ({ zoomIn, zoomOut }): ReactElement => {
         image="/static/icons/zoomOut.svg"
         imageHover="/static/icons/zoomOutLight.svg"
         imageActive="/static/icons/zoomOutLight.svg"
-        onClick={(): void => zoomOut(1)}
+        onClick={(): void => zoomOut()}
       />
     </ButtonsContainer>
   )
 }
 
+type DispatchProps = {
+  zoomIn(offset?: number): void
+  zoomOut(offset?: number): void
+}
+
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  zoomIn(scale: number): void {
-    dispatch(zoomIn(scale))
+  zoomIn(offset): void {
+    dispatch(zoomIn(offset))
   },
-  zoomOut(scale: number): void {
-    dispatch(zoomOut(scale))
+  zoomOut(offset): void {
+    dispatch(zoomOut(offset))
   },
 })
 
