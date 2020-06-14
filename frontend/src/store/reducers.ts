@@ -1,9 +1,7 @@
 import { combineReducers } from "redux"
 
 import {
-  ZOOM_IN,
-  ZOOM_OUT,
-  ZOOM_RESET,
+  SET_ZOOM_LEVEL,
   GO_TO_PAGE,
   SET_PAGES,
   SELECT_TOOL,
@@ -12,27 +10,10 @@ import {
 import { ZoomAction, PagesAction, ToolAction } from "./actions"
 import tools, { Tool } from "../utils/tools"
 
-enum ZOOM_LIMIT {
-  MIN = 1,
-  MAX = 5,
-}
-
 const zoomReducer = (state = 1, action: ZoomAction): number => {
   switch (action.type) {
-    case ZOOM_IN:
-      if (state + action.scale <= ZOOM_LIMIT.MAX) {
-        return state + action.scale
-      } else {
-        return state
-      }
-    case ZOOM_OUT:
-      if (state - action.scale >= ZOOM_LIMIT.MIN) {
-        return state - action.scale
-      } else {
-        return state
-      }
-    case ZOOM_RESET:
-      return action.scale
+    case SET_ZOOM_LEVEL:
+      return action.zoomLevel
     default:
       return state
   }

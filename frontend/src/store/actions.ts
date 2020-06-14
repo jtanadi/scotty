@@ -1,7 +1,6 @@
+import store from "./index"
 import {
-  ZOOM_IN,
-  ZOOM_OUT,
-  ZOOM_RESET,
+  SET_ZOOM_LEVEL,
   GO_TO_PAGE,
   SET_PAGES,
   SELECT_TOOL,
@@ -14,21 +13,43 @@ import {
 
 export type ZoomAction = {
   type: string
-  scale?: number
+  zoomLevel?: number
 }
 
-export const zoomIn = (scale: number): ZoomAction => ({
-  type: ZOOM_IN,
-  scale: scale,
-})
+enum ZOOM_LIMIT {
+  MIN = 1,
+  MAX = 5,
+}
 
-export const zoomOut = (scale: number): ZoomAction => ({
-  type: ZOOM_OUT,
-  scale: scale,
-})
+export const zoomIn = (offset = 1): ZoomAction => {
+  const currentZoom = store.getState().zoom
+  if (currentZoom < ZOOM_LIMIT.MAX) {
+    return {
+      type: SET_ZOOM_LEVEL,
+      zoomLevel: currentZoom + offset,
+    }
+  }
+
+  // "Do nothing"
+  return { type: "" }
+}
+
+export const zoomOut = (offset = 1): ZoomAction => {
+  const currentZoom = store.getState().zoom
+  if (currentZoom > ZOOM_LIMIT.MIN) {
+    return {
+      type: SET_ZOOM_LEVEL,
+      zoomLevel: currentZoom - offset,
+    }
+  }
+
+  // "Do nothing"
+  return { type: "" }
+}
 
 export const zoomReset = (): ZoomAction => ({
-  type: ZOOM_RESET,
+  type: SET_ZOOM_LEVEL,
+  zoomLevel: ZOOM_LIMIT.MIN,
 })
 
 /////////////////////

@@ -1,7 +1,5 @@
-// Zooms
-export const ZOOM_IN = "ZOOM_IN"
-export const ZOOM_OUT = "ZOOM_OUT"
-export const ZOOM_RESET = "ZOOM_RESET"
+// Zoom
+export const SET_ZOOM_LEVEL = "SET_ZOOM_LEVEL"
 
 // Page navigation
 export const GO_TO_PAGE = "GO_TO_PAGE"
