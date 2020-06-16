@@ -6,12 +6,10 @@ import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
 
 type PropTypes = {
-  pdfUrl: string
   pageRef: RefObject<HTMLImageElement>
 }
 
 const View: FC<PropTypes & StateProps> = ({
-  pdfUrl,
   pageRef,
   zoom,
   pageUrl,
@@ -36,7 +34,7 @@ const View: FC<PropTypes & StateProps> = ({
         onMouseUp={handleMouseReset}
         onMouseLeave={handleMouseReset}
       >
-        <Page src={`${pdfUrl}/${pageUrl}`} ref={pageRef} draggable={false} />
+        <Page src={pageUrl} ref={pageRef} draggable={false} />
       </PageContainer>
     </DocumentContainer>
   )
@@ -47,9 +45,13 @@ type StateProps = {
   pageUrl: string
 }
 
-const mapStateToProps = ({ zoom, pages }): StateProps => ({
+const mapStateToProps = ({
   zoom,
-  pageUrl: pages.pages[pages.currentPage - 1],
+  pages: { pages, currentPage },
+  room: { pdfUrl },
+}): StateProps => ({
+  zoom,
+  pageUrl: `${pdfUrl}/${pages[currentPage - 1]}`,
 })
 
 export default connect(mapStateToProps)(View)
