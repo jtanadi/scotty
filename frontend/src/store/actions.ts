@@ -17,6 +17,10 @@ export const setPdfUrl = (url: string): RoomAction => ({
   url,
 })
 
+export const clearRoom = (): RoomAction => ({
+  type: constants.CLEAR_ROOM,
+})
+
 /////////////////////
 //      Zooms      //
 /////////////////////
@@ -69,6 +73,10 @@ export const setPages = (pages: string[]): PagesAction => ({
 export const goToPage = (pageNum: number): PagesAction => ({
   type: constants.GO_TO_PAGE,
   pageNum,
+})
+
+export const clearPages = (): PagesAction => ({
+  type: constants.CLEAR_PAGES,
 })
 
 /////////////////////

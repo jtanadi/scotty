@@ -17,6 +17,8 @@ const roomReducer = (
       return { ...state, users: action.users }
     case constants.SET_PDF_URL:
       return { ...state, pdfUrl: action.url }
+    case constants.CLEAR_ROOM:
+      return initialRoomState
     default:
       return state
   }
@@ -45,6 +47,8 @@ const pagesReducer = (
       return { ...state, pages: action.pages }
     case constants.GO_TO_PAGE:
       return { ...state, currentPage: action.pageNum }
+    case constants.CLEAR_PAGES:
+      return initialPageState
     default:
       return state
   }

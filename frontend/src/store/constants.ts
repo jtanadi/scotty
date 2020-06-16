@@ -1,6 +1,7 @@
 // Room
 export const SET_USERS = "SET_USERS"
 export const SET_PDF_URL = "SET_PDF_URL"
+export const CLEAR_ROOM = "CLEAR_ROOM"
 
 // Zoom
 export const SET_ZOOM_LEVEL = "SET_ZOOM_LEVEL"
@@ -8,6 +9,7 @@ export const SET_ZOOM_LEVEL = "SET_ZOOM_LEVEL"
 // Page navigation
 export const GO_TO_PAGE = "GO_TO_PAGE"
 export const SET_PAGES = "SET_PAGES"
+export const CLEAR_PAGES = "CLEAR_PAGES"
 
 // Tools
 export const SELECT_TOOL = "SELECT_TOOL"

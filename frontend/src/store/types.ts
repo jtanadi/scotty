@@ -16,7 +16,11 @@ type SetPdfUrlAction = {
   url: string
 }
 
-export type RoomAction = SetUsersAction | SetPdfUrlAction
+type ClearRoomAction = {
+  type: typeof constants.CLEAR_ROOM
+}
+
+export type RoomAction = SetUsersAction | SetPdfUrlAction | ClearRoomAction
 
 type SetZoomAction = {
   type: typeof constants.SET_ZOOM_LEVEL | string
@@ -35,7 +39,11 @@ type SetPagesAction = {
   pages: string[]
 }
 
-export type PagesAction = GoToPageAction | SetPagesAction
+type ClearPagesAction = {
+  type: typeof constants.CLEAR_PAGES
+}
+
+export type PagesAction = GoToPageAction | SetPagesAction | ClearPagesAction
 
 type SelectToolAction = {
   type: typeof constants.SELECT_TOOL

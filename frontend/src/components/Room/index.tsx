@@ -40,6 +40,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   setToolColor,
   setUsers,
   setPdfUrl,
+  clearStore,
 }): ReactElement => {
   const pageRef = useRef(null)
 
@@ -80,6 +81,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   const handleClose = (): void => {
     const leaveRoomData: RoomData = { roomID: id }
     socket.emit("leave room", leaveRoomData)
+    clearStore()
     history.push("/")
   }
 
@@ -172,6 +174,7 @@ type DispatchProps = {
   setToolColor(hex: string): void
   setUsers(users: User[]): void
   setPdfUrl(url: string): void
+  clearStore(): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
@@ -189,6 +192,10 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
   setPdfUrl(url: string): void {
     dispatch(actions.setPdfUrl(url))
+  },
+  clearStore(): void {
+    dispatch(actions.clearRoom())
+    dispatch(actions.clearPages())
   },
 })
 
