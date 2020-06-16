@@ -4,6 +4,24 @@ import * as constants from "./constants"
 import * as types from "./types"
 import tools from "../utils/tools"
 
+const initialRoomState: types.RoomState = {
+  users: [],
+  pdfUrl: "",
+}
+const roomReducer = (
+  state = initialRoomState,
+  action: types.RoomAction
+): types.RoomState => {
+  switch (action.type) {
+    case constants.SET_USERS:
+      return { ...state, users: action.users }
+    case constants.SET_PDF_URL:
+      return { ...state, pdfUrl: action.url }
+    default:
+      return state
+  }
+}
+
 const zoomReducer = (state = 1, action: types.ZoomAction): number => {
   switch (action.type) {
     case constants.SET_ZOOM_LEVEL:
@@ -53,6 +71,7 @@ const toolReducer = (
 }
 
 export default combineReducers({
+  room: roomReducer,
   zoom: zoomReducer,
   pages: pagesReducer,
   tools: toolReducer,

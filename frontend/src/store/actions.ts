@@ -1,10 +1,21 @@
 import store from "./index"
 import * as constants from "./constants"
-import { ZoomAction, PagesAction, ToolAction } from "./types"
+import { RoomAction, ZoomAction, PagesAction, ToolAction } from "./types"
+import { User } from "../../../backend/src/sockets/types"
 
 /////////////////////
 //      Room       //
 /////////////////////
+
+export const setUsers = (users: User[]): RoomAction => ({
+  type: constants.SET_USERS,
+  users,
+})
+
+export const setPdfUrl = (url: string): RoomAction => ({
+  type: constants.SET_PDF_URL,
+  url,
+})
 
 /////////////////////
 //      Zooms      //

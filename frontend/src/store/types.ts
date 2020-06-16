@@ -1,9 +1,22 @@
 import * as constants from "./constants"
 import { Tool } from "../utils/tools"
+import { User } from "../../../backend/src/sockets/types"
 
 //////////////////
 // ACTION TYPES //
 //////////////////
+
+type SetUsersAction = {
+  type: typeof constants.SET_USERS
+  users: User[]
+}
+
+type SetPdfUrlAction = {
+  type: typeof constants.SET_PDF_URL
+  url: string
+}
+
+export type RoomAction = SetUsersAction | SetPdfUrlAction
 
 type SetZoomAction = {
   type: typeof constants.SET_ZOOM_LEVEL | string
@@ -39,6 +52,11 @@ export type ToolAction = SelectToolAction | SetColorAction
 /////////////////
 // STATE TYPES //
 /////////////////
+
+export type RoomState = {
+  users: User[]
+  pdfUrl: string
+}
 
 export type PageState = {
   currentPage: number
