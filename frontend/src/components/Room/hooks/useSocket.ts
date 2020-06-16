@@ -7,25 +7,25 @@ import {
   User,
   UsersData,
   ToolColorChangeData,
+  ChangePageData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
 type UseSocketReturn = {
   userID: string
-  users: User[]
-  pdfUrl: string
   error: string
+  socketChangePage: (pageNum: number) => void
 }
 
 export default (
   roomID: string,
   toolColor: string,
   setPages: (pages: string[]) => void,
-  goToPage: (pageNum: number) => void
+  goToPage: (pageNum: number) => void,
+  setUsers: (users: User[]) => void,
+  setPdfUrl: (url: string) => void
 ): UseSocketReturn => {
   const [userID, setUserID] = useState("")
-  const [users, setUsers] = useState<User[]>([])
-  const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
     const joinRoomData: JoinRoomData = { roomID, toolColor }
@@ -64,5 +64,10 @@ export default (
     }
   }, [toolColor])
 
-  return { userID, users, pdfUrl, error }
+  const socketChangePage = (pageNum: number): void => {
+    const data: ChangePageData = { roomID, pageNum }
+    socket.emit("client change page", data)
+  }
+
+  return { userID, error, socketChangePage }
 }
