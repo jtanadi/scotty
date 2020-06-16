@@ -5,7 +5,7 @@ import { Dispatch } from "redux"
 import randomColor from "randomcolor"
 
 // Utils, etc.
-import { RoomData } from "../../../../backend/src/sockets/types"
+import { RoomData, User } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
 import { Tool } from "../../utils/tools"
 
@@ -20,7 +20,7 @@ import ToolBar from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, useSocket } from "./hooks"
-import { goToPage, setPages, setToolColor } from "../../store/actions"
+import * as actions from "../../store/actions"
 
 interface PropTypes extends RouteComponentProps {
   id: string
@@ -31,11 +31,15 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   id,
   filename,
   location,
+  toolColor,
+  pdfUrl,
+  users,
   goToPage,
   setPages,
   selectedTool,
-  toolColor,
   setToolColor,
+  setUsers,
+  setPdfUrl,
 }): ReactElement => {
   const pageRef = useRef(null)
 
@@ -48,11 +52,13 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     pageRef
   )
 
-  const { userID, users, pdfUrl, error } = useSocket(
+  const { userID, error, socketChangePage } = useSocket(
     id,
     toolColor,
     setPages,
-    goToPage
+    goToPage,
+    setUsers,
+    setPdfUrl
   )
 
   useEffect(() => {
@@ -130,12 +136,11 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
         {renderPointers()}
         {renderOwnPointer()}
         <NavBar
-          roomID={id}
           filename={filename}
-          users={users}
+          socketChangePage={socketChangePage}
           handleClose={handleClose}
         />
-        {pdfUrl ? <DocumentView pdfUrl={pdfUrl} pageRef={pageRef} /> : null}
+        {pdfUrl ? <DocumentView pageRef={pageRef} /> : null}
         <ZoomBar />
         <ToolBar />
       </Background>
@@ -150,28 +155,40 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
 type StateProps = {
   selectedTool: Tool
   toolColor: string
+  pdfUrl: string
+  users: User[]
 }
 
-const mapStateToProps = ({ tools }): StateProps => ({
+const mapStateToProps = ({ room, tools }): StateProps => ({
   selectedTool: tools.tools[tools.selectedIdx],
   toolColor: tools.color,
+  pdfUrl: room.pdfUrl,
+  users: room.users,
 })
 
 type DispatchProps = {
   goToPage(pageNum: number): void
   setPages(pages: string[]): void
   setToolColor(hex: string): void
+  setUsers(users: User[]): void
+  setPdfUrl(url: string): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   goToPage(pageNum): void {
-    dispatch(goToPage(pageNum))
+    dispatch(actions.goToPage(pageNum))
   },
   setPages(pages): void {
-    dispatch(setPages(pages))
+    dispatch(actions.setPages(pages))
   },
   setToolColor(hex): void {
-    dispatch(setToolColor(hex))
+    dispatch(actions.setToolColor(hex))
+  },
+  setUsers(users): void {
+    dispatch(actions.setUsers(users))
+  },
+  setPdfUrl(url: string): void {
+    dispatch(actions.setPdfUrl(url))
   },
 })
 
