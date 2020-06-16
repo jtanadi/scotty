@@ -12,11 +12,7 @@ import {
 import tools from "../../utils/tools"
 import { selectTool } from "../../store/actions"
 
-type PropTypes = {
-  showMouse: boolean
-}
-
-const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
+const ToolBar: FC<StateProps & DispatchProps> = ({
   toolColor,
   numOfTools,
   selectedToolIdx,

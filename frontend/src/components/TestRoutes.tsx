@@ -55,10 +55,7 @@ const TestRoutes = (): ReactElement => {
 
       <Route path="/test/ZoomBar" render={(): ReactElement => <ZoomBar />} />
 
-      <Route
-        path="/test/ToolBar"
-        render={(): ReactElement => <ToolBar showMouse={false} />}
-      />
+      <Route path="/test/ToolBar" render={(): ReactElement => <ToolBar />} />
 
       <Route
         path="/test/Room"

@@ -137,7 +137,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
         />
         {pdfUrl ? <DocumentView pdfUrl={pdfUrl} pageRef={pageRef} /> : null}
         <ZoomBar />
-        <ToolBar showMouse={showMouse} />
+        <ToolBar />
       </Background>
     )
   }
