@@ -1,20 +1,14 @@
 import store from "./index"
-import {
-  SET_ZOOM_LEVEL,
-  GO_TO_PAGE,
-  SET_PAGES,
-  SELECT_TOOL,
-  SET_TOOL_COLOR,
-} from "./constants"
+import * as constants from "./constants"
+import { ZoomAction, PagesAction, ToolAction } from "./types"
+
+/////////////////////
+//      Room       //
+/////////////////////
 
 /////////////////////
 //      Zooms      //
 /////////////////////
-
-export type ZoomAction = {
-  type: string
-  zoomLevel?: number
-}
 
 enum ZOOM_LIMIT {
   MIN = 1,
@@ -25,12 +19,12 @@ export const zoomIn = (offset = 1): ZoomAction => {
   const currentZoom = store.getState().zoom
   if (currentZoom < ZOOM_LIMIT.MAX) {
     return {
-      type: SET_ZOOM_LEVEL,
+      type: constants.SET_ZOOM_LEVEL,
       zoomLevel: currentZoom + offset,
     }
   }
 
-  // "Do nothing"
+  // Default: do nothing
   return { type: "" }
 }
 
@@ -38,17 +32,17 @@ export const zoomOut = (offset = 1): ZoomAction => {
   const currentZoom = store.getState().zoom
   if (currentZoom > ZOOM_LIMIT.MIN) {
     return {
-      type: SET_ZOOM_LEVEL,
+      type: constants.SET_ZOOM_LEVEL,
       zoomLevel: currentZoom - offset,
     }
   }
 
-  // "Do nothing"
+  // Default: do nothing
   return { type: "" }
 }
 
 export const zoomReset = (): ZoomAction => ({
-  type: SET_ZOOM_LEVEL,
+  type: constants.SET_ZOOM_LEVEL,
   zoomLevel: ZOOM_LIMIT.MIN,
 })
 
@@ -56,20 +50,13 @@ export const zoomReset = (): ZoomAction => ({
 //      Pages      //
 /////////////////////
 
-export type PagesAction = {
-  type: string
-  maxPage?: number
-  pageNum?: number
-  pages?: string[]
-}
-
 export const setPages = (pages: string[]): PagesAction => ({
-  type: SET_PAGES,
+  type: constants.SET_PAGES,
   pages,
 })
 
 export const goToPage = (pageNum: number): PagesAction => ({
-  type: GO_TO_PAGE,
+  type: constants.GO_TO_PAGE,
   pageNum,
 })
 
@@ -77,18 +64,12 @@ export const goToPage = (pageNum: number): PagesAction => ({
 //      Tools      //
 /////////////////////
 
-export type ToolAction = {
-  type: string
-  idx?: number
-  color?: string
-}
-
 export const selectTool = (idx: number): ToolAction => ({
-  type: SELECT_TOOL,
+  type: constants.SELECT_TOOL,
   idx,
 })
 
 export const setToolColor = (hex: string): ToolAction => ({
-  type: SET_TOOL_COLOR,
+  type: constants.SET_TOOL_COLOR,
   color: hex,
 })

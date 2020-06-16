@@ -1,55 +1,38 @@
 import { combineReducers } from "redux"
 
-import {
-  SET_ZOOM_LEVEL,
-  GO_TO_PAGE,
-  SET_PAGES,
-  SELECT_TOOL,
-  SET_TOOL_COLOR,
-} from "./constants"
-import { ZoomAction, PagesAction, ToolAction } from "./actions"
-import tools, { Tool } from "../utils/tools"
+import * as constants from "./constants"
+import * as types from "./types"
+import tools from "../utils/tools"
 
-const zoomReducer = (state = 1, action: ZoomAction): number => {
+const zoomReducer = (state = 1, action: types.ZoomAction): number => {
   switch (action.type) {
-    case SET_ZOOM_LEVEL:
+    case constants.SET_ZOOM_LEVEL:
       return action.zoomLevel
     default:
       return state
   }
 }
 
-export type PageState = {
-  currentPage: number
-  pages: string[]
-}
-
-const initialPageState: PageState = {
+const initialPageState: types.PageState = {
   currentPage: 1,
   pages: [],
 }
 
 const pagesReducer = (
   state = initialPageState,
-  action: PagesAction
-): PageState => {
+  action: types.PagesAction
+): types.PageState => {
   switch (action.type) {
-    case SET_PAGES:
+    case constants.SET_PAGES:
       return { ...state, pages: action.pages }
-    case GO_TO_PAGE:
+    case constants.GO_TO_PAGE:
       return { ...state, currentPage: action.pageNum }
     default:
       return state
   }
 }
 
-export type ToolState = {
-  tools: Tool[]
-  selectedIdx: number
-  color: string
-}
-
-const initialToolState: ToolState = {
+const initialToolState: types.ToolState = {
   tools,
   selectedIdx: null,
   color: "",
@@ -57,12 +40,12 @@ const initialToolState: ToolState = {
 
 const toolReducer = (
   state = initialToolState,
-  action: ToolAction
-): ToolState => {
+  action: types.ToolAction
+): types.ToolState => {
   switch (action.type) {
-    case SELECT_TOOL:
+    case constants.SELECT_TOOL:
       return { ...state, selectedIdx: action.idx }
-    case SET_TOOL_COLOR:
+    case constants.SET_TOOL_COLOR:
       return { ...state, color: action.color }
     default:
       return state
