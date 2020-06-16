@@ -1,7 +1,8 @@
 import React, { useState, useEffect, ReactElement, FormEvent } from "react"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
 
 import { User } from "../../../../backend/src/sockets/types"
-
 import { ToolButton } from "../globalStyles"
 import {
   NavBarContainer,
@@ -14,56 +15,67 @@ import {
   ReverseToolButton,
   CloseButton,
 } from "./styles"
-
-export type PageOption = {
-  offset?: number
-  goto?: number
-}
+import { goToPage } from "../../store/actions"
 
 type PropTypes = {
-  pageNum: number
-  maxPage: number
   filename: string
-  users: User[]
-  handleChangePage(option: PageOption): void
   handleClose(): void
+  socketChangePage: (pageNum: number) => void
 }
 
-const NavBar: React.FC<PropTypes> = ({
-  pageNum,
+const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
+  currentPage,
   maxPage,
   filename,
   users,
-  handleChangePage,
+  goToPage,
   handleClose,
 }): ReactElement => {
-  const [currentPageNum, setCurrentPageNum] = useState(pageNum || "")
+  const [displayPageNum, setDisplayPageNum] = useState("")
 
   const handleInputSubmit = (ev: FormEvent): void => {
     ev.preventDefault()
-    if (!currentPageNum) return
-    handleChangePage({ goto: currentPageNum as number })
+    if (!displayPageNum) return
+    goToPage(parseInt(displayPageNum, 10))
   }
 
   const handleInputChange = (ev: FormEvent<HTMLInputElement>): void => {
     if (!ev.currentTarget.value) {
-      setCurrentPageNum("")
+      setDisplayPageNum("")
       return
     }
 
     const parsedPageNum = parseInt(ev.currentTarget.value, 10)
-    if (
-      !isNaN(parsedPageNum) &&
-      parsedPageNum > 0 &&
-      parsedPageNum <= maxPage
-    ) {
-      setCurrentPageNum(parsedPageNum)
+    if (!isNaN(parsedPageNum)) {
+      setDisplayPageNum(ev.currentTarget.value)
+    }
+  }
+
+  const goFirstPage = (): void => {
+    goToPage(1)
+  }
+
+  const goLastPage = (): void => {
+    goToPage(maxPage)
+  }
+
+  const goPrevPage = (): void => {
+    const newPage = currentPage - 1
+    if (newPage > 0) {
+      goToPage(newPage)
+    }
+  }
+
+  const goNextPage = (): void => {
+    const newPage = currentPage + 1
+    if (newPage <= maxPage) {
+      goToPage(newPage)
     }
   }
 
   useEffect(() => {
-    setCurrentPageNum(pageNum)
-  }, [pageNum])
+    setDisplayPageNum(currentPage.toString())
+  }, [currentPage])
 
   return (
     <NavBarContainer>
@@ -78,7 +90,7 @@ const NavBar: React.FC<PropTypes> = ({
           image="/static/icons/firstLastPage.svg"
           imageHover="/static/icons/firstLastPageLight.svg"
           imageActive="/static/icons/firstLastPageLight.svg"
-          onClick={(): void => handleChangePage({ goto: 1 })}
+          onClick={goFirstPage}
         />
         <ToolButton
           width="3rem"
@@ -86,13 +98,13 @@ const NavBar: React.FC<PropTypes> = ({
           image="/static/icons/prevNextPage.svg"
           imageHover="/static/icons/prevNextPageLight.svg"
           imageActive="/static/icons/prevNextPageLight.svg"
-          onClick={(): void => handleChangePage({ offset: -1 })}
+          onClick={goPrevPage}
         />
 
         <PageNumContainer>
           <PageNumForm onSubmit={handleInputSubmit}>
             <PageNumInput
-              value={currentPageNum}
+              value={displayPageNum}
               onSubmit={handleInputSubmit}
               onChange={handleInputChange}
             />
@@ -106,7 +118,7 @@ const NavBar: React.FC<PropTypes> = ({
           image="/static/icons/prevNextPage.svg"
           imageHover="/static/icons/prevNextPageLight.svg"
           imageActive="/static/icons/prevNextPageLight.svg"
-          onClick={(): void => handleChangePage({ offset: 1 })}
+          onClick={goNextPage}
         />
         <ReverseToolButton
           width="3rem"
@@ -114,7 +126,7 @@ const NavBar: React.FC<PropTypes> = ({
           image="/static/icons/firstLastPage.svg"
           imageHover="/static/icons/firstLastPageLight.svg"
           imageActive="/static/icons/firstLastPageLight.svg"
-          onClick={(): void => handleChangePage({ goto: maxPage })}
+          onClick={goLastPage}
         />
       </NavChild>
 
@@ -135,4 +147,30 @@ const NavBar: React.FC<PropTypes> = ({
   )
 }
 
-export default NavBar
+type StateProps = {
+  maxPage: number
+  currentPage: number
+  users: User[]
+}
+
+type DispatchProps = {
+  goToPage(pageNum: number): void
+}
+
+const mapStateToProps = ({ pages, room }): StateProps => ({
+  maxPage: pages.pages.length,
+  currentPage: pages.currentPage,
+  users: room.users,
+})
+
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  { socketChangePage }
+): DispatchProps => ({
+  goToPage(pageNum): void {
+    dispatch(goToPage(pageNum))
+    socketChangePage(pageNum)
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

@@ -1,4 +1,4 @@
-import { useState, useEffect, RefObject } from "react"
+import { useState, useEffect, RefObject, Dispatch, SetStateAction } from "react"
 
 import { MouseMoveData } from "../../../../../backend/src/sockets/types"
 import roundTo from "../../../utils/roundTo"
@@ -8,7 +8,7 @@ const roundTo3 = roundTo(3)
 
 type UsePointerReturn = {
   showMouse: boolean
-  handlePointerToggle: () => void
+  setShowMouse: Dispatch<SetStateAction<boolean>>
   ownMouseX: number
   ownMouseY: number
 }
@@ -63,9 +63,5 @@ export default (
     }
   }, [showMouse])
 
-  const handlePointerToggle = (): void => {
-    setShowMouse(prev => !prev)
-  }
-
-  return { showMouse, handlePointerToggle, ownMouseX, ownMouseY }
+  return { showMouse, setShowMouse, ownMouseX, ownMouseY }
 }

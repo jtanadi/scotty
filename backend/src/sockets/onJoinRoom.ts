@@ -8,21 +8,21 @@ import {
   UsersData,
 } from "./types"
 
-const createUser = (id: string, pointerColor: string): User => {
+const createUser = (id: string, toolColor: string): User => {
   return {
     id,
     mouseX: 0,
     mouseY: 0,
-    pointerColor,
+    toolColor,
   }
 }
 
 export default (connection: Connection, data: JoinRoomData): void => {
   const { io, socket } = connection
-  const { roomID, pointerColor } = data
+  const { roomID, toolColor } = data
   const room = rooms[roomID]
 
-  room.users.push(createUser(socket.id, pointerColor))
+  room.users.push(createUser(socket.id, toolColor))
   usersMap[socket.id] = roomID
 
   socket.join(roomID)

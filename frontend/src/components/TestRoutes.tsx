@@ -45,32 +45,18 @@ const TestRoutes = (): ReactElement => {
         path="/test/NavBar"
         render={(): ReactElement => (
           <NavBar
-            pageNum={1}
-            maxPage={2}
             filename="test"
-            users={[]}
-            handleChangePage={(): void => {}}
             handleClose={(): void => {}}
+            socketChangePage={(pageNum: number): void => {
+              pageNum
+            }}
           />
         )}
       />
 
-      <Route
-        path="/test/ZoomBar"
-        render={(): ReactElement => <ZoomBar handleZoom={(): void => {}} />}
-      />
+      <Route path="/test/ZoomBar" render={(): ReactElement => <ZoomBar />} />
 
-      <Route
-        path="/test/ToolBar"
-        render={(): ReactElement => (
-          <ToolBar
-            showMouse={false}
-            pointerColor="#ffffff"
-            handleToolBarButton={(): void => {}}
-            handlePointerColor={(): void => {}}
-          />
-        )}
-      />
+      <Route path="/test/ToolBar" render={(): ReactElement => <ToolBar />} />
 
       <Route
         path="/test/Room"

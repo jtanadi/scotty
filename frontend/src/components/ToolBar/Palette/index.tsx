@@ -5,6 +5,8 @@ import React, {
   ReactElement,
   ChangeEvent,
 } from "react"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
 
 import {
   Container,
@@ -17,38 +19,49 @@ import {
   ColorInput,
   PaletteCover,
 } from "./styles"
+import { setToolColor } from "../../../store/actions"
 
 type PropTypes = {
   show: boolean
-  colors: string[]
-  currentColor: string
   handleShow(): void
-  handleChangeColor(color: string): void
 }
 
-const Palette: FC<PropTypes> = ({
+const createColors = (firstColor: string): string[] => [
+  firstColor,
+  "#F2994A",
+  "#F2C94C",
+  "#219653",
+  "#6FCF97",
+  "#2F80ED",
+  "#2D9CDB",
+]
+
+const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
   show,
-  colors,
-  currentColor,
   handleShow,
-  handleChangeColor,
+  toolColor,
+  setToolColor,
 }): ReactElement => {
+  const [colors, setColors] = useState([])
   const [presetColorUsed, setPresetColorUsed] = useState(true)
   useEffect(() => {
-    if (!colors.length) return
-
-    const usingPresetColor = !!colors.find(color => color === currentColor)
-    setPresetColorUsed(usingPresetColor)
-  }, [currentColor])
+    if (!toolColor) return
+    if (colors.length) {
+      const usingPresetColor = !!colors.find(color => color === toolColor)
+      setPresetColorUsed(usingPresetColor)
+    } else {
+      setColors(createColors(toolColor))
+    }
+  }, [toolColor])
 
   const handleInputChange = (ev: ChangeEvent<HTMLInputElement>): void => {
     // Basic validation: only accept up to 6 characters
-    // and only accept valid hex values (a-f, 0-9)
+    // valid hex values (a-f, 0-9)
     const hex = ev.target.value
     const hexRegex = /^[a-f0-9]+$/gi
     if (hex.length > 6 || (hex && !hexRegex.test(hex))) return
 
-    handleChangeColor(`#${hex}`)
+    setToolColor(`#${hex}`)
   }
 
   const renderPalette = (): ReactElement => {
@@ -60,8 +73,8 @@ const Palette: FC<PropTypes> = ({
               <Color
                 key={`color-${i}`}
                 color={color}
-                selected={color === currentColor}
-                onClick={(): void => handleChangeColor(color)}
+                selected={color === toolColor}
+                onClick={(): void => setToolColor(color)}
               />
             ))}
             <InputDiv>
@@ -69,7 +82,7 @@ const Palette: FC<PropTypes> = ({
                 <Hash>#</Hash>
               </HashDiv>
               <ColorInput
-                value={currentColor.replace(/^#/, "").toLowerCase()}
+                value={toolColor.replace(/^#/, "").toLowerCase()}
                 onChange={handleInputChange}
                 presetColorUsed={presetColorUsed}
               />
@@ -85,4 +98,21 @@ const Palette: FC<PropTypes> = ({
   return show ? renderPalette() : null
 }
 
-export default Palette
+type StateProps = {
+  toolColor: string
+}
+const mapStateToProps = ({ tools }): StateProps => ({
+  toolColor: tools.color,
+})
+
+type DispatchProps = {
+  setToolColor(hex: string): void
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  setToolColor(hex): void {
+    dispatch(setToolColor(hex))
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Palette)

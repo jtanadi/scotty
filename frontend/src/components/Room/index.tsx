@@ -1,9 +1,13 @@
-import React, { useState, ReactElement, useRef } from "react"
+import React, { ReactElement, useRef, useEffect } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
+import randomColor from "randomcolor"
 
 // Utils, etc.
-import { RoomData } from "../../../../backend/src/sockets/types"
+import { RoomData, User } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
+import { Tool } from "../../utils/tools"
 
 // Components
 import NavBar from "../NavBar"
@@ -12,46 +16,65 @@ import { LocationState } from "../Home"
 import LinkModal from "../LinkModal"
 import DocumentView from "../DocumentView"
 import ZoomBar from "../ZoomBar"
-import ToolBar, { TOOLS } from "../ToolBar"
+import ToolBar from "../ToolBar"
 
 import { Background, COLORS } from "../globalStyles"
-import { usePointer, usePageNum, useSocket, useZoom } from "./hooks"
+import { usePointer, useSocket } from "./hooks"
+import * as actions from "../../store/actions"
 
 interface PropTypes extends RouteComponentProps {
   id: string
   filename: string
 }
 
-const Room: React.FC<PropTypes> = ({
+const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   id,
   filename,
   location,
+  toolColor,
+  pdfUrl,
+  users,
+  goToPage,
+  setPages,
+  selectedTool,
+  setToolColor,
+  setUsers,
+  setPdfUrl,
 }): ReactElement => {
   const pageRef = useRef(null)
 
-  const [pages, setPages] = useState<string[]>([])
-  const { showMouse, handlePointerToggle, ownMouseX, ownMouseY } = usePointer(
+  useEffect(() => {
+    setToolColor(randomColor({ luminosity: "bright" }))
+  }, [])
+
+  const { showMouse, setShowMouse, ownMouseX, ownMouseY } = usePointer(
     id,
     pageRef
   )
-  const { pageNum, setPageNum, handleChangePage } = usePageNum(id, pages)
-  const { scale, handleZoom } = useZoom()
-  const {
-    pointerColor,
-    handlePointerColor,
-    userID,
-    users,
-    pdfUrl,
-    error,
-  } = useSocket(id, setPages, setPageNum)
 
-  const handleToolBarButton = (tool: TOOLS): void => {
-    switch (tool) {
-      case TOOLS.POINTER:
-        handlePointerToggle()
+  const { userID, error, socketChangePage } = useSocket(
+    id,
+    toolColor,
+    setPages,
+    goToPage,
+    setUsers,
+    setPdfUrl
+  )
+
+  useEffect(() => {
+    if (!selectedTool) {
+      if (showMouse) {
+        setShowMouse(false)
+      }
+      return
+    }
+
+    switch (selectedTool.name) {
+      case "pointer":
+        setShowMouse(true)
         break
     }
-  }
+  }, [selectedTool])
 
   const history = useHistory()
   const handleClose = (): void => {
@@ -84,7 +107,7 @@ const Room: React.FC<PropTypes> = ({
                 key={user.id}
                 x={mouseX}
                 y={mouseY}
-                color={user.pointerColor}
+                color={user.toolColor}
               />
             )
           }
@@ -95,7 +118,7 @@ const Room: React.FC<PropTypes> = ({
 
   const renderOwnPointer = (): ReactElement => {
     return showMouse ? (
-      <Pointer x={ownMouseX} y={ownMouseY} color={pointerColor} />
+      <Pointer x={ownMouseX} y={ownMouseY} color={toolColor} />
     ) : null
   }
 
@@ -113,27 +136,13 @@ const Room: React.FC<PropTypes> = ({
         {renderPointers()}
         {renderOwnPointer()}
         <NavBar
-          pageNum={pageNum}
-          maxPage={pages.length}
           filename={filename}
-          users={users}
-          handleChangePage={handleChangePage}
+          socketChangePage={socketChangePage}
           handleClose={handleClose}
         />
-        {pdfUrl ? (
-          <DocumentView
-            src={`${pdfUrl}/${pages[pageNum - 1]}`}
-            scale={scale}
-            pageRef={pageRef}
-          />
-        ) : null}
-        <ZoomBar handleZoom={handleZoom} />
-        <ToolBar
-          pointerColor={pointerColor}
-          handlePointerColor={handlePointerColor}
-          showMouse={showMouse}
-          handleToolBarButton={handleToolBarButton}
-        />
+        {pdfUrl ? <DocumentView pageRef={pageRef} /> : null}
+        <ZoomBar />
+        <ToolBar />
       </Background>
     )
   }
@@ -143,4 +152,45 @@ const Room: React.FC<PropTypes> = ({
   )
 }
 
-export default withRouter(Room) as any
+type StateProps = {
+  selectedTool: Tool
+  toolColor: string
+  pdfUrl: string
+  users: User[]
+}
+
+const mapStateToProps = ({ room, tools }): StateProps => ({
+  selectedTool: tools.tools[tools.selectedIdx],
+  toolColor: tools.color,
+  pdfUrl: room.pdfUrl,
+  users: room.users,
+})
+
+type DispatchProps = {
+  goToPage(pageNum: number): void
+  setPages(pages: string[]): void
+  setToolColor(hex: string): void
+  setUsers(users: User[]): void
+  setPdfUrl(url: string): void
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  goToPage(pageNum): void {
+    dispatch(actions.goToPage(pageNum))
+  },
+  setPages(pages): void {
+    dispatch(actions.setPages(pages))
+  },
+  setToolColor(hex): void {
+    dispatch(actions.setToolColor(hex))
+  },
+  setUsers(users): void {
+    dispatch(actions.setUsers(users))
+  },
+  setPdfUrl(url: string): void {
+    dispatch(actions.setPdfUrl(url))
+  },
+})
+
+const ConnectedRoom = connect(mapStateToProps, mapDispatchToProps)(Room)
+export default withRouter(ConnectedRoom) as any

@@ -1,5 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react"
-import randomColor from "randomcolor"
+import { useState, useEffect } from "react"
 
 import {
   JoinRoomData,
@@ -7,34 +6,29 @@ import {
   SyncPageData,
   User,
   UsersData,
-  PointerChangeData,
+  ToolColorChangeData,
+  ChangePageData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
 type UseSocketReturn = {
-  pointerColor: string
-  handlePointerColor(color: string): void
   userID: string
-  users: User[]
-  pdfUrl: string
   error: string
+  socketChangePage: (pageNum: number) => void
 }
 
 export default (
   roomID: string,
-  setPages: Dispatch<SetStateAction<string[]>>,
-  setPageNum: Dispatch<SetStateAction<number>>
+  toolColor: string,
+  setPages: (pages: string[]) => void,
+  goToPage: (pageNum: number) => void,
+  setUsers: (users: User[]) => void,
+  setPdfUrl: (url: string) => void
 ): UseSocketReturn => {
-  const [pointerColor, setPointerColor] = useState("")
   const [userID, setUserID] = useState("")
-  const [users, setUsers] = useState<User[]>([])
-  const [pdfUrl, setPdfUrl] = useState("")
   const [error, setError] = useState("")
   useEffect(() => {
-    const color = randomColor({ luminosity: "bright" })
-    setPointerColor(color)
-
-    const joinRoomData: JoinRoomData = { roomID, pointerColor: color }
+    const joinRoomData: JoinRoomData = { roomID, toolColor }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
@@ -44,7 +38,7 @@ export default (
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
-      setPageNum(data.pageNum)
+      goToPage(data.pageNum)
     })
 
     socket.on("update users", (data: UsersData): void => {
@@ -63,12 +57,17 @@ export default (
     }
   }, [])
 
-  const handlePointerColor = (color: string): void => {
-    setPointerColor(color)
+  useEffect(() => {
+    if (toolColor) {
+      const data: ToolColorChangeData = { roomID, toolColor }
+      socket.emit("change tool color", data)
+    }
+  }, [toolColor])
 
-    const pointerChangeData: PointerChangeData = { roomID, color }
-    socket.emit("change pointer color", pointerChangeData)
+  const socketChangePage = (pageNum: number): void => {
+    const data: ChangePageData = { roomID, pageNum }
+    socket.emit("client change page", data)
   }
 
-  return { pointerColor, handlePointerColor, userID, users, pdfUrl, error }
+  return { userID, error, socketChangePage }
 }

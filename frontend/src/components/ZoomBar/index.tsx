@@ -1,13 +1,13 @@
 import React, { FC, ReactElement } from "react"
+import { Dispatch } from "redux"
+import { connect } from "react-redux"
 
 import { ToolButton } from "../globalStyles"
 import { ButtonsContainer } from "./styles"
 
-type PropTypes = {
-  handleZoom(offset: number): void
-}
+import { zoomIn, zoomOut } from "../../store/actions"
 
-const ZoomBar: FC<PropTypes> = ({ handleZoom }): ReactElement => {
+const ZoomBar: FC<{} & DispatchProps> = ({ zoomIn, zoomOut }): ReactElement => {
   return (
     <ButtonsContainer>
       <ToolButton
@@ -16,7 +16,7 @@ const ZoomBar: FC<PropTypes> = ({ handleZoom }): ReactElement => {
         image="/static/icons/zoomIn.svg"
         imageHover="/static/icons/zoomInLight.svg"
         imageActive="/static/icons/zoomInLight.svg"
-        onClick={(): void => handleZoom(1)}
+        onClick={(): void => zoomIn()}
       />
       <ToolButton
         width="2.25rem"
@@ -24,10 +24,24 @@ const ZoomBar: FC<PropTypes> = ({ handleZoom }): ReactElement => {
         image="/static/icons/zoomOut.svg"
         imageHover="/static/icons/zoomOutLight.svg"
         imageActive="/static/icons/zoomOutLight.svg"
-        onClick={(): void => handleZoom(-1)}
+        onClick={(): void => zoomOut()}
       />
     </ButtonsContainer>
   )
 }
 
-export default ZoomBar
+type DispatchProps = {
+  zoomIn(offset?: number): void
+  zoomOut(offset?: number): void
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  zoomIn(offset): void {
+    dispatch(zoomIn(offset))
+  },
+  zoomOut(offset): void {
+    dispatch(zoomOut(offset))
+  },
+})
+
+export default connect(null, mapDispatchToProps)(ZoomBar)
