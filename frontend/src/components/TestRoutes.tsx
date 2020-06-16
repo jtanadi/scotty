@@ -45,10 +45,11 @@ const TestRoutes = (): ReactElement => {
         path="/test/NavBar"
         render={(): ReactElement => (
           <NavBar
-            roomID="1234"
             filename="test"
-            users={[]}
             handleClose={(): void => {}}
+            socketChangePage={(pageNum: number): void => {
+              pageNum
+            }}
           />
         )}
       />

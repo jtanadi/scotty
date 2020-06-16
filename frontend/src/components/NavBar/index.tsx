@@ -2,9 +2,7 @@ import React, { useState, useEffect, ReactElement, FormEvent } from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 
-import socket from "../../socket"
 import { User } from "../../../../backend/src/sockets/types"
-
 import { ToolButton } from "../globalStyles"
 import {
   NavBarContainer,
@@ -21,13 +19,11 @@ import { goToPage } from "../../store/actions"
 
 type PropTypes = {
   filename: string
-  roomID: string
-  users: User[]
   handleClose(): void
+  socketChangePage: (pageNum: number) => void
 }
 
 const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
-  roomID,
   currentPage,
   maxPage,
   filename,
@@ -40,7 +36,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
   const handleInputSubmit = (ev: FormEvent): void => {
     ev.preventDefault()
     if (!displayPageNum) return
-    goToPage(roomID, parseInt(displayPageNum, 10))
+    goToPage(parseInt(displayPageNum, 10))
   }
 
   const handleInputChange = (ev: FormEvent<HTMLInputElement>): void => {
@@ -56,24 +52,24 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
   }
 
   const goFirstPage = (): void => {
-    goToPage(roomID, 1)
+    goToPage(1)
   }
 
   const goLastPage = (): void => {
-    goToPage(roomID, maxPage)
+    goToPage(maxPage)
   }
 
   const goPrevPage = (): void => {
     const newPage = currentPage - 1
-    if (currentPage > 0) {
-      goToPage(roomID, newPage)
+    if (newPage > 0) {
+      goToPage(newPage)
     }
   }
 
   const goNextPage = (): void => {
     const newPage = currentPage + 1
     if (newPage <= maxPage) {
-      goToPage(roomID, newPage)
+      goToPage(newPage)
     }
   }
 
@@ -154,21 +150,26 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
 type StateProps = {
   maxPage: number
   currentPage: number
+  users: User[]
 }
 
 type DispatchProps = {
-  goToPage(roomID: string, pageNum: number): void
+  goToPage(pageNum: number): void
 }
 
-const mapStateToProps = ({ pages }): StateProps => ({
+const mapStateToProps = ({ pages, room }): StateProps => ({
   maxPage: pages.pages.length,
   currentPage: pages.currentPage,
+  users: room.users,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  goToPage(roomID, pageNum): void {
-    socket.emit("client change page", { roomID, pageNum })
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  { socketChangePage }
+): DispatchProps => ({
+  goToPage(pageNum): void {
     dispatch(goToPage(pageNum))
+    socketChangePage(pageNum)
   },
 })
 
