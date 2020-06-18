@@ -32,14 +32,17 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   toolColor,
   pdfUrl,
   users,
+  userID,
   goToPage,
   setPages,
   selectedTool,
   setToolColor,
   setUsers,
+  setUserID,
   setPdfUrl,
   clearStore,
   setFilename,
+  setPresenter,
 }): ReactElement => {
   const pageRef = useRef(null)
 
@@ -52,14 +55,16 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     pageRef
   )
 
-  const { userID, error, socketChangePage } = useSocket(
+  const { error, socketChangePage, socketUpdatePresenter } = useSocket(
     id,
     toolColor,
     setPages,
     goToPage,
     setUsers,
+    setUserID,
     setPdfUrl,
-    setFilename
+    setFilename,
+    setPresenter
   )
 
   useEffect(() => {
@@ -140,7 +145,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
         <NavBar socketChangePage={socketChangePage} handleClose={handleClose} />
         {pdfUrl ? <DocumentView pageRef={pageRef} /> : null}
         <ZoomBar />
-        <ToolBar />
+        <ToolBar socketUpdatePresenter={socketUpdatePresenter} />
       </Background>
     )
   }
@@ -155,13 +160,18 @@ type StateProps = {
   toolColor: string
   pdfUrl: string
   users: User[]
+  userID: string
 }
 
-const mapStateToProps = ({ room, tools }): StateProps => ({
+const mapStateToProps = ({
+  room: { pdfUrl, users, userID },
+  tools,
+}): StateProps => ({
   selectedTool: tools.tools[tools.selectedIdx],
   toolColor: tools.color,
-  pdfUrl: room.pdfUrl,
-  users: room.users,
+  pdfUrl,
+  users,
+  userID,
 })
 
 type DispatchProps = {
@@ -169,9 +179,11 @@ type DispatchProps = {
   setPages(pages: string[]): void
   setToolColor(hex: string): void
   setUsers(users: User[]): void
+  setUserID(id: string): void
   setPdfUrl(url: string): void
   clearStore(): void
   setFilename(filename: string): void
+  setPresenter(presenterID: string): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
@@ -187,6 +199,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   setUsers(users): void {
     dispatch(actions.setUsers(users))
   },
+  setUserID(id): void {
+    dispatch(actions.setUserID(id))
+  },
   setPdfUrl(url: string): void {
     dispatch(actions.setPdfUrl(url))
   },
@@ -196,6 +211,10 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
   setFilename(filename): void {
     dispatch(actions.setFilename(filename))
+  },
+
+  setPresenter(presenterID): void {
+    dispatch(actions.setPresenter(presenterID))
   },
 })
 
