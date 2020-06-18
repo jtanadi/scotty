@@ -14,6 +14,7 @@ export type User = {
 
 export type Room = {
   users: User[]
+  filename: string
   s3Dir: string
   pdfUrl: string
   pageNum: number
@@ -69,6 +70,7 @@ export type SyncDocData = {
   userID: string
   pdfUrl: string
   pages: string[]
+  filename: string
 }
 
 export type SyncPageData = {
