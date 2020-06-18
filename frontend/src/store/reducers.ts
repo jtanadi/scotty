@@ -36,6 +36,7 @@ const zoomReducer = (state = 1, action: types.ZoomAction): number => {
 const initialPageState: types.PageState = {
   currentPage: 1,
   pages: [],
+  cached: {},
 }
 
 const pagesReducer = (
@@ -49,6 +50,8 @@ const pagesReducer = (
       return { ...state, currentPage: action.pageNum }
     case constants.CLEAR_PAGES:
       return initialPageState
+    case constants.CACHE_PAGE:
+      return { ...state, cached: { ...state.cached, [action.page]: true } }
     default:
       return state
   }
