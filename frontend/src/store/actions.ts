@@ -79,6 +79,11 @@ export const clearPages = (): PagesAction => ({
   type: constants.CLEAR_PAGES,
 })
 
+export const cachePage = (page: string): PagesAction => ({
+  type: constants.CACHE_PAGE,
+  page,
+})
+
 /////////////////////
 //      Tools      //
 /////////////////////

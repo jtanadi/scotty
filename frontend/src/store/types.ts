@@ -43,7 +43,16 @@ type ClearPagesAction = {
   type: typeof constants.CLEAR_PAGES
 }
 
-export type PagesAction = GoToPageAction | SetPagesAction | ClearPagesAction
+type CachePageAction = {
+  type: typeof constants.CACHE_PAGE
+  page: string
+}
+
+export type PagesAction =
+  | GoToPageAction
+  | SetPagesAction
+  | ClearPagesAction
+  | CachePageAction
 
 type SelectToolAction = {
   type: typeof constants.SELECT_TOOL
@@ -66,9 +75,14 @@ export type RoomState = {
   pdfUrl: string
 }
 
+export type PageCache = {
+  [pageFile: string]: boolean
+}
+
 export type PageState = {
   currentPage: number
   pages: string[]
+  cached: PageCache
 }
 
 export type ToolState = {
