@@ -30,6 +30,7 @@ router.post("/", (req: Request, res: Response) => {
       pdfUrl: `${s3Url}/${s3Dir}`,
       pageNum: 1,
       pages: files,
+      presenterID: "",
     }
 
     rooms[roomID] = newRoom
