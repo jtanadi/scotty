@@ -6,8 +6,10 @@ import tools from "../utils/tools"
 
 const initialRoomState: types.RoomState = {
   users: [],
+  userID: "",
   pdfUrl: "",
   filename: "",
+  presenterID: "",
 }
 const roomReducer = (
   state = initialRoomState,
@@ -16,12 +18,16 @@ const roomReducer = (
   switch (action.type) {
     case constants.SET_USERS:
       return { ...state, users: action.users }
+    case constants.SET_USER_ID:
+      return { ...state, userID: action.id }
     case constants.SET_PDF_URL:
       return { ...state, pdfUrl: action.url }
     case constants.CLEAR_ROOM:
       return initialRoomState
     case constants.SET_FILENAME:
       return { ...state, filename: action.filename }
+    case constants.SET_PRESENTER:
+      return { ...state, presenterID: action.presenterID }
     default:
       return state
   }

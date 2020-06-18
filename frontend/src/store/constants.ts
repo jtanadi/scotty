@@ -3,6 +3,8 @@ export const SET_USERS = "SET_USERS"
 export const SET_PDF_URL = "SET_PDF_URL"
 export const CLEAR_ROOM = "CLEAR_ROOM"
 export const SET_FILENAME = "SET_FILENAME"
+export const SET_PRESENTER = "SET_PRESENTER"
+export const SET_USER_ID = "SET_USER_ID"
 
 // Zoom
 export const SET_ZOOM_LEVEL = "SET_ZOOM_LEVEL"

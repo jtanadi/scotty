@@ -12,6 +12,11 @@ export const setUsers = (users: User[]): RoomAction => ({
   users,
 })
 
+export const setUserID = (id: string): RoomAction => ({
+  type: constants.SET_USER_ID,
+  id,
+})
+
 export const setPdfUrl = (url: string): RoomAction => ({
   type: constants.SET_PDF_URL,
   url,
@@ -24,6 +29,11 @@ export const clearRoom = (): RoomAction => ({
 export const setFilename = (filename: string): RoomAction => ({
   type: constants.SET_FILENAME,
   filename,
+})
+
+export const setPresenter = (presenterID: string): RoomAction => ({
+  type: constants.SET_PRESENTER,
+  presenterID,
 })
 
 /////////////////////
