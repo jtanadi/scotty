@@ -19,6 +19,7 @@ export type Room = {
   pdfUrl: string
   pageNum: number
   pages: string[]
+  presenterID: string
 }
 
 // Maps roomID to Room
@@ -71,6 +72,7 @@ export type SyncDocData = {
   pdfUrl: string
   pages: string[]
   filename: string
+  presenterID: string
 }
 
 export type SyncPageData = {
@@ -79,4 +81,8 @@ export type SyncPageData = {
 
 export type UsersData = {
   users: User[]
+}
+
+export type PresenterData = {
+  presenterID: string
 }
