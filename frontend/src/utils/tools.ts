@@ -12,6 +12,6 @@ const createTool = (name: string): Tool => ({
 })
 
 /* const tools: Tool[] = ["pointer", "draw", "erase"].map(tool => createTool(tool)) */
-const tools: Tool[] = ["pointer"].map(tool => createTool(tool))
+const tools: Tool[] = ["pointer", "presenter"].map(tool => createTool(tool))
 
 export default tools
