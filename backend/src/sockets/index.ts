@@ -4,12 +4,14 @@ import { Server as HTTPSserver } from "https"
 import socket, { Server as SocketServer } from "socket.io"
 
 import checkRoom from "./middlewares/checkRoom"
+import { Connection } from "./types"
 
 import onChangePage from "./onChangePage"
 import onDisconnect from "./onDisconnect"
 import onJoinRoom from "./onJoinRoom"
 import onMouseMove from "./onMouseMove"
 import onToolColorChange from "./onToolColorChange"
+import onUpdatePresenter from "./onUpdatePresenter"
 
 export let io: SocketServer
 
@@ -17,30 +19,39 @@ export default (server: HTTPserver | HTTPSserver): void => {
   io = socket(server, { cookie: false })
 
   io.on("connection", socket => {
-    socket.use((packet, next) => checkRoom({ io, socket }, packet, next))
+    const connection: Connection = {
+      io,
+      socket,
+    }
+
+    socket.use((packet, next) => checkRoom(connection, packet, next))
 
     socket.on("join room", data => {
-      onJoinRoom({ io, socket }, data)
+      onJoinRoom(connection, data)
     })
 
     socket.on("client change page", data => {
-      onChangePage({ io, socket }, data)
+      onChangePage(connection, data)
     })
 
     socket.on("leave room", () => {
-      onDisconnect({ io, socket })
+      onDisconnect(connection)
     })
 
     socket.on("disconnect", () => {
-      onDisconnect({ io, socket })
+      onDisconnect(connection)
     })
 
     socket.on("mousemove", data => {
-      onMouseMove({ io, socket }, data)
+      onMouseMove(connection, data)
     })
 
     socket.on("change tool color", data => {
-      onToolColorChange({ io, socket }, data)
+      onToolColorChange(connection, data)
+    })
+
+    socket.on("client update presenter", data => {
+      onUpdatePresenter(connection, data)
     })
   })
 }
