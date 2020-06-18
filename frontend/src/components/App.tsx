@@ -11,6 +11,7 @@ const App: React.FC<{}> = (): ReactElement => {
     <Router>
       <Route exact path="/" component={Home} />
       <Route
+        exact
         path="/room=:id"
         render={({ match }): ReactElement => <Room id={match.params.id} />}
       />
