@@ -23,7 +23,8 @@ export default (
   setPages: (pages: string[]) => void,
   goToPage: (pageNum: number) => void,
   setUsers: (users: User[]) => void,
-  setPdfUrl: (url: string) => void
+  setPdfUrl: (url: string) => void,
+  setFilename: (filename: string) => void
 ): UseSocketReturn => {
   const [userID, setUserID] = useState("")
   const [error, setError] = useState("")
@@ -35,6 +36,7 @@ export default (
       setUserID(data.userID)
       setPdfUrl(data.pdfUrl)
       setPages(data.pages)
+      setFilename(data.filename)
     })
 
     socket.on("sync page", (data: SyncPageData): void => {

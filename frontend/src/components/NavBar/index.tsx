@@ -18,7 +18,6 @@ import {
 import { goToPage } from "../../store/actions"
 
 type PropTypes = {
-  filename: string
   handleClose(): void
   socketChangePage: (pageNum: number) => void
 }
@@ -151,6 +150,7 @@ type StateProps = {
   maxPage: number
   currentPage: number
   users: User[]
+  filename: string
 }
 
 type DispatchProps = {
@@ -161,6 +161,7 @@ const mapStateToProps = ({ pages, room }): StateProps => ({
   maxPage: pages.pages.length,
   currentPage: pages.currentPage,
   users: room.users,
+  filename: room.filename,
 })
 
 const mapDispatchToProps = (
