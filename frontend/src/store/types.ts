@@ -20,7 +20,16 @@ type ClearRoomAction = {
   type: typeof constants.CLEAR_ROOM
 }
 
-export type RoomAction = SetUsersAction | SetPdfUrlAction | ClearRoomAction
+type SetFilenameAction = {
+  type: typeof constants.SET_FILENAME
+  filename: string
+}
+
+export type RoomAction =
+  | SetUsersAction
+  | SetPdfUrlAction
+  | ClearRoomAction
+  | SetFilenameAction
 
 type SetZoomAction = {
   type: typeof constants.SET_ZOOM_LEVEL | string
@@ -73,6 +82,7 @@ export type ToolAction = SelectToolAction | SetColorAction
 export type RoomState = {
   users: User[]
   pdfUrl: string
+  filename: string
 }
 
 export type PageCache = {
