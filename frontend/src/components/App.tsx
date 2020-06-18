@@ -11,10 +11,9 @@ const App: React.FC<{}> = (): ReactElement => {
     <Router>
       <Route exact path="/" component={Home} />
       <Route
-        path="/room=:id/filename=:filename"
-        render={({ match }): ReactElement => (
-          <Room id={match.params.id} filename={match.params.filename} />
-        )}
+        exact
+        path="/room=:id"
+        render={({ match }): ReactElement => <Room id={match.params.id} />}
       />
       {window.location.hostname === "localhost" ? <TestRoutes /> : null}
     </Router>

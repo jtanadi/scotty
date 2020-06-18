@@ -24,12 +24,10 @@ import * as actions from "../../store/actions"
 
 interface PropTypes extends RouteComponentProps {
   id: string
-  filename: string
 }
 
 const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   id,
-  filename,
   location,
   toolColor,
   pdfUrl,
@@ -41,6 +39,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   setUsers,
   setPdfUrl,
   clearStore,
+  setFilename,
 }): ReactElement => {
   const pageRef = useRef(null)
 
@@ -59,7 +58,8 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     setPages,
     goToPage,
     setUsers,
-    setPdfUrl
+    setPdfUrl,
+    setFilename
   )
 
   useEffect(() => {
@@ -137,11 +137,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
         {renderHostModal()}
         {renderPointers()}
         {renderOwnPointer()}
-        <NavBar
-          filename={filename}
-          socketChangePage={socketChangePage}
-          handleClose={handleClose}
-        />
+        <NavBar socketChangePage={socketChangePage} handleClose={handleClose} />
         {pdfUrl ? <DocumentView pageRef={pageRef} /> : null}
         <ZoomBar />
         <ToolBar />
@@ -175,6 +171,7 @@ type DispatchProps = {
   setUsers(users: User[]): void
   setPdfUrl(url: string): void
   clearStore(): void
+  setFilename(filename: string): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
@@ -196,6 +193,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   clearStore(): void {
     dispatch(actions.clearRoom())
     dispatch(actions.clearPages())
+  },
+  setFilename(filename): void {
+    dispatch(actions.setFilename(filename))
   },
 })
 

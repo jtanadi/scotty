@@ -45,7 +45,6 @@ const TestRoutes = (): ReactElement => {
         path="/test/NavBar"
         render={(): ReactElement => (
           <NavBar
-            filename="test"
             handleClose={(): void => {}}
             socketChangePage={(pageNum: number): void => {
               pageNum

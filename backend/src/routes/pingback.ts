@@ -12,7 +12,7 @@ router.post("/", (req: Request, res: Response) => {
   res.sendStatus(204)
 
   const { status, message, forwardData } = req.body
-  const { hostID, roomID } = JSON.parse(forwardData)
+  const { hostID, roomID, filename } = JSON.parse(forwardData)
 
   console.log(message)
 
@@ -25,6 +25,7 @@ router.post("/", (req: Request, res: Response) => {
 
     const newRoom: Room = {
       users: [],
+      filename,
       s3Dir,
       pdfUrl: `${s3Url}/${s3Dir}`,
       pageNum: 1,

@@ -21,6 +21,11 @@ export const clearRoom = (): RoomAction => ({
   type: constants.CLEAR_ROOM,
 })
 
+export const setFilename = (filename: string): RoomAction => ({
+  type: constants.SET_FILENAME,
+  filename,
+})
+
 /////////////////////
 //      Zooms      //
 /////////////////////

@@ -23,7 +23,6 @@ import { Form, ResetText } from "./styles"
 
 export type LocationState = {
   host: boolean
-  filename: string
 }
 
 const Home: React.FC<{}> = (): ReactElement => {
@@ -66,6 +65,7 @@ const Home: React.FC<{}> = (): ReactElement => {
             "Content-Type": type,
             "x-Pingback": pingbackAddress,
             "x-Forward-Data": JSON.stringify({
+              filename: pdfFile.name,
               hostID: socket.id,
               roomID: uuidv4,
             }),
@@ -155,7 +155,7 @@ const Home: React.FC<{}> = (): ReactElement => {
     return (
       <Redirect
         to={{
-          pathname: `/room=${roomID}/filename=${pdfFile.name}`,
+          pathname: `/room=${roomID}`,
           state: { host: true },
         }}
       />
