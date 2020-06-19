@@ -53,13 +53,20 @@ type NoOpZoomAction = {
 }
 
 type SetScrollAction = {
-  type:
-    | typeof constants.SET_SCROLL_LEFT_RATIO
-    | typeof constants.SET_SCROLL_TOP_RATIO
-  ratio: number
+  type: typeof constants.SET_SCROLL_RATIOS
+  left: number
+  top: number
 }
 
-export type ZoomAction = SetZoomAction | NoOpZoomAction | SetScrollAction
+type ClearZoomAction = {
+  type: typeof constants.CLEAR_ZOOM
+}
+
+export type ZoomAction =
+  | SetZoomAction
+  | NoOpZoomAction
+  | SetScrollAction
+  | ClearZoomAction
 
 type GoToPageAction = {
   type: typeof constants.GO_TO_PAGE
@@ -96,7 +103,11 @@ type SetColorAction = {
   color: string
 }
 
-export type ToolAction = SelectToolAction | SetColorAction
+type ClearToolsAction = {
+  type: typeof constants.CLEAR_TOOLS
+}
+
+export type ToolAction = SelectToolAction | SetColorAction | ClearToolsAction
 
 /////////////////
 // STATE TYPES //

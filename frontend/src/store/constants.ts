@@ -9,8 +9,8 @@ export const SET_USER_ID = "SET_USER_ID"
 // Zoom & Pan
 export const SET_ZOOM_LEVEL = "SET_ZOOM_LEVEL"
 export const NO_OP_ZOOM = "NO_OP_ZOOM"
-export const SET_SCROLL_LEFT_RATIO = "SET_SCROLL_LEFT_RATIO"
-export const SET_SCROLL_TOP_RATIO = "SET_SCROLL_TOP_RATIO"
+export const SET_SCROLL_RATIOS = "SET_SCROLL_RATIOS"
+export const CLEAR_ZOOM = "CLEAR_ZOOM"
 
 // Page navigation
 export const GO_TO_PAGE = "GO_TO_PAGE"
@@ -21,3 +21,4 @@ export const CACHE_PAGE = "CACHE_PAGE"
 // Tools
 export const SELECT_TOOL = "SELECT_TOOL"
 export const SET_TOOL_COLOR = "SET_TOOL_COLOR"
+export const CLEAR_TOOLS = "CLEAR_TOOLS"

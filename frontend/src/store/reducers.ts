@@ -46,18 +46,16 @@ const zoomReducer = (
   switch (action.type) {
     case constants.SET_ZOOM_LEVEL:
       return { ...state, zoomLevel: action.zoomLevel }
-    case constants.SET_SCROLL_LEFT_RATIO:
+    case constants.SET_SCROLL_RATIOS:
       return {
         ...state,
-        scrollLeftRatio: action.ratio,
-      }
-    case constants.SET_SCROLL_TOP_RATIO:
-      return {
-        ...state,
-        scrollTopRatio: action.ratio,
+        scrollLeftRatio: action.left,
+        scrollTopRatio: action.top,
       }
     case constants.NO_OP_ZOOM:
       return state
+    case constants.CLEAR_ZOOM:
+      return initialZoomState
     default:
       return state
   }
@@ -102,6 +100,8 @@ const toolReducer = (
       return { ...state, selectedIdx: action.idx }
     case constants.SET_TOOL_COLOR:
       return { ...state, color: action.color }
+    case constants.CLEAR_TOOLS:
+      return initialToolState
     default:
       return state
   }

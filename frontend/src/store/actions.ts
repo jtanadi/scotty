@@ -70,19 +70,14 @@ export const zoomOut = (offset = 1): ZoomAction => {
   return { type: constants.NO_OP_ZOOM }
 }
 
-export const zoomReset = (): ZoomAction => ({
-  type: constants.SET_ZOOM_LEVEL,
-  zoomLevel: ZOOM_LIMIT.MIN,
+export const setScrollRatios = (left: number, top: number): ZoomAction => ({
+  type: constants.SET_SCROLL_RATIOS,
+  left,
+  top,
 })
 
-export const setScrollLeftRatio = (ratio: number): ZoomAction => ({
-  type: constants.SET_SCROLL_LEFT_RATIO,
-  ratio,
-})
-
-export const setScrollTopRatio = (ratio: number): ZoomAction => ({
-  type: constants.SET_SCROLL_TOP_RATIO,
-  ratio,
+export const clearZoom = (): ZoomAction => ({
+  type: constants.CLEAR_ZOOM,
 })
 
 /////////////////////
@@ -120,4 +115,8 @@ export const selectTool = (idx: number): ToolAction => ({
 export const setToolColor = (hex: string): ToolAction => ({
   type: constants.SET_TOOL_COLOR,
   color: hex,
+})
+
+export const clearTools = (): ToolAction => ({
+  type: constants.CLEAR_TOOLS,
 })
