@@ -8,6 +8,7 @@ export const DocumentContainer = styled.div`
 `
 
 type PageContainerProp = {
+  disablePan: boolean
   scale: number
   mouseDown: boolean
 }
@@ -16,7 +17,7 @@ export const PageContainer = styled.div.attrs((props: PageContainerProp) => {
   const transform = `scale(${props.scale})`
 
   let cursor = "default"
-  if (props.scale > 1) {
+  if (props.scale > 1 && !props.disablePan) {
     cursor = props.mouseDown ? "grabbing" : "grab"
   }
 
