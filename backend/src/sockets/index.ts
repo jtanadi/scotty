@@ -12,6 +12,7 @@ import onJoinRoom from "./onJoinRoom"
 import onMouseMove from "./onMouseMove"
 import onToolColorChange from "./onToolColorChange"
 import onUpdatePresenter from "./onUpdatePresenter"
+import onUpdateScroll from "./onUpdateScroll"
 
 export let io: SocketServer
 
@@ -52,6 +53,10 @@ export default (server: HTTPserver | HTTPSserver): void => {
 
     socket.on("client update presenter", data => {
       onUpdatePresenter(connection, data)
+    })
+
+    socket.on("client update scroll", data => {
+      onUpdateScroll(connection, data)
     })
   })
 }
