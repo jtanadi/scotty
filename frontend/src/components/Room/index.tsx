@@ -160,7 +160,11 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
           />
         ) : null}
         <ZoomBar socketUpdateZoom={socketUpdateZoom} />
-        <ToolBar socketUpdatePresenter={socketUpdatePresenter} />
+        <ToolBar
+          socketUpdatePresenter={socketUpdatePresenter}
+          socketUpdateZoom={socketUpdateZoom}
+          socketUpdateScroll={socketUpdateScroll}
+        />
       </Background>
     )
   }

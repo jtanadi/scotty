@@ -63,7 +63,11 @@ const TestRoutes = (): ReactElement => {
       <Route
         path="/test/ToolBar"
         render={(): ReactElement => (
-          <ToolBar socketUpdatePresenter={(): void => {}} />
+          <ToolBar
+            socketUpdatePresenter={(): void => {}}
+            socketUpdateZoom={(): void => {}}
+            socketUpdateScroll={(): void => {}}
+          />
         )}
       />
 
