@@ -9,6 +9,7 @@ import { PageCache } from "../../store/types"
 
 type PropTypes = {
   pageRef: RefObject<HTMLImageElement>
+  socketUpdateScroll(left: number, top: number): void
 }
 
 const View: FC<PropTypes & StateProps & DispatchProps> = ({
@@ -112,15 +113,21 @@ const mapStateToProps = ({
 
 type DispatchProps = {
   cachePage(page: string): void
-  setScrollRatios(left: number, top: number): void
+  setScrollRatios(left: number, top: number, broadcast: boolean): void
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  { socketUpdateScroll }
+): DispatchProps => ({
   cachePage(page): void {
     dispatch(cachePage(page))
   },
-  setScrollRatios(left, top): void {
+  setScrollRatios(left, top, broadcast): void {
     dispatch(setScrollRatios(left, top))
+    if (broadcast) {
+      socketUpdateScroll(left, top)
+    }
   },
 })
 

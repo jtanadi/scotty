@@ -15,7 +15,7 @@ export default (
   isPresenter: boolean,
   scrollLeftRatio: number,
   scrollTopRatio: number,
-  setScrollRatios: (left: number, top: number) => void
+  setScrollRatios: (left: number, top: number, broadcast: boolean) => void
 ): HandledMouseEvents => {
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
@@ -72,13 +72,15 @@ export default (
       const left = scrollLeft / scrollLeftMax
       const top = scrollTop / scrollTopMax
 
-      setScrollRatios(left, top)
+      const broadcast = presenterMode && isPresenter
+      setScrollRatios(left, top, broadcast)
     }
   }
 
   useEffect(() => {
     if (scale === 1) {
-      setScrollRatios(0.5, 0.5)
+      const broadcast = presenterMode && isPresenter
+      setScrollRatios(0.5, 0.5, broadcast)
     }
 
     const {
@@ -92,7 +94,7 @@ export default (
 
     docRef.current.scrollLeft = scrollLeftMax * scrollLeftRatio
     docRef.current.scrollTop = scrollTopMax * scrollTopRatio
-  }, [scale])
+  }, [scale, scrollLeftRatio, scrollTopRatio])
 
   return {
     mouseDown,
