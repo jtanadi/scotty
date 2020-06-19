@@ -10,6 +10,7 @@ import {
   ToolColorChangeData,
   ChangePageData,
   PresenterData,
+  ChangeScrollData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
@@ -17,6 +18,7 @@ type UseSocketReturn = {
   error: string
   socketChangePage: (pageNum: number) => void
   socketUpdatePresenter: () => void
+  socketUpdateScroll: (left: number, top: number) => void
 }
 
 export default (
@@ -84,5 +86,10 @@ export default (
     socket.emit("client update presenter", data)
   }
 
-  return { error, socketChangePage, socketUpdatePresenter }
+  const socketUpdateScroll = (scrollLeft: number, scrollTop: number): void => {
+    const data: ChangeScrollData = { roomID, scrollLeft, scrollTop }
+    socket.emit("client update scroll", data)
+  }
+
+  return { error, socketChangePage, socketUpdatePresenter, socketUpdateScroll }
 }
