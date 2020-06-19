@@ -37,5 +37,11 @@ export default (connection: Connection): void => {
   usersMap[socket.id] = null
 
   const usersData: UsersData = { users: room.users }
+
+  // If presenter leaves the room, give back presenter control
+  if (socket.id === room.presenterID) {
+    usersData.presenterID = ""
+  }
+
   io.to(roomID).emit("update users", usersData)
 }
