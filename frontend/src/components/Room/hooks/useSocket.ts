@@ -62,6 +62,10 @@ export default (
 
     socket.on("update users", (data: UsersData): void => {
       setUsers(data.users)
+
+      if (typeof data.presenterID !== "undefined") {
+        setPresenter(data.presenterID)
+      }
     })
 
     socket.on("update presenter", (data: PresenterData) => {
