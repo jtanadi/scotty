@@ -4,7 +4,11 @@ import { Dispatch } from "redux"
 
 import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
-import { cachePage } from "../../store/actions"
+import {
+  cachePage,
+  setScrollTopRatio,
+  setScrollLeftRatio,
+} from "../../store/actions"
 import { PageCache } from "../../store/types"
 
 type PropTypes = {
@@ -22,6 +26,10 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
   cachePage,
   presenterMode,
   isPresenter,
+  scrollLeftRatio,
+  scrollTopRatio,
+  setScrollTopRatio,
+  setScrollLeftRatio,
 }): ReactElement => {
   const docRef = useRef(null)
   const {
@@ -30,7 +38,16 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     handleMouseDown,
     handleMouseReset,
     handlePan,
-  } = usePanhandler(docRef, zoom, presenterMode, isPresenter)
+  } = usePanhandler(
+    docRef,
+    zoom,
+    presenterMode,
+    isPresenter,
+    scrollLeftRatio,
+    scrollTopRatio,
+    setScrollLeftRatio,
+    setScrollTopRatio
+  )
 
   useEffect(() => {
     // Load next 2 pages to be loaded if not cached yet
@@ -71,6 +88,8 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
 
 type StateProps = {
   zoom: number
+  scrollLeftRatio: number
+  scrollTopRatio: number
   pageUrl: string
   nextPageFile: string
   nextNextPageFile: string
@@ -81,11 +100,13 @@ type StateProps = {
 }
 
 const mapStateToProps = ({
-  zoom: { zoomLevel },
+  zoom: { zoomLevel, scrollLeftRatio, scrollTopRatio },
   pages: { pages, currentPage, cached },
   room: { pdfUrl, presenterID, userID },
 }): StateProps => ({
   zoom: zoomLevel,
+  scrollLeftRatio,
+  scrollTopRatio,
   pdfUrl,
   pageUrl: `${pdfUrl}/${pages[currentPage - 1]}`,
   nextPageFile: pages[currentPage + currentPage - 1],
@@ -97,11 +118,19 @@ const mapStateToProps = ({
 
 type DispatchProps = {
   cachePage(page: string): void
+  setScrollLeftRatio(ratio: number): void
+  setScrollTopRatio(ratio: number): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   cachePage(page): void {
     dispatch(cachePage(page))
+  },
+  setScrollLeftRatio(ratio): void {
+    dispatch(setScrollLeftRatio(ratio))
+  },
+  setScrollTopRatio(ratio): void {
+    dispatch(setScrollTopRatio(ratio))
   },
 })
 

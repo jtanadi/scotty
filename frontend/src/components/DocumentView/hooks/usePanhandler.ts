@@ -10,7 +10,13 @@ type HandledMouseEvents = {
 
 export default (
   docRef: RefObject<HTMLDivElement>,
-  scale: number
+  scale: number,
+  presenterMode: boolean,
+  isPresenter: boolean,
+  scrollLeftRatio: number,
+  scrollTopRatio: number,
+  setScrollLeftRatio: (ratio: number) => void,
+  setScrollTopRatio: (ratio: number) => void
 ): HandledMouseEvents => {
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
@@ -20,7 +26,7 @@ export default (
   const [startX, setStartX] = useState(0)
   const [startY, setStartY] = useState(0)
   const handleMouseDown = (ev: MouseEvent): void => {
-    if (scale <= 1) return
+    if (scale <= 1 || (presenterMode && !isPresenter)) return
     setMouseDown(true)
     setStartX(ev.clientX)
     setStartY(ev.clientY)
@@ -35,8 +41,6 @@ export default (
   }
 
   // default is center (0.5 of width and height)
-  const [scrollLeftRatio, setScrollLeftRatio] = useState(0.5)
-  const [scrollTopRatio, setScrollTopRatio] = useState(0.5)
   const handlePan = (ev: MouseEvent): void => {
     if (!mouseDown || scale <= 1) return
 
