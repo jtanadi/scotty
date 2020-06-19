@@ -44,11 +44,21 @@ export type RoomAction =
   | SetPresenterAction
 
 type SetZoomAction = {
-  type: typeof constants.SET_ZOOM_LEVEL | string
-  zoomLevel?: number
+  type: typeof constants.SET_ZOOM_LEVEL
+  zoomLevel: number
 }
 
-export type ZoomAction = SetZoomAction
+type NoOpZoomAction = {
+  type: typeof constants.NO_OP_ZOOM
+}
+
+type SetScrollAction = {
+  type: typeof constants.SET_SCROLL_RATIO
+  scrollTopRatio?: number
+  scrollLeftRatio?: number
+}
+
+export type ZoomAction = SetZoomAction | NoOpZoomAction | SetScrollAction
 
 type GoToPageAction = {
   type: typeof constants.GO_TO_PAGE
@@ -97,6 +107,12 @@ export type RoomState = {
   pdfUrl: string
   filename: string
   presenterID: string
+}
+
+export type ZoomState = {
+  zoomLevel: number
+  scrollLeftRatio: number
+  scrollTopRatio: number
 }
 
 export type PageCache = {

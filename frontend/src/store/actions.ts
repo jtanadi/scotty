@@ -46,7 +46,7 @@ enum ZOOM_LIMIT {
 }
 
 export const zoomIn = (offset = 1): ZoomAction => {
-  const currentZoom = store.getState().zoom
+  const currentZoom = store.getState().zoom.zoomLevel
   if (currentZoom < ZOOM_LIMIT.MAX) {
     return {
       type: constants.SET_ZOOM_LEVEL,
@@ -54,12 +54,11 @@ export const zoomIn = (offset = 1): ZoomAction => {
     }
   }
 
-  // Default: do nothing
-  return { type: "" }
+  return { type: constants.NO_OP_ZOOM }
 }
 
 export const zoomOut = (offset = 1): ZoomAction => {
-  const currentZoom = store.getState().zoom
+  const currentZoom = store.getState().zoom.zoomLevel
   if (currentZoom > ZOOM_LIMIT.MIN) {
     return {
       type: constants.SET_ZOOM_LEVEL,
@@ -68,7 +67,7 @@ export const zoomOut = (offset = 1): ZoomAction => {
   }
 
   // Default: do nothing
-  return { type: "" }
+  return { type: constants.NO_OP_ZOOM }
 }
 
 export const zoomReset = (): ZoomAction => ({

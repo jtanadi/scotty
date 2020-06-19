@@ -6,8 +6,10 @@ export const SET_FILENAME = "SET_FILENAME"
 export const SET_PRESENTER = "SET_PRESENTER"
 export const SET_USER_ID = "SET_USER_ID"
 
-// Zoom
+// Zoom & Pan
 export const SET_ZOOM_LEVEL = "SET_ZOOM_LEVEL"
+export const NO_OP_ZOOM = "NO_OP_ZOOM"
+export const SET_SCROLL_RATIO = "SET_SCROLL_RATIO"
 
 // Page navigation
 export const GO_TO_PAGE = "GO_TO_PAGE"

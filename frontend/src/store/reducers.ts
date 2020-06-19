@@ -33,10 +33,27 @@ const roomReducer = (
   }
 }
 
-const zoomReducer = (state = 1, action: types.ZoomAction): number => {
+const initialZoomState: types.ZoomState = {
+  zoomLevel: 1,
+  scrollTopRatio: 0.5,
+  scrollLeftRatio: 0.5,
+}
+
+const zoomReducer = (
+  state = initialZoomState,
+  action: types.ZoomAction
+): types.ZoomState => {
   switch (action.type) {
     case constants.SET_ZOOM_LEVEL:
-      return action.zoomLevel
+      return { ...state, zoomLevel: action.zoomLevel }
+    case constants.SET_SCROLL_RATIO:
+      return {
+        ...state,
+        scrollTopRatio: action.scrollTopRatio,
+        scrollLeftRatio: action.scrollLeftRatio,
+      }
+    case constants.NO_OP_ZOOM:
+      return state
     default:
       return state
   }
