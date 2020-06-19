@@ -11,7 +11,6 @@ export type User = {
   mouseY: number
   toolColor: string
 }
-
 export type Room = {
   users: User[]
   filename: string
@@ -20,8 +19,22 @@ export type Room = {
   pageNum: number
   pages: string[]
   presenterID: string
+  zoom: number
   scrollLeft: number
   scrollTop: number
+}
+
+export const initialRoomState: Room = {
+  users: [],
+  filename: "",
+  s3Dir: "",
+  pdfUrl: "",
+  pageNum: 1,
+  pages: [],
+  presenterID: "",
+  zoom: 1,
+  scrollLeft: 0.5,
+  scrollTop: 0.5,
 }
 
 // Maps roomID to Room
@@ -70,6 +83,10 @@ export interface ChangeScrollData extends RoomData {
   scrollTop: number
 }
 
+export interface ChangeZoomData extends RoomData {
+  zoom: number
+}
+
 ////////////////////////////
 // Server -> Client types //
 ////////////////////////////
@@ -80,6 +97,7 @@ export type SyncDocData = {
   pages: string[]
   filename: string
   presenterID: string
+  zoom: number
   scrollLeft: number
   scrollTop: number
 }
@@ -99,4 +117,8 @@ export type PresenterData = {
 export type SyncScrollData = {
   scrollLeft: number
   scrollTop: number
+}
+
+export type SyncZoomData = {
+  zoom: number
 }
