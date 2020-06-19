@@ -18,11 +18,13 @@ type PropTypes = {
 
 const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
   zoomLevel,
-  broadcast,
+  presenterMode,
+  isPresenter,
   setZoomLevel,
 }): ReactElement => {
   const handleClick = (ev: MouseEvent): void => {
     const target = ev.target as HTMLButtonElement
+    const broadcast = presenterMode && isPresenter
     if (target.id === "zoom-in" && zoomLevel < ZOOM_LIMIT.MAX) {
       setZoomLevel(zoomLevel + 1, broadcast)
     } else if (target.id === "zoom-out" && zoomLevel > ZOOM_LIMIT.MIN) {
@@ -33,6 +35,7 @@ const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
   return (
     <ButtonsContainer>
       <ToolButton
+        disabled={presenterMode && !isPresenter}
         id="zoom-in"
         width="2.25rem"
         height="2.25rem"
@@ -42,6 +45,7 @@ const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
         onClick={handleClick}
       />
       <ToolButton
+        disabled={presenterMode && !isPresenter}
         id="zoom-out"
         width="2.25rem"
         height="2.25rem"
@@ -56,7 +60,8 @@ const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
 
 type StateProps = {
   zoomLevel: number
-  broadcast: boolean
+  presenterMode: boolean
+  isPresenter: boolean
 }
 
 const mapStateToProps = ({
@@ -64,7 +69,8 @@ const mapStateToProps = ({
   zoom: { zoomLevel },
 }): StateProps => ({
   zoomLevel,
-  broadcast: presenterID && presenterID === userID,
+  presenterMode: !!presenterID,
+  isPresenter: presenterID === userID,
 })
 
 type DispatchProps = {
