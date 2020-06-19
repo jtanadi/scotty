@@ -52,8 +52,6 @@ const zoomReducer = (
         scrollLeftRatio: action.left,
         scrollTopRatio: action.top,
       }
-    case constants.NO_OP_ZOOM:
-      return state
     case constants.CLEAR_ZOOM:
       return initialZoomState
     default:

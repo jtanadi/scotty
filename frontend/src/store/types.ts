@@ -48,10 +48,6 @@ type SetZoomAction = {
   zoomLevel: number
 }
 
-type NoOpZoomAction = {
-  type: typeof constants.NO_OP_ZOOM
-}
-
 type SetScrollAction = {
   type: typeof constants.SET_SCROLL_RATIOS
   left: number
@@ -62,11 +58,7 @@ type ClearZoomAction = {
   type: typeof constants.CLEAR_ZOOM
 }
 
-export type ZoomAction =
-  | SetZoomAction
-  | NoOpZoomAction
-  | SetScrollAction
-  | ClearZoomAction
+export type ZoomAction = SetZoomAction | SetScrollAction | ClearZoomAction
 
 type GoToPageAction = {
   type: typeof constants.GO_TO_PAGE

@@ -1,4 +1,3 @@
-import store from "./index"
 import * as constants from "./constants"
 import { RoomAction, ZoomAction, PagesAction, ToolAction } from "./types"
 import { User } from "../../../backend/src/sockets/types"
@@ -40,35 +39,10 @@ export const setPresenter = (presenterID: string): RoomAction => ({
 //      Zooms      //
 /////////////////////
 
-enum ZOOM_LIMIT {
-  MIN = 1,
-  MAX = 5,
-}
-
-export const zoomIn = (offset = 1): ZoomAction => {
-  const currentZoom = store.getState().zoom.zoomLevel
-  if (currentZoom < ZOOM_LIMIT.MAX) {
-    return {
-      type: constants.SET_ZOOM_LEVEL,
-      zoomLevel: currentZoom + offset,
-    }
-  }
-
-  return { type: constants.NO_OP_ZOOM }
-}
-
-export const zoomOut = (offset = 1): ZoomAction => {
-  const currentZoom = store.getState().zoom.zoomLevel
-  if (currentZoom > ZOOM_LIMIT.MIN) {
-    return {
-      type: constants.SET_ZOOM_LEVEL,
-      zoomLevel: currentZoom - offset,
-    }
-  }
-
-  // Default: do nothing
-  return { type: constants.NO_OP_ZOOM }
-}
+export const setZoomLevel = (zoomLevel: number): ZoomAction => ({
+  type: constants.SET_ZOOM_LEVEL,
+  zoomLevel,
+})
 
 export const setScrollRatios = (left: number, top: number): ZoomAction => ({
   type: constants.SET_SCROLL_RATIOS,
