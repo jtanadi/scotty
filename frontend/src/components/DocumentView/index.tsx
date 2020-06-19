@@ -20,6 +20,8 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
   nextNextPageFile,
   cachedPages,
   cachePage,
+  presenterMode,
+  isPresenter,
 }): ReactElement => {
   const docRef = useRef(null)
   const {
@@ -28,7 +30,7 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     handleMouseDown,
     handleMouseReset,
     handlePan,
-  } = usePanhandler(docRef, zoom)
+  } = usePanhandler(docRef, zoom, presenterMode, isPresenter)
 
   useEffect(() => {
     // Load next 2 pages to be loaded if not cached yet
@@ -52,6 +54,7 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
   return (
     <DocumentContainer ref={docRef}>
       <PageContainer
+        disablePan={presenterMode && !isPresenter}
         scale={zoom}
         mouseDown={mouseDown}
         onContextMenu={handleContextMenu}
@@ -73,19 +76,23 @@ type StateProps = {
   nextNextPageFile: string
   pdfUrl: string
   cachedPages: PageCache
+  presenterMode: boolean
+  isPresenter: boolean
 }
 
 const mapStateToProps = ({
-  zoom,
+  zoom: { zoomLevel },
   pages: { pages, currentPage, cached },
-  room: { pdfUrl },
+  room: { pdfUrl, presenterID, userID },
 }): StateProps => ({
-  zoom,
+  zoom: zoomLevel,
   pdfUrl,
   pageUrl: `${pdfUrl}/${pages[currentPage - 1]}`,
   nextPageFile: pages[currentPage + currentPage - 1],
   nextNextPageFile: pages[currentPage + currentPage],
   cachedPages: cached,
+  presenterMode: !!presenterID,
+  isPresenter: presenterID === userID,
 })
 
 type DispatchProps = {
