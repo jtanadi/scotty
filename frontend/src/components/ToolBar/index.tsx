@@ -9,14 +9,21 @@ import {
   ToolBarButton,
   ColorIndicator,
 } from "./styles"
-import tools from "../../utils/tools"
-import { selectTool } from "../../store/actions"
+import * as actions from "../../store/actions"
+import { Tool } from "../../utils/tools"
 
-const ToolBar: FC<StateProps & DispatchProps> = ({
+type PropTypes = {
+  socketUpdatePresenter: () => void
+}
+
+const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
+  userID,
+  presenterID,
+  tools,
   toolColor,
-  numOfTools,
   selectedToolIdx,
   selectTool,
+  setPresenter,
 }): ReactElement => {
   const [showPalette, setShowPalette] = useState(false)
   const handlePalette = (): void => {
@@ -24,15 +31,19 @@ const ToolBar: FC<StateProps & DispatchProps> = ({
   }
 
   const handleToolClick = (clickedIdx: number): void => {
-    const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
-    selectTool(toolIdx)
+    if (clickedIdx === tools.length - 1) {
+      setPresenter(userID)
+    } else {
+      const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
+      selectTool(toolIdx)
+    }
   }
 
   return (
     <ButtonsContainer>
       <ColorIndicator color={toolColor} onClick={handlePalette} />
       <Palette show={showPalette} handleShow={handlePalette} />
-      <ButtonsInnerContainer count={numOfTools}>
+      <ButtonsInnerContainer count={tools.length}>
         {tools.map((tool, i) => (
           <ToolBarButton
             key={`tool-${i}`}
@@ -42,7 +53,13 @@ const ToolBar: FC<StateProps & DispatchProps> = ({
             imageHover={tool.hover || tool.image}
             imageActive={tool.active || tool.hover || tool.image}
             onClick={(): void => handleToolClick(i)}
-            active={selectedToolIdx === i}
+            active={
+              selectedToolIdx === i ||
+              (i === tools.length - 1 && presenterID === userID)
+            }
+            disabled={
+              i === tools.length - 1 && presenterID && presenterID !== userID
+            }
           />
         ))}
       </ButtonsInnerContainer>
@@ -51,24 +68,39 @@ const ToolBar: FC<StateProps & DispatchProps> = ({
 }
 
 type StateProps = {
-  numOfTools: number
+  tools: Tool[]
   selectedToolIdx: number
   toolColor: string
+  userID: string
+  presenterID: string
 }
 
-const mapStateToProps = ({ tools }): StateProps => ({
-  numOfTools: tools.length,
-  selectedToolIdx: tools.selectedIdx,
-  toolColor: tools.color,
+const mapStateToProps = ({
+  room: { userID, presenterID },
+  tools: { tools, selectedIdx, color },
+}): StateProps => ({
+  tools,
+  selectedToolIdx: selectedIdx,
+  toolColor: color,
+  userID,
+  presenterID,
 })
 
 type DispatchProps = {
   selectTool(idx: number): void
+  setPresenter(id: string): void
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  { socketUpdatePresenter }
+): DispatchProps => ({
   selectTool(idx): void {
-    dispatch(selectTool(idx))
+    dispatch(actions.selectTool(idx))
+  },
+  setPresenter(id): void {
+    dispatch(actions.setPresenter(id))
+    socketUpdatePresenter()
   },
 })
 
