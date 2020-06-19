@@ -18,7 +18,8 @@ type PropTypes = {
 
 const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
   userID,
-  presenterID,
+  presenterMode,
+  isPresenter,
   tools,
   toolColor,
   selectedToolIdx,
@@ -54,12 +55,9 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
             imageActive={tool.active || tool.hover || tool.image}
             onClick={(): void => handleToolClick(i)}
             active={
-              selectedToolIdx === i ||
-              (i === tools.length - 1 && presenterID === userID)
+              selectedToolIdx === i || (i === tools.length - 1 && isPresenter)
             }
-            disabled={
-              i === tools.length - 1 && presenterID && presenterID !== userID
-            }
+            disabled={i === tools.length - 1 && presenterMode && !isPresenter}
           />
         ))}
       </ButtonsInnerContainer>
@@ -72,7 +70,8 @@ type StateProps = {
   selectedToolIdx: number
   toolColor: string
   userID: string
-  presenterID: string
+  presenterMode: boolean
+  isPresenter: boolean
 }
 
 const mapStateToProps = ({
@@ -83,7 +82,8 @@ const mapStateToProps = ({
   selectedToolIdx: selectedIdx,
   toolColor: color,
   userID,
-  presenterID,
+  presenterMode: !!presenterID,
+  isPresenter: presenterID === userID,
 })
 
 type DispatchProps = {
