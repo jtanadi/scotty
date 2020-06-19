@@ -4,11 +4,7 @@ import { Dispatch } from "redux"
 
 import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
-import {
-  cachePage,
-  setScrollTopRatio,
-  setScrollLeftRatio,
-} from "../../store/actions"
+import { cachePage, setScrollRatios } from "../../store/actions"
 import { PageCache } from "../../store/types"
 
 type PropTypes = {
@@ -28,8 +24,7 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
   isPresenter,
   scrollLeftRatio,
   scrollTopRatio,
-  setScrollTopRatio,
-  setScrollLeftRatio,
+  setScrollRatios,
 }): ReactElement => {
   const docRef = useRef(null)
   const {
@@ -45,8 +40,7 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     isPresenter,
     scrollLeftRatio,
     scrollTopRatio,
-    setScrollLeftRatio,
-    setScrollTopRatio
+    setScrollRatios
   )
 
   useEffect(() => {
@@ -118,19 +112,15 @@ const mapStateToProps = ({
 
 type DispatchProps = {
   cachePage(page: string): void
-  setScrollLeftRatio(ratio: number): void
-  setScrollTopRatio(ratio: number): void
+  setScrollRatios(left: number, top: number): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   cachePage(page): void {
     dispatch(cachePage(page))
   },
-  setScrollLeftRatio(ratio): void {
-    dispatch(setScrollLeftRatio(ratio))
-  },
-  setScrollTopRatio(ratio): void {
-    dispatch(setScrollTopRatio(ratio))
+  setScrollRatios(left, top): void {
+    dispatch(setScrollRatios(left, top))
   },
 })
 
