@@ -43,6 +43,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   clearStore,
   setFilename,
   setPresenter,
+  setZoomLevel,
   setScrollRatios,
 }): ReactElement => {
   const pageRef = useRef(null)
@@ -60,6 +61,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     error,
     socketChangePage,
     socketUpdatePresenter,
+    socketUpdateZoom,
     socketUpdateScroll,
   } = useSocket(
     id,
@@ -71,6 +73,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     setPdfUrl,
     setFilename,
     setPresenter,
+    setZoomLevel,
     setScrollRatios
   )
 
@@ -156,7 +159,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
             socketUpdateScroll={socketUpdateScroll}
           />
         ) : null}
-        <ZoomBar />
+        <ZoomBar socketUpdateZoom={socketUpdateZoom} />
         <ToolBar socketUpdatePresenter={socketUpdatePresenter} />
       </Background>
     )
@@ -196,6 +199,7 @@ type DispatchProps = {
   clearStore(): void
   setFilename(filename: string): void
   setPresenter(presenterID: string): void
+  setZoomLevel(zoom: number): void
   setScrollRatios(left: number, top: number): void
 }
 
@@ -229,6 +233,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
   setPresenter(presenterID): void {
     dispatch(actions.setPresenter(presenterID))
+  },
+  setZoomLevel(zoom): void {
+    dispatch(actions.setZoomLevel(zoom))
   },
   setScrollRatios(left, top): void {
     dispatch(actions.setScrollRatios(left, top))

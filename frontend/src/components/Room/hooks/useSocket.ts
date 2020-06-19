@@ -12,6 +12,8 @@ import {
   PresenterData,
   ChangeScrollData,
   SyncScrollData,
+  ChangeZoomData,
+  SyncZoomData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
@@ -19,6 +21,7 @@ type UseSocketReturn = {
   error: string
   socketChangePage: (pageNum: number) => void
   socketUpdatePresenter: () => void
+  socketUpdateZoom: (zoom: number) => void
   socketUpdateScroll: (left: number, top: number) => void
 }
 
@@ -32,6 +35,7 @@ export default (
   setPdfUrl: (url: string) => void,
   setFilename: (filename: string) => void,
   setPresenter: (presenterID: string) => void,
+  setZoomLevel: (zoomLevel: number) => void,
   setScrollRatios: (left: number, top: number) => void
 ): UseSocketReturn => {
   const [error, setError] = useState("")
@@ -47,6 +51,7 @@ export default (
       setPresenter(data.presenterID)
 
       if (data.presenterID && data.presenterID !== data.userID) {
+        setZoomLevel(data.zoom)
         setScrollRatios(data.scrollLeft, data.scrollTop)
       }
     })
@@ -63,6 +68,10 @@ export default (
       setPresenter(data.presenterID)
     })
 
+    socket.on("update zoom", (data: SyncZoomData) => {
+      setZoomLevel(data.zoom)
+    })
+
     socket.on("update scroll", (data: SyncScrollData) => {
       setScrollRatios(data.scrollLeft, data.scrollTop)
     })
@@ -75,6 +84,9 @@ export default (
       socket.off("sync document")
       socket.off("sync page")
       socket.off("update users")
+      socket.off("update presenter")
+      socket.off("update zoom")
+      socket.off("update scroll")
       socket.off("error")
     }
   }, [])
@@ -96,10 +108,21 @@ export default (
     socket.emit("client update presenter", data)
   }
 
+  const socketUpdateZoom = (zoom: number): void => {
+    const data: ChangeZoomData = { roomID, zoom }
+    socket.emit("client update zoom", data)
+  }
+
   const socketUpdateScroll = (scrollLeft: number, scrollTop: number): void => {
     const data: ChangeScrollData = { roomID, scrollLeft, scrollTop }
     socket.emit("client update scroll", data)
   }
 
-  return { error, socketChangePage, socketUpdatePresenter, socketUpdateScroll }
+  return {
+    error,
+    socketChangePage,
+    socketUpdatePresenter,
+    socketUpdateZoom,
+    socketUpdateScroll,
+  }
 }
