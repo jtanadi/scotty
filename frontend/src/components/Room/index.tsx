@@ -208,6 +208,8 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   clearStore(): void {
     dispatch(actions.clearRoom())
     dispatch(actions.clearPages())
+    dispatch(actions.clearZoom())
+    dispatch(actions.clearTools())
   },
   setFilename(filename): void {
     dispatch(actions.setFilename(filename))
