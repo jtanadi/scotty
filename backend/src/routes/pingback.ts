@@ -31,6 +31,8 @@ router.post("/", (req: Request, res: Response) => {
       pageNum: 1,
       pages: files,
       presenterID: "",
+      scrollLeft: 0.5,
+      scrollTop: 0.5,
     }
 
     rooms[roomID] = newRoom
