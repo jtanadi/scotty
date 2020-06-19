@@ -1,10 +1,14 @@
 import styled from "styled-components"
 
-export const DocumentContainer = styled.div`
+type DocumentContainerProps = {
+  showScrollbars: boolean
+}
+
+export const DocumentContainer = styled.div<DocumentContainerProps>`
   margin: 3rem auto 0 auto;
   height: calc(100vh - 3rem);
   width: 100vw;
-  overflow: scroll;
+  overflow: ${(props): string => (props.showScrollbars ? "scroll" : "hidden")};
 `
 
 type PageContainerProp = {
