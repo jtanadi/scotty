@@ -1,4 +1,11 @@
-import React, { FC, ReactElement, RefObject, useRef, useEffect } from "react"
+import React, {
+  FC,
+  ReactElement,
+  RefObject,
+  useRef,
+  useState,
+  useEffect,
+} from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 
@@ -14,7 +21,7 @@ type PropTypes = {
 
 const View: FC<PropTypes & StateProps & DispatchProps> = ({
   pageRef,
-  zoom,
+  zoomLevel,
   pdfUrl,
   pageUrl,
   nextPageFile,
@@ -36,7 +43,7 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     handlePan,
   } = usePanhandler(
     docRef,
-    zoom,
+    zoomLevel,
     presenterMode,
     isPresenter,
     scrollLeftRatio,
@@ -63,11 +70,22 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     }
   }, [pdfUrl, nextPageFile, nextNextPageFile])
 
+  const [showScrollbars, setShowScrollbars] = useState(true)
+  useEffect(() => {
+    // If not in presenter mode OR if in presenter mode and is presenter
+    // AND zoom level is more than 1, show scrollbars
+    if ((!presenterMode || (presenterMode && isPresenter)) && zoomLevel > 1) {
+      setShowScrollbars(true)
+    } else {
+      setShowScrollbars(false)
+    }
+  }, [zoomLevel, presenterMode, isPresenter])
+
   return (
-    <DocumentContainer ref={docRef}>
+    <DocumentContainer ref={docRef} showScrollbars={showScrollbars}>
       <PageContainer
         disablePan={presenterMode && !isPresenter}
-        scale={zoom}
+        scale={zoomLevel}
         mouseDown={mouseDown}
         onContextMenu={handleContextMenu}
         onMouseMove={handlePan}
@@ -82,7 +100,7 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
 }
 
 type StateProps = {
-  zoom: number
+  zoomLevel: number
   scrollLeftRatio: number
   scrollTopRatio: number
   pageUrl: string
@@ -99,7 +117,7 @@ const mapStateToProps = ({
   pages: { pages, currentPage, cached },
   room: { pdfUrl, presenterID, userID },
 }): StateProps => ({
-  zoom: zoomLevel,
+  zoomLevel,
   scrollLeftRatio,
   scrollTopRatio,
   pdfUrl,
