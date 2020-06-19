@@ -14,6 +14,8 @@ import { Tool } from "../../utils/tools"
 
 type PropTypes = {
   socketUpdatePresenter: () => void
+  socketUpdateZoom: (zoomLevel: number) => void
+  socketUpdateScroll: (scrollLeft: number, scrollTop: number) => void
 }
 
 const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
@@ -25,6 +27,9 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
   selectedToolIdx,
   selectTool,
   setPresenter,
+  zoomLevel,
+  scrollLeftRatio,
+  scrollTopRatio,
 }): ReactElement => {
   const [showPalette, setShowPalette] = useState(false)
   const handlePalette = (): void => {
@@ -32,8 +37,10 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
   }
 
   const handleToolClick = (clickedIdx: number): void => {
+    // Last tool is presenter tool
+    // setPresenter can work like a toggle on the socket server side
     if (clickedIdx === tools.length - 1) {
-      setPresenter(userID)
+      setPresenter(userID, zoomLevel, scrollLeftRatio, scrollTopRatio)
     } else {
       const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
       selectTool(toolIdx)
@@ -72,11 +79,15 @@ type StateProps = {
   userID: string
   presenterMode: boolean
   isPresenter: boolean
+  zoomLevel: number
+  scrollLeftRatio: number
+  scrollTopRatio: number
 }
 
 const mapStateToProps = ({
   room: { userID, presenterID },
   tools: { tools, selectedIdx, color },
+  zoom: { zoomLevel, scrollLeftRatio, scrollTopRatio },
 }): StateProps => ({
   tools,
   selectedToolIdx: selectedIdx,
@@ -84,23 +95,33 @@ const mapStateToProps = ({
   userID,
   presenterMode: !!presenterID,
   isPresenter: presenterID === userID,
+  zoomLevel,
+  scrollLeftRatio,
+  scrollTopRatio,
 })
 
 type DispatchProps = {
   selectTool(idx: number): void
-  setPresenter(id: string): void
+  setPresenter(
+    id: string,
+    zoomLevel: number,
+    scrollLeftRatio: number,
+    scrollTopRatio: number
+  ): void
 }
 
 const mapDispatchToProps = (
   dispatch: Dispatch,
-  { socketUpdatePresenter }
+  { socketUpdatePresenter, socketUpdateZoom, socketUpdateScroll }
 ): DispatchProps => ({
   selectTool(idx): void {
     dispatch(actions.selectTool(idx))
   },
-  setPresenter(id): void {
+  setPresenter(id, zoomLevel, scrollLeftRatio, scrollTopRatio): void {
     dispatch(actions.setPresenter(id))
     socketUpdatePresenter()
+    socketUpdateZoom(zoomLevel)
+    socketUpdateScroll(scrollLeftRatio, scrollTopRatio)
   },
 })
 
