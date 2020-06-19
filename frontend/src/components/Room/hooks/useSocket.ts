@@ -11,6 +11,7 @@ import {
   ChangePageData,
   PresenterData,
   ChangeScrollData,
+  SyncScrollData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
 
@@ -30,7 +31,8 @@ export default (
   setUserID: (id: string) => void,
   setPdfUrl: (url: string) => void,
   setFilename: (filename: string) => void,
-  setPresenter: (presenterID: string) => void
+  setPresenter: (presenterID: string) => void,
+  setScrollRatios: (left: number, top: number) => void
 ): UseSocketReturn => {
   const [error, setError] = useState("")
   useEffect(() => {
@@ -43,6 +45,10 @@ export default (
       setPages(data.pages)
       setFilename(data.filename)
       setPresenter(data.presenterID)
+
+      if (data.presenterID && data.presenterID !== data.userID) {
+        setScrollRatios(data.scrollLeft, data.scrollTop)
+      }
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
@@ -55,6 +61,10 @@ export default (
 
     socket.on("update presenter", (data: PresenterData) => {
       setPresenter(data.presenterID)
+    })
+
+    socket.on("update scroll", (data: SyncScrollData) => {
+      setScrollRatios(data.scrollLeft, data.scrollTop)
     })
 
     socket.on("error", (data: Error): void => {
