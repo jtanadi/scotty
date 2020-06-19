@@ -2,7 +2,8 @@ import express, { Request, Response } from "express"
 import { rooms } from "../sockets/cache"
 import { io } from "../sockets"
 
-import { Room, initialRoomState, RoomData } from "../sockets/types"
+import { Room, RoomData } from "../sockets/types"
+import initialRoomState from "../utils/initialRoomState"
 
 const router = express.Router()
 const s3Url = "https://beam-me-up-scotty.s3.amazonaws.com"
