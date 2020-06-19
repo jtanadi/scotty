@@ -28,13 +28,14 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
   filename,
   users,
   goToPage,
+  inputDisabled,
   handleClose,
 }): ReactElement => {
   const [displayPageNum, setDisplayPageNum] = useState("")
 
   const handleInputSubmit = (ev: FormEvent): void => {
     ev.preventDefault()
-    if (!displayPageNum) return
+    if (!displayPageNum || inputDisabled) return
     goToPage(parseInt(displayPageNum, 10))
   }
 
@@ -84,6 +85,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
 
       <NavChild>
         <ToolButton
+          disabled={inputDisabled}
           width="3rem"
           height="3rem"
           image="/static/icons/firstLastPage.svg"
@@ -92,6 +94,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
           onClick={goFirstPage}
         />
         <ToolButton
+          disabled={inputDisabled}
           width="3rem"
           height="3rem"
           image="/static/icons/prevNextPage.svg"
@@ -103,6 +106,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
         <PageNumContainer>
           <PageNumForm onSubmit={handleInputSubmit}>
             <PageNumInput
+              disabled={inputDisabled}
               value={displayPageNum}
               onSubmit={handleInputSubmit}
               onChange={handleInputChange}
@@ -112,6 +116,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
         </PageNumContainer>
 
         <ReverseToolButton
+          disabled={inputDisabled}
           width="3rem"
           height="3rem"
           image="/static/icons/prevNextPage.svg"
@@ -120,6 +125,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
           onClick={goNextPage}
         />
         <ReverseToolButton
+          disabled={inputDisabled}
           width="3rem"
           height="3rem"
           image="/static/icons/firstLastPage.svg"
@@ -151,17 +157,22 @@ type StateProps = {
   currentPage: number
   users: User[]
   filename: string
+  inputDisabled: boolean
 }
 
 type DispatchProps = {
   goToPage(pageNum: number): void
 }
 
-const mapStateToProps = ({ pages, room }): StateProps => ({
-  maxPage: pages.pages.length,
-  currentPage: pages.currentPage,
-  users: room.users,
-  filename: room.filename,
+const mapStateToProps = ({
+  pages: { pages, currentPage },
+  room: { users, userID, filename, presenterID },
+}): StateProps => ({
+  maxPage: pages.length,
+  currentPage,
+  users,
+  filename,
+  inputDisabled: presenterID && presenterID !== userID,
 })
 
 const mapDispatchToProps = (
