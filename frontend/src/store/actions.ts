@@ -75,6 +75,16 @@ export const zoomReset = (): ZoomAction => ({
   zoomLevel: ZOOM_LIMIT.MIN,
 })
 
+export const setScrollLeftRatio = (ratio: number): ZoomAction => ({
+  type: constants.SET_SCROLL_LEFT_RATIO,
+  ratio,
+})
+
+export const setScrollTopRatio = (ratio: number): ZoomAction => ({
+  type: constants.SET_SCROLL_TOP_RATIO,
+  ratio,
+})
+
 /////////////////////
 //      Pages      //
 /////////////////////

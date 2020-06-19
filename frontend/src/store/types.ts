@@ -53,9 +53,10 @@ type NoOpZoomAction = {
 }
 
 type SetScrollAction = {
-  type: typeof constants.SET_SCROLL_RATIO
-  scrollTopRatio?: number
-  scrollLeftRatio?: number
+  type:
+    | typeof constants.SET_SCROLL_LEFT_RATIO
+    | typeof constants.SET_SCROLL_TOP_RATIO
+  ratio: number
 }
 
 export type ZoomAction = SetZoomAction | NoOpZoomAction | SetScrollAction

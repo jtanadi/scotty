@@ -46,11 +46,15 @@ const zoomReducer = (
   switch (action.type) {
     case constants.SET_ZOOM_LEVEL:
       return { ...state, zoomLevel: action.zoomLevel }
-    case constants.SET_SCROLL_RATIO:
+    case constants.SET_SCROLL_LEFT_RATIO:
       return {
         ...state,
-        scrollTopRatio: action.scrollTopRatio,
-        scrollLeftRatio: action.scrollLeftRatio,
+        scrollLeftRatio: action.ratio,
+      }
+    case constants.SET_SCROLL_TOP_RATIO:
+      return {
+        ...state,
+        scrollTopRatio: action.ratio,
       }
     case constants.NO_OP_ZOOM:
       return state
