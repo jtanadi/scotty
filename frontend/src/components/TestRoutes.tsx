@@ -53,7 +53,12 @@ const TestRoutes = (): ReactElement => {
         )}
       />
 
-      <Route path="/test/ZoomBar" render={(): ReactElement => <ZoomBar />} />
+      <Route
+        path="/test/ZoomBar"
+        render={(): ReactElement => (
+          <ZoomBar socketUpdateZoom={(): void => {}} />
+        )}
+      />
 
       <Route
         path="/test/ToolBar"
