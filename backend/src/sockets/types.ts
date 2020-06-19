@@ -20,6 +20,8 @@ export type Room = {
   pageNum: number
   pages: string[]
   presenterID: string
+  scrollLeft: number
+  scrollTop: number
 }
 
 // Maps roomID to Room
@@ -63,6 +65,11 @@ export interface ToolColorChangeData extends RoomData {
   toolColor: string
 }
 
+export interface ChangeScrollData extends RoomData {
+  scrollLeft: number
+  scrollTop: number
+}
+
 ////////////////////////////
 // Server -> Client types //
 ////////////////////////////
@@ -73,6 +80,8 @@ export type SyncDocData = {
   pages: string[]
   filename: string
   presenterID: string
+  scrollLeft: number
+  scrollTop: number
 }
 
 export type SyncPageData = {
@@ -85,4 +94,9 @@ export type UsersData = {
 
 export type PresenterData = {
   presenterID: string
+}
+
+export type SyncScrollData = {
+  scrollLeft: number
+  scrollTop: number
 }
