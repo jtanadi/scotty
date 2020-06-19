@@ -1,3 +1,5 @@
+import { Room } from "../sockets/types"
+
 const initialRoomState: Room = {
   users: [],
   filename: "",
