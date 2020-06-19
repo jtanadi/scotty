@@ -18,6 +18,8 @@ type InnerContainerProps = {
 export const ButtonsInnerContainer = styled.div<InnerContainerProps>`
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
   height: ${(props): string => `${props.count * 2.25}rem`};
+  display: flex;
+  flex-direction: column;
 `
 
 type ToolBarButtonProps = {
