@@ -2,7 +2,7 @@ import express, { Request, Response } from "express"
 import { rooms } from "../sockets/cache"
 import { io } from "../sockets"
 
-import { Room, RoomData } from "../sockets/types"
+import { Room, initialRoomState, RoomData } from "../sockets/types"
 
 const router = express.Router()
 const s3Url = "https://beam-me-up-scotty.s3.amazonaws.com"
@@ -24,15 +24,11 @@ router.post("/", (req: Request, res: Response) => {
     const { s3Dir, files } = message
 
     const newRoom: Room = {
-      users: [],
+      ...initialRoomState,
       filename,
       s3Dir,
       pdfUrl: `${s3Url}/${s3Dir}`,
-      pageNum: 1,
       pages: files,
-      presenterID: "",
-      scrollLeft: 0.5,
-      scrollTop: 0.5,
     }
 
     rooms[roomID] = newRoom
