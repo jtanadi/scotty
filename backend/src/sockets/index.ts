@@ -13,6 +13,7 @@ import onMouseMove from "./onMouseMove"
 import onToolColorChange from "./onToolColorChange"
 import onUpdatePresenter from "./onUpdatePresenter"
 import onUpdateScroll from "./onUpdateScroll"
+import onUpdateZoom from "./onUpdateZoom"
 
 export let io: SocketServer
 
@@ -57,6 +58,10 @@ export default (server: HTTPserver | HTTPSserver): void => {
 
     socket.on("client update scroll", data => {
       onUpdateScroll(connection, data)
+    })
+
+    socket.on("client update zoom", data => {
+      onUpdateZoom(connection, data)
     })
   })
 }
