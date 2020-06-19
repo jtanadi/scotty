@@ -95,6 +95,7 @@ export type SyncPageData = {
 
 export type UsersData = {
   users: User[]
+  presenterID?: string
 }
 
 export type PresenterData = {
