@@ -1,6 +1,6 @@
 import { useState, useEffect, MouseEvent, RefObject } from "react"
 
-type HandledMouseEvents = {
+type UsePanhandlerReturn = {
   mouseDown: boolean
   handleContextMenu: (ev: MouseEvent) => void
   handleMouseDown: (ev: MouseEvent) => void
@@ -16,7 +16,7 @@ export default (
   scrollLeftRatio: number,
   scrollTopRatio: number,
   setScrollRatios: (left: number, top: number, broadcast: boolean) => void
-): HandledMouseEvents => {
+): UsePanhandlerReturn => {
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
   }
