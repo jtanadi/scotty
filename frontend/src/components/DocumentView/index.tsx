@@ -13,7 +13,6 @@ import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
 import { cachePage, setScrollRatios } from "../../store/actions"
 import { PageCache } from "../../store/types"
-import handleScroll from "./handleScroll"
 
 type PropTypes = {
   pageRef: RefObject<HTMLImageElement>
@@ -83,15 +82,31 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     }
   }, [zoomLevel, presenterMode, isPresenter])
 
-  const _handleScroll = (ev): void => {
-    handleScroll(ev.target, presenterMode && isPresenter, setScrollRatios)
+  const handleScroll = (ev): void => {
+    const {
+      scrollLeft,
+      scrollWidth,
+      clientWidth,
+      scrollTop,
+      scrollHeight,
+      clientHeight,
+    } = ev.target
+
+    const scrollLeftMax = scrollWidth - clientWidth
+    const scrollTopMax = scrollHeight - clientHeight
+
+    // Default to 0.5 (center)
+    const left = scrollLeftMax ? scrollLeft / scrollLeftMax : 0.5
+    const top = scrollTopMax ? scrollTop / scrollTopMax : 0.5
+
+    setScrollRatios(left, top, presenterMode && isPresenter)
   }
 
   return (
     <DocumentContainer
       ref={docRef}
       showScrollbars={showScrollbars}
-      onScroll={_handleScroll}
+      onScroll={handleScroll}
     >
       <PageContainer
         disablePan={presenterMode && !isPresenter}

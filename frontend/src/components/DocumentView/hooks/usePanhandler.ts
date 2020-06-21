@@ -1,5 +1,4 @@
 import { useState, useEffect, MouseEvent, RefObject } from "react"
-import handleScroll from "../handleScroll"
 
 type UsePanhandlerReturn = {
   mouseDown: boolean
@@ -56,11 +55,6 @@ export default (
 
     setStartX(ev.clientX)
     setStartY(ev.clientY)
-
-    if (docRef.current) {
-      const broadcast = presenterMode && isPresenter
-      handleScroll(docRef.current, broadcast, setScrollRatios)
-    }
   }
 
   const updateScrollPositions = (): void => {
