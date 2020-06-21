@@ -11,7 +11,6 @@ export type User = {
   mouseY: number
   toolColor: string
 }
-
 export type Room = {
   users: User[]
   filename: string
@@ -19,6 +18,10 @@ export type Room = {
   pdfUrl: string
   pageNum: number
   pages: string[]
+  presenterID: string
+  zoom: number
+  scrollLeft: number
+  scrollTop: number
 }
 
 // Maps roomID to Room
@@ -62,6 +65,15 @@ export interface ToolColorChangeData extends RoomData {
   toolColor: string
 }
 
+export interface ChangeScrollData extends RoomData {
+  scrollLeft: number
+  scrollTop: number
+}
+
+export interface ChangeZoomData extends RoomData {
+  zoom: number
+}
+
 ////////////////////////////
 // Server -> Client types //
 ////////////////////////////
@@ -71,6 +83,10 @@ export type SyncDocData = {
   pdfUrl: string
   pages: string[]
   filename: string
+  presenterID: string
+  zoom: number
+  scrollLeft: number
+  scrollTop: number
 }
 
 export type SyncPageData = {
@@ -79,4 +95,18 @@ export type SyncPageData = {
 
 export type UsersData = {
   users: User[]
+  presenterID?: string
+}
+
+export type PresenterData = {
+  presenterID: string
+}
+
+export type SyncScrollData = {
+  scrollLeft: number
+  scrollTop: number
+}
+
+export type SyncZoomData = {
+  zoom: number
 }

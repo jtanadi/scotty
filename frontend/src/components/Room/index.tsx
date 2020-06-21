@@ -32,14 +32,19 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   toolColor,
   pdfUrl,
   users,
+  userID,
   goToPage,
   setPages,
   selectedTool,
   setToolColor,
   setUsers,
+  setUserID,
   setPdfUrl,
   clearStore,
   setFilename,
+  setPresenter,
+  setZoomLevel,
+  setScrollRatios,
 }): ReactElement => {
   const pageRef = useRef(null)
 
@@ -52,14 +57,24 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     pageRef
   )
 
-  const { userID, error, socketChangePage } = useSocket(
+  const {
+    error,
+    socketChangePage,
+    socketUpdatePresenter,
+    socketUpdateZoom,
+    socketUpdateScroll,
+  } = useSocket(
     id,
     toolColor,
     setPages,
     goToPage,
     setUsers,
+    setUserID,
     setPdfUrl,
-    setFilename
+    setFilename,
+    setPresenter,
+    setZoomLevel,
+    setScrollRatios
   )
 
   useEffect(() => {
@@ -138,9 +153,18 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
         {renderPointers()}
         {renderOwnPointer()}
         <NavBar socketChangePage={socketChangePage} handleClose={handleClose} />
-        {pdfUrl ? <DocumentView pageRef={pageRef} /> : null}
-        <ZoomBar />
-        <ToolBar />
+        {pdfUrl ? (
+          <DocumentView
+            pageRef={pageRef}
+            socketUpdateScroll={socketUpdateScroll}
+          />
+        ) : null}
+        <ZoomBar socketUpdateZoom={socketUpdateZoom} />
+        <ToolBar
+          socketUpdatePresenter={socketUpdatePresenter}
+          socketUpdateZoom={socketUpdateZoom}
+          socketUpdateScroll={socketUpdateScroll}
+        />
       </Background>
     )
   }
@@ -155,13 +179,18 @@ type StateProps = {
   toolColor: string
   pdfUrl: string
   users: User[]
+  userID: string
 }
 
-const mapStateToProps = ({ room, tools }): StateProps => ({
+const mapStateToProps = ({
+  room: { pdfUrl, users, userID },
+  tools,
+}): StateProps => ({
   selectedTool: tools.tools[tools.selectedIdx],
   toolColor: tools.color,
-  pdfUrl: room.pdfUrl,
-  users: room.users,
+  pdfUrl,
+  users,
+  userID,
 })
 
 type DispatchProps = {
@@ -169,9 +198,13 @@ type DispatchProps = {
   setPages(pages: string[]): void
   setToolColor(hex: string): void
   setUsers(users: User[]): void
+  setUserID(id: string): void
   setPdfUrl(url: string): void
   clearStore(): void
   setFilename(filename: string): void
+  setPresenter(presenterID: string): void
+  setZoomLevel(zoom: number): void
+  setScrollRatios(left: number, top: number): void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
@@ -187,15 +220,29 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   setUsers(users): void {
     dispatch(actions.setUsers(users))
   },
+  setUserID(id): void {
+    dispatch(actions.setUserID(id))
+  },
   setPdfUrl(url: string): void {
     dispatch(actions.setPdfUrl(url))
   },
   clearStore(): void {
     dispatch(actions.clearRoom())
     dispatch(actions.clearPages())
+    dispatch(actions.clearZoom())
+    dispatch(actions.clearTools())
   },
   setFilename(filename): void {
     dispatch(actions.setFilename(filename))
+  },
+  setPresenter(presenterID): void {
+    dispatch(actions.setPresenter(presenterID))
+  },
+  setZoomLevel(zoom): void {
+    dispatch(actions.setZoomLevel(zoom))
+  },
+  setScrollRatios(left, top): void {
+    dispatch(actions.setScrollRatios(left, top))
   },
 })
 

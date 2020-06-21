@@ -1,25 +1,39 @@
-import React, { FC, ReactElement, RefObject, useRef, useEffect } from "react"
+import React, {
+  FC,
+  ReactElement,
+  RefObject,
+  useRef,
+  useState,
+  useEffect,
+} from "react"
 import { connect } from "react-redux"
 import { Dispatch } from "redux"
 
 import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
-import { cachePage } from "../../store/actions"
+import { cachePage, setScrollRatios } from "../../store/actions"
 import { PageCache } from "../../store/types"
+import handleScroll from "./handleScroll"
 
 type PropTypes = {
   pageRef: RefObject<HTMLImageElement>
+  socketUpdateScroll(left: number, top: number): void
 }
 
 const View: FC<PropTypes & StateProps & DispatchProps> = ({
   pageRef,
-  zoom,
+  zoomLevel,
   pdfUrl,
   pageUrl,
   nextPageFile,
   nextNextPageFile,
   cachedPages,
   cachePage,
+  presenterMode,
+  isPresenter,
+  scrollLeftRatio,
+  scrollTopRatio,
+  setScrollRatios,
 }): ReactElement => {
   const docRef = useRef(null)
   const {
@@ -28,7 +42,15 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     handleMouseDown,
     handleMouseReset,
     handlePan,
-  } = usePanhandler(docRef, zoom)
+  } = usePanhandler(
+    docRef,
+    zoomLevel,
+    presenterMode,
+    isPresenter,
+    scrollLeftRatio,
+    scrollTopRatio,
+    setScrollRatios
+  )
 
   useEffect(() => {
     // Load next 2 pages to be loaded if not cached yet
@@ -49,10 +71,31 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     }
   }, [pdfUrl, nextPageFile, nextNextPageFile])
 
+  const [showScrollbars, setShowScrollbars] = useState(true)
+  useEffect(() => {
+    // Show scrollbars only if not in presenter mode
+    // OR if in presenter mode and is presenter
+    // AND zoom level is more than 1
+    if ((!presenterMode || (presenterMode && isPresenter)) && zoomLevel > 1) {
+      setShowScrollbars(true)
+    } else {
+      setShowScrollbars(false)
+    }
+  }, [zoomLevel, presenterMode, isPresenter])
+
+  const _handleScroll = (ev): void => {
+    handleScroll(ev.target, presenterMode && isPresenter, setScrollRatios)
+  }
+
   return (
-    <DocumentContainer ref={docRef}>
+    <DocumentContainer
+      ref={docRef}
+      showScrollbars={showScrollbars}
+      onScroll={_handleScroll}
+    >
       <PageContainer
-        scale={zoom}
+        disablePan={presenterMode && !isPresenter}
+        scale={zoomLevel}
         mouseDown={mouseDown}
         onContextMenu={handleContextMenu}
         onMouseMove={handlePan}
@@ -67,34 +110,52 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
 }
 
 type StateProps = {
-  zoom: number
+  zoomLevel: number
+  scrollLeftRatio: number
+  scrollTopRatio: number
   pageUrl: string
   nextPageFile: string
   nextNextPageFile: string
   pdfUrl: string
   cachedPages: PageCache
+  presenterMode: boolean
+  isPresenter: boolean
 }
 
 const mapStateToProps = ({
-  zoom,
+  zoom: { zoomLevel, scrollLeftRatio, scrollTopRatio },
   pages: { pages, currentPage, cached },
-  room: { pdfUrl },
+  room: { pdfUrl, presenterID, userID },
 }): StateProps => ({
-  zoom,
+  zoomLevel,
+  scrollLeftRatio,
+  scrollTopRatio,
   pdfUrl,
   pageUrl: `${pdfUrl}/${pages[currentPage - 1]}`,
   nextPageFile: pages[currentPage + currentPage - 1],
   nextNextPageFile: pages[currentPage + currentPage],
   cachedPages: cached,
+  presenterMode: !!presenterID,
+  isPresenter: presenterID === userID,
 })
 
 type DispatchProps = {
   cachePage(page: string): void
+  setScrollRatios(left: number, top: number, broadcast: boolean): void
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  { socketUpdateScroll }
+): DispatchProps => ({
   cachePage(page): void {
     dispatch(cachePage(page))
+  },
+  setScrollRatios(left, top, broadcast): void {
+    dispatch(setScrollRatios(left, top))
+    if (broadcast) {
+      socketUpdateScroll(left, top)
+    }
   },
 })
 

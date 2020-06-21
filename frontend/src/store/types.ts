@@ -11,6 +11,11 @@ type SetUsersAction = {
   users: User[]
 }
 
+type SetUserIdAction = {
+  type: typeof constants.SET_USER_ID
+  id: string
+}
+
 type SetPdfUrlAction = {
   type: typeof constants.SET_PDF_URL
   url: string
@@ -25,18 +30,35 @@ type SetFilenameAction = {
   filename: string
 }
 
+type SetPresenterAction = {
+  type: typeof constants.SET_PRESENTER
+  presenterID: string
+}
+
 export type RoomAction =
   | SetUsersAction
+  | SetUserIdAction
   | SetPdfUrlAction
   | ClearRoomAction
   | SetFilenameAction
+  | SetPresenterAction
 
 type SetZoomAction = {
-  type: typeof constants.SET_ZOOM_LEVEL | string
-  zoomLevel?: number
+  type: typeof constants.SET_ZOOM_LEVEL
+  zoomLevel: number
 }
 
-export type ZoomAction = SetZoomAction
+type SetScrollAction = {
+  type: typeof constants.SET_SCROLL_RATIOS
+  left: number
+  top: number
+}
+
+type ClearZoomAction = {
+  type: typeof constants.CLEAR_ZOOM
+}
+
+export type ZoomAction = SetZoomAction | SetScrollAction | ClearZoomAction
 
 type GoToPageAction = {
   type: typeof constants.GO_TO_PAGE
@@ -73,7 +95,11 @@ type SetColorAction = {
   color: string
 }
 
-export type ToolAction = SelectToolAction | SetColorAction
+type ClearToolsAction = {
+  type: typeof constants.CLEAR_TOOLS
+}
+
+export type ToolAction = SelectToolAction | SetColorAction | ClearToolsAction
 
 /////////////////
 // STATE TYPES //
@@ -81,8 +107,16 @@ export type ToolAction = SelectToolAction | SetColorAction
 
 export type RoomState = {
   users: User[]
+  userID: string
   pdfUrl: string
   filename: string
+  presenterID: string
+}
+
+export type ZoomState = {
+  zoomLevel: number
+  scrollLeftRatio: number
+  scrollTopRatio: number
 }
 
 export type PageCache = {

@@ -6,8 +6,10 @@ import tools from "../utils/tools"
 
 const initialRoomState: types.RoomState = {
   users: [],
+  userID: "",
   pdfUrl: "",
   filename: "",
+  presenterID: "",
 }
 const roomReducer = (
   state = initialRoomState,
@@ -16,21 +18,42 @@ const roomReducer = (
   switch (action.type) {
     case constants.SET_USERS:
       return { ...state, users: action.users }
+    case constants.SET_USER_ID:
+      return { ...state, userID: action.id }
     case constants.SET_PDF_URL:
       return { ...state, pdfUrl: action.url }
     case constants.CLEAR_ROOM:
       return initialRoomState
     case constants.SET_FILENAME:
       return { ...state, filename: action.filename }
+    case constants.SET_PRESENTER:
+      return { ...state, presenterID: action.presenterID }
     default:
       return state
   }
 }
 
-const zoomReducer = (state = 1, action: types.ZoomAction): number => {
+const initialZoomState: types.ZoomState = {
+  zoomLevel: 1,
+  scrollTopRatio: 0.5,
+  scrollLeftRatio: 0.5,
+}
+
+const zoomReducer = (
+  state = initialZoomState,
+  action: types.ZoomAction
+): types.ZoomState => {
   switch (action.type) {
     case constants.SET_ZOOM_LEVEL:
-      return action.zoomLevel
+      return { ...state, zoomLevel: action.zoomLevel }
+    case constants.SET_SCROLL_RATIOS:
+      return {
+        ...state,
+        scrollLeftRatio: action.left,
+        scrollTopRatio: action.top,
+      }
+    case constants.CLEAR_ZOOM:
+      return initialZoomState
     default:
       return state
   }
@@ -75,6 +98,8 @@ const toolReducer = (
       return { ...state, selectedIdx: action.idx }
     case constants.SET_TOOL_COLOR:
       return { ...state, color: action.color }
+    case constants.CLEAR_TOOLS:
+      return initialToolState
     default:
       return state
   }

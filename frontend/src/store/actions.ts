@@ -1,4 +1,3 @@
-import store from "./index"
 import * as constants from "./constants"
 import { RoomAction, ZoomAction, PagesAction, ToolAction } from "./types"
 import { User } from "../../../backend/src/sockets/types"
@@ -10,6 +9,11 @@ import { User } from "../../../backend/src/sockets/types"
 export const setUsers = (users: User[]): RoomAction => ({
   type: constants.SET_USERS,
   users,
+})
+
+export const setUserID = (id: string): RoomAction => ({
+  type: constants.SET_USER_ID,
+  id,
 })
 
 export const setPdfUrl = (url: string): RoomAction => ({
@@ -26,44 +30,28 @@ export const setFilename = (filename: string): RoomAction => ({
   filename,
 })
 
+export const setPresenter = (presenterID: string): RoomAction => ({
+  type: constants.SET_PRESENTER,
+  presenterID,
+})
+
 /////////////////////
 //      Zooms      //
 /////////////////////
 
-enum ZOOM_LIMIT {
-  MIN = 1,
-  MAX = 5,
-}
-
-export const zoomIn = (offset = 1): ZoomAction => {
-  const currentZoom = store.getState().zoom
-  if (currentZoom < ZOOM_LIMIT.MAX) {
-    return {
-      type: constants.SET_ZOOM_LEVEL,
-      zoomLevel: currentZoom + offset,
-    }
-  }
-
-  // Default: do nothing
-  return { type: "" }
-}
-
-export const zoomOut = (offset = 1): ZoomAction => {
-  const currentZoom = store.getState().zoom
-  if (currentZoom > ZOOM_LIMIT.MIN) {
-    return {
-      type: constants.SET_ZOOM_LEVEL,
-      zoomLevel: currentZoom - offset,
-    }
-  }
-
-  // Default: do nothing
-  return { type: "" }
-}
-
-export const zoomReset = (): ZoomAction => ({
+export const setZoomLevel = (zoomLevel: number): ZoomAction => ({
   type: constants.SET_ZOOM_LEVEL,
-  zoomLevel: ZOOM_LIMIT.MIN,
+  zoomLevel,
+})
+
+export const setScrollRatios = (left: number, top: number): ZoomAction => ({
+  type: constants.SET_SCROLL_RATIOS,
+  left,
+  top,
+})
+
+export const clearZoom = (): ZoomAction => ({
+  type: constants.CLEAR_ZOOM,
 })
 
 /////////////////////
@@ -101,4 +89,8 @@ export const selectTool = (idx: number): ToolAction => ({
 export const setToolColor = (hex: string): ToolAction => ({
   type: constants.SET_TOOL_COLOR,
   color: hex,
+})
+
+export const clearTools = (): ToolAction => ({
+  type: constants.CLEAR_TOOLS,
 })

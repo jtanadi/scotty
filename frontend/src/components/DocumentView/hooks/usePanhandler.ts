@@ -1,6 +1,7 @@
 import { useState, useEffect, MouseEvent, RefObject } from "react"
+import handleScroll from "../handleScroll"
 
-type HandledMouseEvents = {
+type UsePanhandlerReturn = {
   mouseDown: boolean
   handleContextMenu: (ev: MouseEvent) => void
   handleMouseDown: (ev: MouseEvent) => void
@@ -10,8 +11,13 @@ type HandledMouseEvents = {
 
 export default (
   docRef: RefObject<HTMLDivElement>,
-  scale: number
-): HandledMouseEvents => {
+  scale: number,
+  presenterMode: boolean,
+  isPresenter: boolean,
+  scrollLeftRatio: number,
+  scrollTopRatio: number,
+  setScrollRatios: (left: number, top: number, broadcast: boolean) => void
+): UsePanhandlerReturn => {
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
   }
@@ -20,7 +26,7 @@ export default (
   const [startX, setStartX] = useState(0)
   const [startY, setStartY] = useState(0)
   const handleMouseDown = (ev: MouseEvent): void => {
-    if (scale <= 1) return
+    if (scale <= 1 || (presenterMode && !isPresenter)) return
     setMouseDown(true)
     setStartX(ev.clientX)
     setStartY(ev.clientY)
@@ -35,8 +41,6 @@ export default (
   }
 
   // default is center (0.5 of width and height)
-  const [scrollLeftRatio, setScrollLeftRatio] = useState(0.5)
-  const [scrollTopRatio, setScrollTopRatio] = useState(0.5)
   const handlePan = (ev: MouseEvent): void => {
     if (!mouseDown || scale <= 1) return
 
@@ -54,29 +58,12 @@ export default (
     setStartY(ev.clientY)
 
     if (docRef.current) {
-      const {
-        scrollLeft,
-        scrollWidth,
-        clientWidth,
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-      } = docRef.current
-
-      const scrollLeftMax = scrollWidth - clientWidth
-      const scrollTopMax = scrollHeight - clientHeight
-
-      setScrollLeftRatio(scrollLeft / scrollLeftMax)
-      setScrollTopRatio(scrollTop / scrollTopMax)
+      const broadcast = presenterMode && isPresenter
+      handleScroll(docRef.current, broadcast, setScrollRatios)
     }
   }
 
-  useEffect(() => {
-    if (scale === 1) {
-      setScrollLeftRatio(0.5)
-      setScrollTopRatio(0.5)
-    }
-
+  const updateScrollPositions = (): void => {
     const {
       scrollWidth,
       clientWidth,
@@ -88,7 +75,23 @@ export default (
 
     docRef.current.scrollLeft = scrollLeftMax * scrollLeftRatio
     docRef.current.scrollTop = scrollTopMax * scrollTopRatio
+  }
+
+  // Recenter view on zoom
+  useEffect(() => {
+    if (scale === 1) {
+      const broadcast = presenterMode && isPresenter
+      setScrollRatios(0.5, 0.5, broadcast)
+    }
+    updateScrollPositions()
   }, [scale])
+
+  // Update view when in presenter mode & is not presenter
+  useEffect(() => {
+    if (presenterMode && !isPresenter) {
+      updateScrollPositions()
+    }
+  }, [scrollLeftRatio, scrollTopRatio])
 
   return {
     mouseDown,

@@ -9,14 +9,27 @@ import {
   ToolBarButton,
   ColorIndicator,
 } from "./styles"
-import tools from "../../utils/tools"
-import { selectTool } from "../../store/actions"
+import * as actions from "../../store/actions"
+import { Tool } from "../../utils/tools"
 
-const ToolBar: FC<StateProps & DispatchProps> = ({
+type PropTypes = {
+  socketUpdatePresenter: () => void
+  socketUpdateZoom: (zoomLevel: number) => void
+  socketUpdateScroll: (scrollLeft: number, scrollTop: number) => void
+}
+
+const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
+  userID,
+  presenterMode,
+  isPresenter,
+  tools,
   toolColor,
-  numOfTools,
   selectedToolIdx,
   selectTool,
+  setPresenter,
+  zoomLevel,
+  scrollLeftRatio,
+  scrollTopRatio,
 }): ReactElement => {
   const [showPalette, setShowPalette] = useState(false)
   const handlePalette = (): void => {
@@ -24,15 +37,21 @@ const ToolBar: FC<StateProps & DispatchProps> = ({
   }
 
   const handleToolClick = (clickedIdx: number): void => {
-    const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
-    selectTool(toolIdx)
+    // Last tool is presenter tool
+    // setPresenter can work like a toggle on the socket server side
+    if (clickedIdx === tools.length - 1) {
+      setPresenter(userID, zoomLevel, scrollLeftRatio, scrollTopRatio)
+    } else {
+      const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
+      selectTool(toolIdx)
+    }
   }
 
   return (
     <ButtonsContainer>
       <ColorIndicator color={toolColor} onClick={handlePalette} />
       <Palette show={showPalette} handleShow={handlePalette} />
-      <ButtonsInnerContainer count={numOfTools}>
+      <ButtonsInnerContainer count={tools.length}>
         {tools.map((tool, i) => (
           <ToolBarButton
             key={`tool-${i}`}
@@ -42,7 +61,10 @@ const ToolBar: FC<StateProps & DispatchProps> = ({
             imageHover={tool.hover || tool.image}
             imageActive={tool.active || tool.hover || tool.image}
             onClick={(): void => handleToolClick(i)}
-            active={selectedToolIdx === i}
+            active={
+              selectedToolIdx === i || (i === tools.length - 1 && isPresenter)
+            }
+            disabled={i === tools.length - 1 && presenterMode && !isPresenter}
           />
         ))}
       </ButtonsInnerContainer>
@@ -51,24 +73,55 @@ const ToolBar: FC<StateProps & DispatchProps> = ({
 }
 
 type StateProps = {
-  numOfTools: number
+  tools: Tool[]
   selectedToolIdx: number
   toolColor: string
+  userID: string
+  presenterMode: boolean
+  isPresenter: boolean
+  zoomLevel: number
+  scrollLeftRatio: number
+  scrollTopRatio: number
 }
 
-const mapStateToProps = ({ tools }): StateProps => ({
-  numOfTools: tools.length,
-  selectedToolIdx: tools.selectedIdx,
-  toolColor: tools.color,
+const mapStateToProps = ({
+  room: { userID, presenterID },
+  tools: { tools, selectedIdx, color },
+  zoom: { zoomLevel, scrollLeftRatio, scrollTopRatio },
+}): StateProps => ({
+  tools,
+  selectedToolIdx: selectedIdx,
+  toolColor: color,
+  userID,
+  presenterMode: !!presenterID,
+  isPresenter: presenterID === userID,
+  zoomLevel,
+  scrollLeftRatio,
+  scrollTopRatio,
 })
 
 type DispatchProps = {
   selectTool(idx: number): void
+  setPresenter(
+    id: string,
+    zoomLevel: number,
+    scrollLeftRatio: number,
+    scrollTopRatio: number
+  ): void
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  { socketUpdatePresenter, socketUpdateZoom, socketUpdateScroll }
+): DispatchProps => ({
   selectTool(idx): void {
-    dispatch(selectTool(idx))
+    dispatch(actions.selectTool(idx))
+  },
+  setPresenter(id, zoomLevel, scrollLeftRatio, scrollTopRatio): void {
+    dispatch(actions.setPresenter(id))
+    socketUpdatePresenter()
+    socketUpdateZoom(zoomLevel)
+    socketUpdateScroll(scrollLeftRatio, scrollTopRatio)
   },
 })
 

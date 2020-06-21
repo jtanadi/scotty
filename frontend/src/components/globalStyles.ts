@@ -123,18 +123,23 @@ export const ToolButton = styled.button<ToolButtonProps>`
   background-position: center;
   transition: all ${ANIMATION_DURATION} ease-in-out;
 
-  &:hover {
+  &:hover:enabled {
     background-color: ${COLORS.DARK_GRAY};
   }
 
-  &:active {
+  &:active:enabled {
     background-color: ${COLORS.SPACE_GRAY};
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
   ${(props): any =>
     props.imageHover &&
     css`
-      &:hover {
+      &:hover:enabled {
         background-image: url(${props.imageHover});
       }
     `}
@@ -142,7 +147,7 @@ export const ToolButton = styled.button<ToolButtonProps>`
   ${(props): any =>
     props.imageActive &&
     css`
-      &:active {
+      &:active:enabled {
         background-image: url(${props.imageActive});
       }
     `}
