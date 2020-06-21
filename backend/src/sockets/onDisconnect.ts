@@ -38,9 +38,10 @@ export default (connection: Connection): void => {
 
   const usersData: UsersData = { users: room.users }
 
-  // If presenter leaves the room, give back presenter control
+  // If presenter leaves the room remove presenterID
   if (socket.id === room.presenterID) {
-    usersData.presenterID = ""
+    room.presenterID = ""
+    usersData.presenterID = room.presenterID
   }
 
   io.to(roomID).emit("update users", usersData)
