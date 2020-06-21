@@ -4,6 +4,7 @@ import path from "path"
 
 // Middlewares
 import useHttps from "./middlewares/useHttps"
+import useGzip from "./middlewares/useGzip"
 
 // Routes
 import uploadRouter from "./routes/upload"
@@ -23,6 +24,7 @@ app.use(
 app.get("/", (req: Request, res: Response): void => {
   res.sendFile(path.join(__dirname, "../../frontend/index.html"))
 })
+app.get("*.js", useGzip)
 
 app.use("/api/upload", uploadRouter)
 app.use("/api/pingback", pingbackRouter)
