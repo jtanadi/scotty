@@ -13,6 +13,7 @@ import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
 import { cachePage, setScrollRatios } from "../../store/actions"
 import { PageCache } from "../../store/types"
+import handleScroll from "./handleScroll"
 
 type PropTypes = {
   pageRef: RefObject<HTMLImageElement>
@@ -72,8 +73,9 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
 
   const [showScrollbars, setShowScrollbars] = useState(true)
   useEffect(() => {
-    // If not in presenter mode OR if in presenter mode and is presenter
-    // AND zoom level is more than 1, show scrollbars
+    // Show scrollbars only if not in presenter mode
+    // OR if in presenter mode and is presenter
+    // AND zoom level is more than 1
     if ((!presenterMode || (presenterMode && isPresenter)) && zoomLevel > 1) {
       setShowScrollbars(true)
     } else {
@@ -81,8 +83,16 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     }
   }, [zoomLevel, presenterMode, isPresenter])
 
+  const _handleScroll = (ev): void => {
+    handleScroll(ev.target, presenterMode && isPresenter, setScrollRatios)
+  }
+
   return (
-    <DocumentContainer ref={docRef} showScrollbars={showScrollbars}>
+    <DocumentContainer
+      ref={docRef}
+      showScrollbars={showScrollbars}
+      onScroll={_handleScroll}
+    >
       <PageContainer
         disablePan={presenterMode && !isPresenter}
         scale={zoomLevel}
