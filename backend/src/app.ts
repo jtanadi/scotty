@@ -14,7 +14,7 @@ const app: Application = express()
 
 app.use(useHttps)
 app.use(bodyParser.json())
-app.use(compression)
+app.use(compression())
 
 app.use("/", express.static(path.join(__dirname, "../../frontend/dist")))
 app.use(
