@@ -1,4 +1,5 @@
 import { useState, useEffect, MouseEvent, RefObject } from "react"
+import handleScroll from "../handleScroll"
 
 type UsePanhandlerReturn = {
   mouseDown: boolean
@@ -57,32 +58,12 @@ export default (
     setStartY(ev.clientY)
 
     if (docRef.current) {
-      const {
-        scrollLeft,
-        scrollWidth,
-        clientWidth,
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-      } = docRef.current
-
-      const scrollLeftMax = scrollWidth - clientWidth
-      const scrollTopMax = scrollHeight - clientHeight
-
-      const left = scrollLeft / scrollLeftMax
-      const top = scrollTop / scrollTopMax
-
       const broadcast = presenterMode && isPresenter
-      setScrollRatios(left, top, broadcast)
+      handleScroll(docRef.current, broadcast, setScrollRatios)
     }
   }
 
-  useEffect(() => {
-    if (scale === 1) {
-      const broadcast = presenterMode && isPresenter
-      setScrollRatios(0.5, 0.5, broadcast)
-    }
-
+  const updateScrollPositions = (): void => {
     const {
       scrollWidth,
       clientWidth,
@@ -94,7 +75,23 @@ export default (
 
     docRef.current.scrollLeft = scrollLeftMax * scrollLeftRatio
     docRef.current.scrollTop = scrollTopMax * scrollTopRatio
-  }, [scale, scrollLeftRatio, scrollTopRatio])
+  }
+
+  // Recenter view on zoom
+  useEffect(() => {
+    if (scale === 1) {
+      const broadcast = presenterMode && isPresenter
+      setScrollRatios(0.5, 0.5, broadcast)
+    }
+    updateScrollPositions()
+  }, [scale])
+
+  // Update view when in presenter mode & is not presenter
+  useEffect(() => {
+    if (presenterMode && !isPresenter) {
+      updateScrollPositions()
+    }
+  }, [scrollLeftRatio, scrollTopRatio])
 
   return {
     mouseDown,
