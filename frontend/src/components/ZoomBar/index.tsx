@@ -5,6 +5,7 @@ import { connect } from "react-redux"
 import { ToolButton } from "../globalStyles"
 import { ButtonsContainer } from "./styles"
 
+import { zoomTools } from "../../utils/tools"
 import { setZoomLevel } from "../../store/actions"
 
 enum ZOOM_LIMIT {
@@ -25,35 +26,32 @@ const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
   const handleClick = (ev: MouseEvent): void => {
     const target = ev.target as HTMLButtonElement
     const broadcast = presenterMode && isPresenter
-    if (target.id === "zoom-in" && zoomLevel < ZOOM_LIMIT.MAX) {
+    if (target.id === "zoomIn" && zoomLevel < ZOOM_LIMIT.MAX) {
       setZoomLevel(zoomLevel + 1, broadcast)
-    } else if (target.id === "zoom-out" && zoomLevel > ZOOM_LIMIT.MIN) {
+    } else if (target.id === "zoomOut" && zoomLevel > ZOOM_LIMIT.MIN) {
       setZoomLevel(zoomLevel - 1, broadcast)
+    } else if (target.id === "zoomReset") {
+      setZoomLevel(1, broadcast)
     }
   }
 
   return (
     <ButtonsContainer>
-      <ToolButton
-        disabled={presenterMode && !isPresenter}
-        id="zoom-in"
-        width="2.25rem"
-        height="2.25rem"
-        image="/static/icons/zoomIn.svg"
-        imageHover="/static/icons/zoomInLight.svg"
-        imageActive="/static/icons/zoomInLight.svg"
-        onClick={handleClick}
-      />
-      <ToolButton
-        disabled={presenterMode && !isPresenter}
-        id="zoom-out"
-        width="2.25rem"
-        height="2.25rem"
-        image="/static/icons/zoomOut.svg"
-        imageHover="/static/icons/zoomOutLight.svg"
-        imageActive="/static/icons/zoomOutLight.svg"
-        onClick={handleClick}
-      />
+      {zoomTools.map(
+        (tool, i): ReactElement => (
+          <ToolButton
+            key={`zoom-tool-${i}`}
+            disabled={presenterMode && !isPresenter}
+            id={tool.name}
+            width="2.25rem"
+            height="2.25rem"
+            image={tool.image}
+            imageHover={tool.hover || tool.image}
+            imageActive={tool.active || tool.hover || tool.image}
+            onClick={handleClick}
+          />
+        )
+      )}
     </ButtonsContainer>
   )
 }
