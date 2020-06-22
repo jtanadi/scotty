@@ -2,7 +2,7 @@ import { combineReducers } from "redux"
 
 import * as constants from "./constants"
 import * as types from "./types"
-import tools from "../utils/tools"
+import { pointerTools } from "../utils/tools"
 
 const initialRoomState: types.RoomState = {
   users: [],
@@ -84,7 +84,7 @@ const pagesReducer = (
 }
 
 const initialToolState: types.ToolState = {
-  tools,
+  tools: pointerTools,
   selectedIdx: null,
   color: "",
 }
