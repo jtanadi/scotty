@@ -11,7 +11,6 @@ const createTool = (name: string): Tool => ({
   hover: `/static/icons/${name}Light.svg`,
 })
 
-/* const tools: Tool[] = ["pointer", "draw", "erase"].map(tool => createTool(tool)) */
 export const pointerTools: Tool[] = ["pointer", "presenter"].map(tool =>
   createTool(tool)
 )
