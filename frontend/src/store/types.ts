@@ -134,3 +134,10 @@ export type ToolState = {
   selectedIdx: number
   color: string
 }
+
+export type RootState = {
+  room: RoomState
+  zoom: ZoomState
+  pages: PageState
+  tools: ToolState
+}
