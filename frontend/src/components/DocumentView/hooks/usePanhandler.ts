@@ -1,4 +1,8 @@
 import { useState, useEffect, MouseEvent, RefObject } from "react"
+import { useSelector, useDispatch } from "react-redux"
+
+import { setScrollRatios } from "../../../store/actions"
+import { RootState } from "../../../store/types"
 
 type UsePanhandlerReturn = {
   mouseDown: boolean
@@ -10,13 +14,23 @@ type UsePanhandlerReturn = {
 
 export default (
   docRef: RefObject<HTMLDivElement>,
-  scale: number,
-  presenterMode: boolean,
-  isPresenter: boolean,
-  scrollLeftRatio: number,
-  scrollTopRatio: number,
-  setScrollRatios: (left: number, top: number, broadcast: boolean) => void
+  socketUpdateScroll: (left: number, top: number) => void
 ): UsePanhandlerReturn => {
+  const dispatch = useDispatch()
+  const zoomLevel = useSelector((state: RootState) => state.zoom.zoomLevel)
+  const presenterMode = useSelector(
+    (state: RootState) => !!state.room.presenterID
+  )
+  const isPresenter = useSelector(
+    (state: RootState) => state.room.userID === state.room.presenterID
+  )
+  const scrollLeftRatio = useSelector(
+    (state: RootState) => state.zoom.scrollLeftRatio
+  )
+  const scrollTopRatio = useSelector(
+    (state: RootState) => state.zoom.scrollTopRatio
+  )
+
   const handleContextMenu = (ev: MouseEvent): void => {
     ev.preventDefault()
   }
@@ -25,7 +39,7 @@ export default (
   const [startX, setStartX] = useState(0)
   const [startY, setStartY] = useState(0)
   const handleMouseDown = (ev: MouseEvent): void => {
-    if (scale <= 1 || (presenterMode && !isPresenter)) return
+    if (zoomLevel <= 1 || (presenterMode && !isPresenter)) return
     setMouseDown(true)
     setStartX(ev.clientX)
     setStartY(ev.clientY)
@@ -41,7 +55,7 @@ export default (
 
   // default is center (0.5 of width and height)
   const handlePan = (ev: MouseEvent): void => {
-    if (!mouseDown || scale <= 1) return
+    if (!mouseDown || zoomLevel <= 1) return
 
     const containerElmt = docRef.current
 
@@ -73,12 +87,17 @@ export default (
 
   // Recenter view on zoom
   useEffect(() => {
-    if (scale === 1) {
+    if (zoomLevel === 1) {
       const broadcast = presenterMode && isPresenter
-      setScrollRatios(0.5, 0.5, broadcast)
+      const defaultScrollRatio = 0.5
+
+      dispatch(setScrollRatios(defaultScrollRatio, defaultScrollRatio))
+      if (broadcast) {
+        socketUpdateScroll(defaultScrollRatio, defaultScrollRatio)
+      }
     }
     updateScrollPositions()
-  }, [scale])
+  }, [zoomLevel])
 
   // Update view when in presenter mode & is not presenter
   useEffect(() => {

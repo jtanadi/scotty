@@ -6,50 +6,52 @@ import React, {
   useState,
   useEffect,
 } from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import { DocumentContainer, PageContainer, Page } from "./styles"
 import usePanhandler from "./hooks/usePanhandler"
 import { cachePage, setScrollRatios } from "../../store/actions"
-import { PageCache } from "../../store/types"
+import { RootState } from "../../store/types"
 
 type PropTypes = {
   pageRef: RefObject<HTMLImageElement>
   socketUpdateScroll(left: number, top: number): void
 }
 
-const View: FC<PropTypes & StateProps & DispatchProps> = ({
-  pageRef,
-  zoomLevel,
-  pdfUrl,
-  pageUrl,
-  nextPageFile,
-  nextNextPageFile,
-  cachedPages,
-  cachePage,
-  presenterMode,
-  isPresenter,
-  scrollLeftRatio,
-  scrollTopRatio,
-  setScrollRatios,
-}): ReactElement => {
+const View: FC<PropTypes> = ({ pageRef, socketUpdateScroll }): ReactElement => {
   const docRef = useRef(null)
+  const dispatch = useDispatch()
+  const zoomLevel = useSelector((state: RootState) => state.zoom.zoomLevel)
+  const pdfUrl = useSelector((state: RootState) => state.room.pdfUrl)
+  const pageUrl = useSelector(
+    (state: RootState) =>
+      `${state.room.pdfUrl}/${state.pages.pages[state.pages.currentPage - 1]}`
+  )
+  const cachedPages = useSelector((state: RootState) => state.pages.cached)
+
+  const nextPageFile = useSelector(
+    (state: RootState) =>
+      state.pages.pages[state.pages.currentPage + state.pages.currentPage - 1]
+  )
+  const nextNextPageFile = useSelector(
+    (state: RootState) =>
+      state.pages.pages[state.pages.currentPage + state.pages.currentPage]
+  )
+
+  const presenterMode = useSelector(
+    (state: RootState) => !!state.room.presenterID
+  )
+  const isPresenter = useSelector(
+    (state: RootState) => state.room.userID === state.room.presenterID
+  )
+
   const {
     mouseDown,
     handleContextMenu,
     handleMouseDown,
     handleMouseReset,
     handlePan,
-  } = usePanhandler(
-    docRef,
-    zoomLevel,
-    presenterMode,
-    isPresenter,
-    scrollLeftRatio,
-    scrollTopRatio,
-    setScrollRatios
-  )
+  } = usePanhandler(docRef, socketUpdateScroll)
 
   useEffect(() => {
     // Load next 2 pages to be loaded if not cached yet
@@ -60,13 +62,13 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     if (nextPageFile && !cachedPages[nextPageFile]) {
       const nextPage = new Image()
       nextPage.src = `${pdfUrl}/${nextPageFile}`
-      cachePage(nextPageFile)
+      dispatch(cachePage(nextPageFile))
     }
 
     if (nextNextPageFile && !cachedPages[nextNextPageFile]) {
       const nextNextPage = new Image()
       nextNextPage.src = `${pdfUrl}/${nextNextPageFile}`
-      cachePage(nextNextPageFile)
+      dispatch(cachePage(nextNextPageFile))
     }
   }, [pdfUrl, nextPageFile, nextNextPageFile])
 
@@ -99,7 +101,10 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
     const left = scrollLeftMax ? scrollLeft / scrollLeftMax : 0.5
     const top = scrollTopMax ? scrollTop / scrollTopMax : 0.5
 
-    setScrollRatios(left, top, presenterMode && isPresenter)
+    dispatch(setScrollRatios(left, top))
+    if (presenterMode && isPresenter) {
+      socketUpdateScroll(left, top)
+    }
   }
 
   return (
@@ -124,54 +129,4 @@ const View: FC<PropTypes & StateProps & DispatchProps> = ({
   )
 }
 
-type StateProps = {
-  zoomLevel: number
-  scrollLeftRatio: number
-  scrollTopRatio: number
-  pageUrl: string
-  nextPageFile: string
-  nextNextPageFile: string
-  pdfUrl: string
-  cachedPages: PageCache
-  presenterMode: boolean
-  isPresenter: boolean
-}
-
-const mapStateToProps = ({
-  zoom: { zoomLevel, scrollLeftRatio, scrollTopRatio },
-  pages: { pages, currentPage, cached },
-  room: { pdfUrl, presenterID, userID },
-}): StateProps => ({
-  zoomLevel,
-  scrollLeftRatio,
-  scrollTopRatio,
-  pdfUrl,
-  pageUrl: `${pdfUrl}/${pages[currentPage - 1]}`,
-  nextPageFile: pages[currentPage + currentPage - 1],
-  nextNextPageFile: pages[currentPage + currentPage],
-  cachedPages: cached,
-  presenterMode: !!presenterID,
-  isPresenter: presenterID === userID,
-})
-
-type DispatchProps = {
-  cachePage(page: string): void
-  setScrollRatios(left: number, top: number, broadcast: boolean): void
-}
-
-const mapDispatchToProps = (
-  dispatch: Dispatch,
-  { socketUpdateScroll }
-): DispatchProps => ({
-  cachePage(page): void {
-    dispatch(cachePage(page))
-  },
-  setScrollRatios(left, top, broadcast): void {
-    dispatch(setScrollRatios(left, top))
-    if (broadcast) {
-      socketUpdateScroll(left, top)
-    }
-  },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(View)
+export default View
