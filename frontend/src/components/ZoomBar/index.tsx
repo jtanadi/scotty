@@ -1,12 +1,12 @@
 import React, { FC, ReactElement, MouseEvent } from "react"
-import { Dispatch } from "redux"
-import { connect } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import { ToolButton } from "../globalStyles"
 import { ButtonsContainer } from "./styles"
 
 import { zoomTools } from "../../utils/tools"
 import { setZoomLevel } from "../../store/actions"
+import { RootState } from "../../store/types"
 
 enum ZOOM_LIMIT {
   MIN = 1,
@@ -17,21 +17,32 @@ type PropTypes = {
   socketUpdateZoom(zoom: number): void
 }
 
-const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
-  zoomLevel,
-  presenterMode,
-  isPresenter,
-  setZoomLevel,
-}): ReactElement => {
+const ZoomBar: FC<PropTypes> = ({ socketUpdateZoom }): ReactElement => {
+  const presenterMode = useSelector(
+    (state: RootState) => !!state.room.presenterID
+  )
+  const isPresenter = useSelector(
+    (state: RootState) => state.room.userID === state.room.presenterID
+  )
+  const zoomLevel = useSelector((state: RootState) => state.zoom.zoomLevel)
+  const dispatch = useDispatch()
+
   const handleClick = (ev: MouseEvent): void => {
     const target = ev.target as HTMLButtonElement
     const broadcast = presenterMode && isPresenter
+    let newZoomLevel: number
+
     if (target.id === "zoomIn" && zoomLevel < ZOOM_LIMIT.MAX) {
-      setZoomLevel(zoomLevel + 1, broadcast)
+      newZoomLevel = zoomLevel + 1
     } else if (target.id === "zoomOut" && zoomLevel > ZOOM_LIMIT.MIN) {
-      setZoomLevel(zoomLevel - 1, broadcast)
+      newZoomLevel = zoomLevel - 1
     } else if (target.id === "zoomReset") {
-      setZoomLevel(1, broadcast)
+      newZoomLevel = 1
+    }
+
+    dispatch(setZoomLevel(newZoomLevel))
+    if (broadcast) {
+      socketUpdateZoom(newZoomLevel)
     }
   }
 
@@ -56,35 +67,4 @@ const ZoomBar: FC<PropTypes & StateProps & DispatchProps> = ({
   )
 }
 
-type StateProps = {
-  zoomLevel: number
-  presenterMode: boolean
-  isPresenter: boolean
-}
-
-const mapStateToProps = ({
-  room: { userID, presenterID },
-  zoom: { zoomLevel },
-}): StateProps => ({
-  zoomLevel,
-  presenterMode: !!presenterID,
-  isPresenter: presenterID === userID,
-})
-
-type DispatchProps = {
-  setZoomLevel: (zoomLevel: number, broadcast: boolean) => void
-}
-
-const mapDispatchToProps = (
-  dispatch: Dispatch,
-  { socketUpdateZoom }
-): DispatchProps => ({
-  setZoomLevel(zoomLevel, broadcast): void {
-    dispatch(setZoomLevel(zoomLevel))
-    if (broadcast) {
-      socketUpdateZoom(zoomLevel)
-    }
-  },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ZoomBar)
+export default ZoomBar

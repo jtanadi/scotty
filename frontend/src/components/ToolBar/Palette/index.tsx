@@ -4,9 +4,9 @@ import React, {
   FC,
   ReactElement,
   ChangeEvent,
+  MouseEvent,
 } from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import {
   Container,
@@ -20,6 +20,7 @@ import {
   PaletteCover,
 } from "./styles"
 import { setToolColor } from "../../../store/actions"
+import { RootState } from "../../../store/types"
 
 type PropTypes = {
   show: boolean
@@ -36,12 +37,9 @@ const createColors = (firstColor: string): string[] => [
   "#2D9CDB",
 ]
 
-const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
-  show,
-  handleShow,
-  toolColor,
-  setToolColor,
-}): ReactElement => {
+const Palette: FC<PropTypes> = ({ show, handleShow }): ReactElement => {
+  const toolColor = useSelector((state: RootState) => state.tools.color)
+  const dispatch = useDispatch()
   const [colors, setColors] = useState([])
   const [presetColorUsed, setPresetColorUsed] = useState(true)
   useEffect(() => {
@@ -64,6 +62,11 @@ const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
     setToolColor(`#${hex}`)
   }
 
+  const handleColorClick = (ev: MouseEvent): void => {
+    const target = ev.target as HTMLDivElement
+    dispatch(setToolColor(target.id))
+  }
+
   const renderPalette = (): ReactElement => {
     return (
       <>
@@ -71,10 +74,11 @@ const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
           <InnerContainer>
             {colors.map((color, i) => (
               <Color
+                id={color}
                 key={`color-${i}`}
                 color={color}
                 selected={color === toolColor}
-                onClick={(): void => setToolColor(color)}
+                onClick={handleColorClick}
               />
             ))}
             <InputDiv>
@@ -98,21 +102,4 @@ const Palette: FC<PropTypes & StateProps & DispatchProps> = ({
   return show ? renderPalette() : null
 }
 
-type StateProps = {
-  toolColor: string
-}
-const mapStateToProps = ({ tools }): StateProps => ({
-  toolColor: tools.color,
-})
-
-type DispatchProps = {
-  setToolColor(hex: string): void
-}
-
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  setToolColor(hex): void {
-    dispatch(setToolColor(hex))
-  },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Palette)
+export default Palette

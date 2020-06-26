@@ -1,6 +1,5 @@
 import React, { useState, FC, ReactElement } from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
+import { useSelector, useDispatch } from "react-redux"
 
 import Palette from "./Palette"
 import {
@@ -10,7 +9,7 @@ import {
   ColorIndicator,
 } from "./styles"
 import * as actions from "../../store/actions"
-import { Tool } from "../../utils/tools"
+import { RootState } from "../../store/types"
 
 type PropTypes = {
   socketUpdatePresenter: () => void
@@ -18,19 +17,32 @@ type PropTypes = {
   socketUpdateScroll: (scrollLeft: number, scrollTop: number) => void
 }
 
-const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
-  userID,
-  presenterMode,
-  isPresenter,
-  tools,
-  toolColor,
-  selectedToolIdx,
-  selectTool,
-  setPresenter,
-  zoomLevel,
-  scrollLeftRatio,
-  scrollTopRatio,
+const ToolBar: FC<PropTypes> = ({
+  socketUpdatePresenter,
+  socketUpdateZoom,
+  socketUpdateScroll,
 }): ReactElement => {
+  const userID = useSelector((state: RootState) => state.room.userID)
+  const presenterMode = useSelector(
+    (state: RootState) => !!state.room.presenterID
+  )
+  const isPresenter = useSelector(
+    (state: RootState) => state.room.userID === state.room.presenterID
+  )
+  const tools = useSelector((state: RootState) => state.tools.tools)
+  const selectedToolIdx = useSelector(
+    (state: RootState) => state.tools.selectedIdx
+  )
+  const toolColor = useSelector((state: RootState) => state.tools.color)
+  const zoomLevel = useSelector((state: RootState) => state.zoom.zoomLevel)
+  const scrollLeftRatio = useSelector(
+    (state: RootState) => state.zoom.scrollLeftRatio
+  )
+  const scrollTopRatio = useSelector(
+    (state: RootState) => state.zoom.scrollTopRatio
+  )
+
+  const dispatch = useDispatch()
   const [showPalette, setShowPalette] = useState(false)
   const handlePalette = (): void => {
     setShowPalette(prev => !prev)
@@ -40,10 +52,13 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
     // Last tool is presenter tool
     // setPresenter can work like a toggle on the socket server side
     if (clickedIdx === tools.length - 1) {
-      setPresenter(userID, zoomLevel, scrollLeftRatio, scrollTopRatio)
+      dispatch(actions.setPresenter(userID))
+      socketUpdatePresenter()
+      socketUpdateZoom(zoomLevel)
+      socketUpdateScroll(scrollLeftRatio, scrollTopRatio)
     } else {
       const toolIdx = selectedToolIdx === clickedIdx ? null : clickedIdx
-      selectTool(toolIdx)
+      dispatch(actions.selectTool(toolIdx))
     }
   }
 
@@ -72,57 +87,4 @@ const ToolBar: FC<PropTypes & StateProps & DispatchProps> = ({
   )
 }
 
-type StateProps = {
-  tools: Tool[]
-  selectedToolIdx: number
-  toolColor: string
-  userID: string
-  presenterMode: boolean
-  isPresenter: boolean
-  zoomLevel: number
-  scrollLeftRatio: number
-  scrollTopRatio: number
-}
-
-const mapStateToProps = ({
-  room: { userID, presenterID },
-  tools: { tools, selectedIdx, color },
-  zoom: { zoomLevel, scrollLeftRatio, scrollTopRatio },
-}): StateProps => ({
-  tools,
-  selectedToolIdx: selectedIdx,
-  toolColor: color,
-  userID,
-  presenterMode: !!presenterID,
-  isPresenter: presenterID === userID,
-  zoomLevel,
-  scrollLeftRatio,
-  scrollTopRatio,
-})
-
-type DispatchProps = {
-  selectTool(idx: number): void
-  setPresenter(
-    id: string,
-    zoomLevel: number,
-    scrollLeftRatio: number,
-    scrollTopRatio: number
-  ): void
-}
-
-const mapDispatchToProps = (
-  dispatch: Dispatch,
-  { socketUpdatePresenter, socketUpdateZoom, socketUpdateScroll }
-): DispatchProps => ({
-  selectTool(idx): void {
-    dispatch(actions.selectTool(idx))
-  },
-  setPresenter(id, zoomLevel, scrollLeftRatio, scrollTopRatio): void {
-    dispatch(actions.setPresenter(id))
-    socketUpdatePresenter()
-    socketUpdateZoom(zoomLevel)
-    socketUpdateScroll(scrollLeftRatio, scrollTopRatio)
-  },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ToolBar)
+export default ToolBar

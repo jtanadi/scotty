@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 
 import {
   RoomData,
   JoinRoomData,
   SyncDocData,
   SyncPageData,
-  User,
   UsersData,
   ToolColorChangeData,
   ChangePageData,
@@ -16,6 +16,8 @@ import {
   SyncZoomData,
 } from "../../../../../backend/src/sockets/types"
 import socket from "../../../socket"
+import * as actions from "../../../store/actions"
+import { RootState } from "../../../store/types"
 
 type UseSocketReturn = {
   error: string
@@ -25,59 +27,50 @@ type UseSocketReturn = {
   socketUpdateScroll: (left: number, top: number) => void
 }
 
-export default (
-  roomID: string,
-  toolColor: string,
-  setPages: (pages: string[]) => void,
-  goToPage: (pageNum: number) => void,
-  setUsers: (users: User[]) => void,
-  setUserID: (id: string) => void,
-  setPdfUrl: (url: string) => void,
-  setFilename: (filename: string) => void,
-  setPresenter: (presenterID: string) => void,
-  setZoomLevel: (zoomLevel: number) => void,
-  setScrollRatios: (left: number, top: number) => void
-): UseSocketReturn => {
+export default (roomID: string): UseSocketReturn => {
+  const dispatch = useDispatch()
+  const toolColor = useSelector((state: RootState) => state.tools.color)
+
   const [error, setError] = useState("")
   useEffect(() => {
     const joinRoomData: JoinRoomData = { roomID, toolColor }
     socket.emit("join room", joinRoomData)
 
     socket.on("sync document", (data: SyncDocData): void => {
-      setUserID(data.userID)
-      setPdfUrl(data.pdfUrl)
-      setPages(data.pages)
-      setFilename(data.filename)
-      setPresenter(data.presenterID)
+      dispatch(actions.setUserID(data.userID))
+      dispatch(actions.setPdfUrl(data.pdfUrl))
+      dispatch(actions.setPages(data.pages))
+      dispatch(actions.setFilename(data.filename))
+      dispatch(actions.setPresenter(data.presenterID))
 
       if (data.presenterID && data.presenterID !== data.userID) {
-        setZoomLevel(data.zoom)
-        setScrollRatios(data.scrollLeft, data.scrollTop)
+        dispatch(actions.setZoomLevel(data.zoom))
+        dispatch(actions.setScrollRatios(data.scrollLeft, data.scrollTop))
       }
     })
 
     socket.on("sync page", (data: SyncPageData): void => {
-      goToPage(data.pageNum)
+      dispatch(actions.goToPage(data.pageNum))
     })
 
     socket.on("update users", (data: UsersData): void => {
-      setUsers(data.users)
+      dispatch(actions.setUsers(data.users))
 
       if (typeof data.presenterID !== "undefined") {
-        setPresenter(data.presenterID)
+        dispatch(actions.setPresenter(data.presenterID))
       }
     })
 
     socket.on("update presenter", (data: PresenterData) => {
-      setPresenter(data.presenterID)
+      dispatch(actions.setPresenter(data.presenterID))
     })
 
     socket.on("update zoom", (data: SyncZoomData) => {
-      setZoomLevel(data.zoom)
+      dispatch(actions.setZoomLevel(data.zoom))
     })
 
     socket.on("update scroll", (data: SyncScrollData) => {
-      setScrollRatios(data.scrollLeft, data.scrollTop)
+      dispatch(actions.setScrollRatios(data.scrollLeft, data.scrollTop))
     })
 
     socket.on("error", (data: Error): void => {

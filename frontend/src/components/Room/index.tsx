@@ -1,13 +1,11 @@
 import React, { ReactElement, useRef, useEffect } from "react"
 import { RouteComponentProps, useHistory, withRouter } from "react-router-dom"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
+import { useSelector, useDispatch } from "react-redux"
 import randomColor from "randomcolor"
 
 // Utils, etc.
-import { RoomData, User } from "../../../../backend/src/sockets/types"
+import { RoomData } from "../../../../backend/src/sockets/types"
 import socket from "../../socket"
-import { Tool } from "../../utils/tools"
 
 // Components
 import NavBar from "../NavBar"
@@ -21,35 +19,25 @@ import ToolBar from "../ToolBar"
 import { Background, COLORS } from "../globalStyles"
 import { usePointer, useSocket } from "./hooks"
 import * as actions from "../../store/actions"
+import { RootState } from "../../store/types"
 
 interface PropTypes extends RouteComponentProps {
   id: string
 }
 
-const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
-  id,
-  location,
-  toolColor,
-  pdfUrl,
-  users,
-  userID,
-  goToPage,
-  setPages,
-  selectedTool,
-  setToolColor,
-  setUsers,
-  setUserID,
-  setPdfUrl,
-  clearStore,
-  setFilename,
-  setPresenter,
-  setZoomLevel,
-  setScrollRatios,
-}): ReactElement => {
+const Room: React.FC<PropTypes> = ({ id, location }): ReactElement => {
   const pageRef = useRef(null)
+  const dispatch = useDispatch()
+  const toolColor = useSelector((state: RootState) => state.tools.color)
+  const pdfUrl = useSelector((state: RootState) => state.room.pdfUrl)
+  const users = useSelector((state: RootState) => state.room.users)
+  const userID = useSelector((state: RootState) => state.room.userID)
+  const selectedTool = useSelector(
+    (state: RootState) => state.tools.tools[state.tools.selectedIdx]
+  )
 
   useEffect(() => {
-    setToolColor(randomColor({ luminosity: "bright" }))
+    dispatch(actions.setToolColor(randomColor({ luminosity: "bright" })))
   }, [])
 
   const { showMouse, setShowMouse, ownMouseX, ownMouseY } = usePointer(
@@ -63,19 +51,7 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
     socketUpdatePresenter,
     socketUpdateZoom,
     socketUpdateScroll,
-  } = useSocket(
-    id,
-    toolColor,
-    setPages,
-    goToPage,
-    setUsers,
-    setUserID,
-    setPdfUrl,
-    setFilename,
-    setPresenter,
-    setZoomLevel,
-    setScrollRatios
-  )
+  } = useSocket(id)
 
   useEffect(() => {
     if (!selectedTool) {
@@ -96,7 +72,10 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   const handleClose = (): void => {
     const leaveRoomData: RoomData = { roomID: id }
     socket.emit("leave room", leaveRoomData)
-    clearStore()
+    dispatch(actions.clearRoom)
+    dispatch(actions.clearZoom)
+    dispatch(actions.clearPages)
+    dispatch(actions.clearTools)
     history.push("/")
   }
 
@@ -174,77 +153,4 @@ const Room: React.FC<PropTypes & StateProps & DispatchProps> = ({
   )
 }
 
-type StateProps = {
-  selectedTool: Tool
-  toolColor: string
-  pdfUrl: string
-  users: User[]
-  userID: string
-}
-
-const mapStateToProps = ({
-  room: { pdfUrl, users, userID },
-  tools,
-}): StateProps => ({
-  selectedTool: tools.tools[tools.selectedIdx],
-  toolColor: tools.color,
-  pdfUrl,
-  users,
-  userID,
-})
-
-type DispatchProps = {
-  goToPage(pageNum: number): void
-  setPages(pages: string[]): void
-  setToolColor(hex: string): void
-  setUsers(users: User[]): void
-  setUserID(id: string): void
-  setPdfUrl(url: string): void
-  clearStore(): void
-  setFilename(filename: string): void
-  setPresenter(presenterID: string): void
-  setZoomLevel(zoom: number): void
-  setScrollRatios(left: number, top: number): void
-}
-
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  goToPage(pageNum): void {
-    dispatch(actions.goToPage(pageNum))
-  },
-  setPages(pages): void {
-    dispatch(actions.setPages(pages))
-  },
-  setToolColor(hex): void {
-    dispatch(actions.setToolColor(hex))
-  },
-  setUsers(users): void {
-    dispatch(actions.setUsers(users))
-  },
-  setUserID(id): void {
-    dispatch(actions.setUserID(id))
-  },
-  setPdfUrl(url: string): void {
-    dispatch(actions.setPdfUrl(url))
-  },
-  clearStore(): void {
-    dispatch(actions.clearRoom())
-    dispatch(actions.clearPages())
-    dispatch(actions.clearZoom())
-    dispatch(actions.clearTools())
-  },
-  setFilename(filename): void {
-    dispatch(actions.setFilename(filename))
-  },
-  setPresenter(presenterID): void {
-    dispatch(actions.setPresenter(presenterID))
-  },
-  setZoomLevel(zoom): void {
-    dispatch(actions.setZoomLevel(zoom))
-  },
-  setScrollRatios(left, top): void {
-    dispatch(actions.setScrollRatios(left, top))
-  },
-})
-
-const ConnectedRoom = connect(mapStateToProps, mapDispatchToProps)(Room)
-export default withRouter(ConnectedRoom) as any
+export default withRouter(Room) as any
