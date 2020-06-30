@@ -57,12 +57,11 @@ export const ReverseToolButton = styled(ToolButton)`
 `
 
 export const CloseButton = styled(ToolButton)`
-  &:hover,
-  &:focus {
+  &:hover:enabled {
     background-color: ${COLORS.RED};
   }
 
-  &:active {
+  &:active:enabled {
     background-color: ${COLORS.MID_RED};
   }
 `

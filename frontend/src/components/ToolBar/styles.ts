@@ -33,7 +33,7 @@ export const ToolBarButton = styled(ToolButton)<ToolBarButtonProps>`
       background-color: ${COLORS.SPACE_GRAY};
       background-image: url(${props.imageHover});
 
-      &:hover {
+      &:hover:enabled {
         background-color: ${COLORS.SPACE_GRAY};
       }
     `}
