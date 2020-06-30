@@ -72,10 +72,10 @@ const Room: React.FC<PropTypes> = ({ id, location }): ReactElement => {
   const handleClose = (): void => {
     const leaveRoomData: RoomData = { roomID: id }
     socket.emit("leave room", leaveRoomData)
-    dispatch(actions.clearRoom)
-    dispatch(actions.clearZoom)
-    dispatch(actions.clearPages)
-    dispatch(actions.clearTools)
+    dispatch(actions.clearRoom())
+    dispatch(actions.clearZoom())
+    dispatch(actions.clearPages())
+    dispatch(actions.clearTools())
     history.push("/")
   }
 
