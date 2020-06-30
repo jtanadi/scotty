@@ -1,8 +1,6 @@
 import React, { useState, useEffect, ReactElement, FormEvent } from "react"
-import { connect } from "react-redux"
-import { Dispatch } from "redux"
+import { useSelector, useDispatch } from "react-redux"
 
-import { User } from "../../../../backend/src/sockets/types"
 import { ToolButton } from "../globalStyles"
 import {
   NavBarContainer,
@@ -16,27 +14,40 @@ import {
   CloseButton,
 } from "./styles"
 import { goToPage } from "../../store/actions"
+import { RootState } from "../../store/types"
 
 type PropTypes = {
   handleClose(): void
   socketChangePage: (pageNum: number) => void
 }
 
-const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
-  currentPage,
-  maxPage,
-  filename,
-  users,
-  goToPage,
-  inputDisabled,
+const NavBar: React.FC<PropTypes> = ({
   handleClose,
+  socketChangePage,
 }): ReactElement => {
+  const dispatch = useDispatch()
+
   const [displayPageNum, setDisplayPageNum] = useState("")
+  const maxPage = useSelector((state: RootState) => state.pages.pages.length)
+  const currentPage = useSelector((state: RootState) => state.pages.currentPage)
+  const filename = useSelector((state: RootState) => state.room.filename)
+  const numOfUsers = useSelector((state: RootState) => state.room.users.length)
+  const inputDisabled = useSelector(
+    (state: RootState) =>
+      state.room.presenterID && state.room.presenterID !== state.room.userID
+  )
+
+  const dispatchPageNum = (pageNum: number): void => {
+    dispatch(goToPage(pageNum))
+    socketChangePage(pageNum)
+  }
 
   const handleInputSubmit = (ev: FormEvent): void => {
     ev.preventDefault()
     if (!displayPageNum || inputDisabled) return
-    goToPage(parseInt(displayPageNum, 10))
+
+    const pageNum = parseInt(displayPageNum, 10)
+    dispatchPageNum(pageNum)
   }
 
   const handleInputChange = (ev: FormEvent<HTMLInputElement>): void => {
@@ -52,24 +63,24 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
   }
 
   const goFirstPage = (): void => {
-    goToPage(1)
+    dispatchPageNum(1)
   }
 
   const goLastPage = (): void => {
-    goToPage(maxPage)
+    dispatchPageNum(maxPage)
   }
 
   const goPrevPage = (): void => {
     const newPage = currentPage - 1
     if (newPage > 0) {
-      goToPage(newPage)
+      dispatchPageNum(newPage)
     }
   }
 
   const goNextPage = (): void => {
     const newPage = currentPage + 1
     if (newPage <= maxPage) {
-      goToPage(newPage)
+      dispatchPageNum(newPage)
     }
   }
 
@@ -137,7 +148,7 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
 
       <NavChild flex="1">
         <InfoText>
-          {`${users.length} ${users.length > 1 ? "users" : "user"}`}
+          {`${numOfUsers} ${numOfUsers > 1 ? "users" : "user"}`}
         </InfoText>
         <CloseButton
           width="3rem"
@@ -152,37 +163,4 @@ const NavBar: React.FC<PropTypes & StateProps & DispatchProps> = ({
   )
 }
 
-type StateProps = {
-  maxPage: number
-  currentPage: number
-  users: User[]
-  filename: string
-  inputDisabled: boolean
-}
-
-type DispatchProps = {
-  goToPage(pageNum: number): void
-}
-
-const mapStateToProps = ({
-  pages: { pages, currentPage },
-  room: { users, userID, filename, presenterID },
-}): StateProps => ({
-  maxPage: pages.length,
-  currentPage,
-  users,
-  filename,
-  inputDisabled: presenterID && presenterID !== userID,
-})
-
-const mapDispatchToProps = (
-  dispatch: Dispatch,
-  { socketChangePage }
-): DispatchProps => ({
-  goToPage(pageNum): void {
-    dispatch(goToPage(pageNum))
-    socketChangePage(pageNum)
-  },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
+export default NavBar
