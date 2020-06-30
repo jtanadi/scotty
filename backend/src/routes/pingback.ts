@@ -2,8 +2,8 @@ import express, { Request, Response } from "express"
 import { rooms } from "../sockets/cache"
 import { io } from "../sockets"
 
-import { Room, RoomData } from "../sockets/types"
-import initialRoomState from "../utils/initialRoomState"
+import { RoomData } from "../sockets/types"
+import createRoom from "../utils/createRoom"
 
 const router = express.Router()
 const s3Url = "https://beam-me-up-scotty.s3.amazonaws.com"
@@ -24,13 +24,7 @@ router.post("/", (req: Request, res: Response) => {
   } else if (status === "end") {
     const { s3Dir, files } = message
 
-    const newRoom: Room = {
-      ...initialRoomState,
-      filename,
-      s3Dir,
-      pdfUrl: `${s3Url}/${s3Dir}`,
-      pages: files,
-    }
+    const newRoom = createRoom(filename, s3Dir, `${s3Url}/${s3Dir}`, files)
 
     rooms[roomID] = newRoom
 
