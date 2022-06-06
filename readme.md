@@ -3,6 +3,8 @@
     <h1>🛸️ scotty 🛸️</h1>
 </div>
 
+## THIS PROJECT HAS BEEN ARCHIVED FOR NOW ##
+
 `scotty` is a WebSocket-enabled PDF viewer, allowing multiple clients to look at and browse through a document together in real time. ([*Who's Scotty?*](https://en.wikipedia.org/wiki/Beam_me_up,_Scotty))
 
 
