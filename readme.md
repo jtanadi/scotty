@@ -1,9 +1,12 @@
 <div align="center">
+    <h1>THIS PROJECT HAS BEEN ARCHIVED AS OF 2022-06-06</h1>
+    <p>The app is still available on the Heroku link below. As of the time of this writing, it is still functional; however, there will not be any work done on the project in the near future.</p>
+</div>
+    
+<div align="center">
     <!-- <img src="./docs/peeker-01.png" alt="peeker illustration" height="300"> -->
     <h1>🛸️ scotty 🛸️</h1>
 </div>
-
-## THIS PROJECT HAS BEEN ARCHIVED FOR NOW ##
 
 `scotty` is a WebSocket-enabled PDF viewer, allowing multiple clients to look at and browse through a document together in real time. ([*Who's Scotty?*](https://en.wikipedia.org/wiki/Beam_me_up,_Scotty))
 
